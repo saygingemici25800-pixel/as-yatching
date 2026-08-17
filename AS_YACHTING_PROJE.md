@@ -323,7 +323,7 @@ dosyasının başında yazılı — sonradan eklenmesin.
 | ~~Google puanı rozeti tıklanamıyor~~ | ~~Orta~~ | ✅ **Kapandı (Faz 2B).** GBP bağlantısı girildi, rozet her sayfada tıklanabilir |
 | **Yapısal veriye puan eklenmesi cazibesi** (Faz 2B'de eklendi) | **Yüksek** | 5.0/34 puanı schema'ya eklemek zengin sonuçların tamamını kaybettirebilir ("self-serving review"). `lib/seo.ts` başında kalıcı uyarı var; kod incelemesinde bu kural kontrol edilmeli |
 | **Yanlış domainle yayına çıkma** (Faz 2B'de eklendi) | **Yüksek** | Canonical, sitemap ve JSON-LD adresleri `SITE_URL`'den üretiliyor; varsayılan `asyachting.com` bir tahmin. Yayından önce domain kesinleşip `.env`'e yazılmalı (soru C11) |
-| **Örnek fiyatların yapısal veriyle yayımlanması** (Faz 2B'de eklendi) | **Yüksek** | Product/Offer şeması `basePrice` alanını yayımlıyor; bu değerler hâlâ demo. Gerçek fiyat girilmeden site indekslenmemeli (soru C12) |
+| ~~Örnek fiyatların yapısal veriyle yayımlanması~~ | ~~Yüksek~~ | ✅ **Kapandı — koda gömüldü.** `productSchema` örnek fiyatlı üründe `offers` üretmiyor. Riskin "yayından önce hatırlarız"a bırakılmaması için koruma kod seviyesinde; gerekçesi `lib/seo.ts` başında KRİTİK KURAL 2 olarak yazılı |
 | **Yer tutucu görseller sunumda "eksik iş" izlenimi verebilir** (Faz 2'de eklendi) | Orta | Görseller marka paletinde ve "YER TUTUCU" damgalı üretildi; sunumda bunun geçici olduğu sözlü olarak da söylenmeli. Kalıcı çözüm Faz 5 çekimi |
 
 ---
@@ -366,6 +366,7 @@ dosyasının başında yazılı — sonradan eklenmesin.
 | 2026-08-17 | Mobilde sabit alt bar (Ara + WhatsApp), pop-up yok | Bölüm 5.4 dönüşüm mekaniği; "çıkış niyeti yok, pop-up yok" kuralına uyuluyor |
 | 2026-08-17 | **Faz 2B teknik kararları aşağıda** ⬇️ | — |
 | 2026-08-17 | **Yapısal veriye `aggregateRating` / `review` EKLENMEYECEK** | Google, işletmenin kendi sitesinde kendi puanını işaretlemesini "self-serving review" sayıyor ve zengin sonuçtan tamamen eleyebiliyor. Kazancı yok, kaybı büyük. 5.0/34 sadece görsel rozet + GBP bağlantısıyla gösteriliyor. Kural `lib/seo.ts` başında kalıcı yorum olarak yazılı |
+| 2026-08-17 | **Örnek fiyat `Offer` olarak yayımlanmayacak — koruma koda gömüldü** | Demo aşamasında bizi koruyan tek şey domainin alınmamış olmasıydı; domain alındığı gün bu koruma kendiliğinden kalkıyor ve o an seed'de örnek fiyat varsa Google'a yanlış fiyat gidiyordu. `productSchema` artık `isSamplePrice: true` iken `offers` alanını hiç üretmiyor. Fiyatsız Product hâlâ geçerli bir şemadır, sadece zengin sonuçta fiyat göstermez |
 | 2026-08-17 | Faz 7'nin teknik yarısı (schema, sitemap, robots) Faz 2B olarak öne çekildi | Sayfalar zaten yazılıyordu; SEO altyapısını sonradan eklemek her sayfaya tekrar dokunmayı gerektirirdi |
 | 2026-08-17 | Faz numaralandırması korundu, yeni iş "2B" olarak eklendi | Faz 3 (Müşteri Sunumu) müşteriyle yapılacak bir iş; kod tarafında tamamlanamaz. Yapılmamış bir fazı "tamamlandı" işaretlemek bu dosyanın kendi kuralını çiğnerdi |
 | 2026-08-17 | `SITE_URL` çevre değişkeninden okunuyor, varsayılan `https://asyachting.com` | Domain henüz alınmadı. Alındığında `.env` içine `NEXT_PUBLIC_SITE_URL` yazmak yeterli; hiçbir dosya değişmeyecek |
@@ -406,7 +407,7 @@ dosyasının başında yazılı — sonradan eklenmesin.
 
 ### 🔴 Faz 2B'de ortaya çıkanlar
 - **C11.** **Domain kararı artık bloke edici.** `SITE_URL` varsayılanı `https://asyachting.com`; sitemap, robots, canonical ve JSON-LD adreslerinin hepsi buradan üretiliyor. Yanlış domainle yayına çıkılırsa canonical adresler baştan hatalı olur. Domain alınınca `.env` içine `NEXT_PUBLIC_SITE_URL` yazılacak, kod değişmeyecek.
-- **C12.** **Product şemasındaki fiyatlar hâlâ ÖRNEK verisi.** Yapısal veride gerçek olmayan fiyat yayımlamak Google tarafından cezalandırılır. Site yayına alınmadan (Faz 7) önce gerçek fiyatlar girilmiş olmalı. Şu an domain olmadığı için indekslenme riski yok.
+- ~~**C12.** Product şemasındaki fiyatlar hâlâ ÖRNEK verisi.~~ → **Çözüldü (kod seviyesinde).** `productSchema`, ürünün `isSamplePrice` alanı `true` olduğu sürece `offers` alanını hiç üretmiyor. Fiyat yalnızca gerçek olduğunda (`isSamplePrice: false`) yapısal veriye giriyor. Fiyatları açmanın tek yolu `data/seed.ts`'e gerçek fiyatı girip bayrağı `false` yapmak — `lib/seo.ts`'e dokunmak değil.
 - **C13.** OG görseli şimdilik tipografik (marka renkleri + wordmark). Profesyonel çekim gelince tekne fotoğraflı bir sürümle değiştirilmeli — sosyal paylaşımda en çok tıklanan öge bu.
 - **C14.** Analitik (GA4) ve Search Console henüz kurulmadı; domain sonrası Faz 7 işi.
 
@@ -570,7 +571,8 @@ Site hazır olana kadar bekleyecek bir şey yok. Google hesabı zaten en değerl
 | Bilinmeyen adres | ✅ Doğru şekilde 404 dönüyor |
 | JSON-LD ayrıştırma | ✅ 17 bloğun hepsi geçerli JSON |
 | **`aggregateRating` / `review`** | ✅ **Hiçbir çıktıda yok** |
-| Şema kapsamı | LocalBusiness her sayfada · FAQPage `/sss` · Product 5 tur sayfasında |
+| **`offers` (örnek fiyat koruması)** | ✅ **Hiçbir çıktıda yok** — 5 ürünün beşi de `isSamplePrice: true`. Bayrak `false` yapıldığında Offer'ın doğru üretildiği ayrıca test edildi |
+| Şema kapsamı | LocalBusiness her sayfada · FAQPage `/sss` · Product 5 tur sayfasında (fiyatsız) |
 | 375px kırılma | ✅ Yedi sayfada da `scrollWidth = 375`, taşan öge sıfır |
 | Kural 4 | ✅ `@/data/seed` importu yalnızca `lib/repository.ts`'te |
 | C9 (tarih) | ✅ `Tarih: 30 Ağustos 2026` |

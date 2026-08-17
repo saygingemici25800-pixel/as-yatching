@@ -4,7 +4,7 @@ import type { Faq, Product, SiteInfo } from "./types";
  * YAPISAL VERİ (JSON-LD) ÜRETİCİLERİ
  * ==================================================================
  *
- * ⛔ KRİTİK KURAL — BURAYA `aggregateRating` VEYA `review` EKLENMEZ.
+ * ⛔ KRİTİK KURAL 1 — BURAYA `aggregateRating` VEYA `review` EKLENMEZ.
  *
  * Google, bir işletmenin KENDİ sitesinde KENDİ puanını yapısal veriyle
  * işaretlemesini "self-serving review" (kendi lehine yorum) sayar ve
@@ -18,6 +18,26 @@ import type { Faq, Product, SiteInfo } from "./types";
  *
  * Sonradan "puanı schema'ya da ekleyelim" diye düşünülürse: EKLEME.
  * Kazancı yok, tüm zengin sonuçları kaybettirme riski var.
+ *
+ * ------------------------------------------------------------------
+ *
+ * ⛔ KRİTİK KURAL 2 — ÖRNEK FİYAT `Offer` OLARAK YAYIMLANMAZ.
+ *
+ * `productSchema`, ürünün `isSamplePrice` alanı `true` olduğu sürece
+ * dönen objeye `offers` alanını HİÇ eklemez. Offer yalnızca fiyat
+ * gerçek olduğunda (`isSamplePrice: false`) yayımlanır.
+ *
+ * Neden koda gömüldü: demo aşamasında bizi koruyan tek şey domainin
+ * henüz alınmamış olması, yani indekslenmemek. Domain alındığı gün bu
+ * koruma kendiliğinden kalkar ve o an seed'de hâlâ örnek fiyat varsa
+ * Google'a yanlış fiyat gider. Yanlış fiyatlı Offer, Merchant/zengin
+ * sonuç yaptırımına yol açar. Koruma "yayından önce hatırlarız"a
+ * bırakılamayacak kadar kritik olduğu için kural burada, kod
+ * seviyesinde duruyor.
+ *
+ * Fiyatları açmak için doğru yol: `data/seed.ts` içindeki gerçek
+ * fiyatları girip `isSamplePrice: false` yapmak. Bu fonksiyona
+ * dokunmak DEĞİL.
  * ==================================================================
  */
 
@@ -104,16 +124,17 @@ export function localBusinessSchema(info: SiteInfo) {
 }
 
 /**
- * Product + Offer — tur detay sayfaları için.
+ * Product (+ koşullu Offer) — tur detay sayfaları için.
  *
- * ⚠️ Fiyatlar `data/seed.ts`'ten geliyor ve demo aşamasında ÖRNEK verisidir.
- * Site yayına alınmadan önce (Faz 7) gerçek fiyatlar girilmiş olmalı;
- * yapısal veride yanlış fiyat yayımlamak Google tarafından cezalandırılır.
+ * `offers` alanı YALNIZCA fiyat gerçekken eklenir. Ürün hâlâ demo
+ * fiyatıyla duruyorsa (`isSamplePrice: true`) Product şeması fiyatsız
+ * yayımlanır — bu geçerli bir Product'tır, sadece zengin sonuçta fiyat
+ * göstermez. Gerekçesi dosya başındaki KRİTİK KURAL 2'de yazılı.
  */
 export function productSchema(product: Product) {
   const url = `${SITE_URL}/turlar/${product.slug}`;
 
-  return {
+  const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
@@ -126,15 +147,21 @@ export function productSchema(product: Product) {
       "@type": "Brand",
       name: "As Yachting",
     },
-    offers: {
+    // ⛔ aggregateRating / review YOK — dosya başındaki KRİTİK KURAL 1.
+  };
+
+  // ⛔ KRİTİK KURAL 2: örnek fiyat asla Offer olarak yayımlanmaz.
+  if (!product.isSamplePrice) {
+    schema.offers = {
       "@type": "Offer",
       price: product.basePrice,
       priceCurrency: product.currency,
       availability: "https://schema.org/InStock",
       url,
-    },
-    // ⛔ aggregateRating / review YOK — dosya başındaki kurala bakın.
-  };
+    };
+  }
+
+  return schema;
 }
 
 /** FAQPage — /sss sayfası için */
