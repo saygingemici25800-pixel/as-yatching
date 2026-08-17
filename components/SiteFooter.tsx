@@ -70,6 +70,16 @@ export default async function SiteFooter() {
                 Tekne
               </Link>
             </li>
+            <li>
+              <Link href="/sss" className="text-ink-soft hover:text-accent">
+                Sık sorulan sorular
+              </Link>
+            </li>
+            <li>
+              <Link href="/iletisim" className="text-ink-soft hover:text-accent">
+                İletişim
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

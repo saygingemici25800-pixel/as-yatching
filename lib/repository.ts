@@ -67,6 +67,24 @@ export async function isDateAvailable(
 }
 
 /**
+ * "2026-08-30" → "30 Ağustos 2026"
+ *
+ * Tarih parçalanarak yerel `Date` kuruluyor; `new Date("2026-08-30")` UTC
+ * gece yarısı olarak yorumlandığı için negatif saat dilimlerinde günü bir
+ * geri kaydırırdı. Biçim tanınmazsa ham değer döner.
+ */
+function formatDateTR(iso: string): string {
+  const [year, month, day] = iso.split("-").map(Number);
+  if (!year || !month || !day) return iso;
+
+  return new Intl.DateTimeFormat("tr-TR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(year, month - 1, day));
+}
+
+/**
  * Demo aşamasında talep kaydedilmez; WhatsApp'a yönlendirilir.
  * Faz 6'da burası veritabanına yazacak.
  */
@@ -78,7 +96,7 @@ export async function createBookingRequest(
 
   const message = [
     `Merhaba, ${product?.name ?? "tur"} için bilgi almak istiyorum.`,
-    `Tarih: ${request.date}`,
+    `Tarih: ${formatDateTR(request.date)}`,
     `Kişi sayısı: ${request.guests}`,
     request.note ? `Not: ${request.note}` : null,
   ]

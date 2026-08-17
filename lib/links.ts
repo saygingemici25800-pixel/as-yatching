@@ -13,3 +13,8 @@ export function whatsappUrl(whatsapp: string, text?: string): string {
 export function telUrl(phone: string): string {
   return `tel:${phone.replace(/[^\d+]/g, "")}`;
 }
+
+/** Google Haritalar yol tarifi — kullanıcının bulunduğu yerden iskeleye */
+export function directionsUrl(latitude: number, longitude: number): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
+}

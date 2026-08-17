@@ -48,7 +48,7 @@ export default function GoogleRating({
           {inner}
         </a>
       ) : (
-        // TODO: Google Business Profile kısa linki alınınca burası tıklanabilir olacak
+        // seed'de googleProfileUrl boşsa rozet tıklanamaz hâlde gösterilir
         <div className={classes}>{inner}</div>
       )}
       <span className="sr-only">

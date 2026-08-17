@@ -14,9 +14,10 @@ import {
 } from "@/lib/repository";
 
 export const metadata: Metadata = {
-  title: "Tekne",
+  title: "Tekne | Fethiye Tekne Kiralama",
   description:
     "Fethiye Limanı'ndan kalkan teknemizin kapasitesi, donanımı ve güvenlik ekipmanları.",
+  alternates: { canonical: "/tekne" },
 };
 
 export default async function BoatPage() {

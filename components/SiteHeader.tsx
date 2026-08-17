@@ -7,6 +7,8 @@ import { getSiteInfo } from "@/lib/repository";
 const NAV = [
   { href: "/turlar", label: "Turlar" },
   { href: "/tekne", label: "Tekne" },
+  { href: "/sss", label: "SSS" },
+  { href: "/iletisim", label: "İletişim" },
 ];
 
 export default async function SiteHeader() {
@@ -18,7 +20,7 @@ export default async function SiteHeader() {
         <Wordmark className="text-2xl sm:text-[1.75rem]" />
 
         <nav className="hidden md:block" aria-label="Ana menü">
-          <ul className="flex items-center gap-8 text-sm">
+          <ul className="flex items-center gap-6 text-sm lg:gap-8">
             {NAV.map((item) => (
               <li key={item.href}>
                 <Link
@@ -35,7 +37,7 @@ export default async function SiteHeader() {
         <div className="flex items-center gap-2">
           <a
             href={telUrl(info.phone)}
-            className="hidden items-center gap-2 text-sm text-ink-soft transition-colors hover:text-accent sm:inline-flex"
+            className="hidden items-center gap-2 text-sm text-ink-soft transition-colors hover:text-accent lg:inline-flex"
           >
             <PhoneIcon className="size-4" />
             {info.phone}

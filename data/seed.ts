@@ -25,7 +25,7 @@ export const siteInfo: SiteInfo = {
   mapUrl: "https://maps.google.com/?q=Fethiye+Limanı+beton+iskele",
   googleRating: 5.0,
   googleReviewCount: 34,
-  googleProfileUrl: null, // TODO: GBP kısa linki
+  googleProfileUrl: "https://www.google.com/maps?cid=4934811779244890993",
   workingHours: "Her gün 24 saat",
   instagram: null, // TODO
   highSeasonMonths: [6, 7, 8, 9],

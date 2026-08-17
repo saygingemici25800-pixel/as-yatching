@@ -24,6 +24,7 @@ import {
   getProducts,
   getSiteInfo,
 } from "@/lib/repository";
+import { SITE_URL, jsonLdScript, productSchema } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ urun: string }> };
 
@@ -39,9 +40,19 @@ export async function generateMetadata({
   const product = await getProduct(urun);
   if (!product) return { title: "Tur bulunamadı" };
 
+  const description = `${product.shortDescription} ${startingFromLabel(product)} — fiyata dahil olanlar sayfada yazılı.`;
+
   return {
-    title: product.name,
-    description: `${product.shortDescription} ${startingFromLabel(product)} — fiyata dahil olanlar sayfada yazılı.`,
+    title: `${product.name} | Fethiye Tekne Kiralama`,
+    description,
+    alternates: { canonical: `/turlar/${product.slug}` },
+    openGraph: {
+      title: `${product.name} | Fethiye Tekne Kiralama | As Yachting`,
+      description,
+      type: "website",
+      locale: "tr_TR",
+      url: `${SITE_URL}/turlar/${product.slug}`,
+    },
   };
 }
 
@@ -62,6 +73,12 @@ export default async function ProductPage({ params }: PageProps) {
 
   return (
     <>
+      {/* Product + Offer yapısal verisi — aggregateRating içermez (bkz. lib/seo.ts) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={jsonLdScript(productSchema(product))}
+      />
+
       <DemoNotice />
 
       <div className="mx-auto max-w-6xl px-4 pt-6 sm:px-6 sm:pt-8">

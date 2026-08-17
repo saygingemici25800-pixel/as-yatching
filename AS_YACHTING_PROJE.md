@@ -6,11 +6,11 @@
 | Alan | Değer |
 |---|---|
 | Proje adı | AS Yachting — Marka & Web Platformu |
-| Versiyon | v0.5 (Demo çalışıyor) |
+| Versiyon | v0.6 (Site tamamlandı, teknik SEO kuruldu) |
 | Son güncelleme | 2026-08-17 |
-| Güncelleyen | Claude Code (Faz 2 uygulaması) |
+| Güncelleyen | Claude Code (Faz 2B uygulaması) |
 | Aktif faz | **Faz 3 — Müşteri Sunumu** |
-| Durum | ✅ Faz 2 tamamlandı — demo tarayıcıda çalışıyor |
+| Durum | ✅ Faz 2B tamamlandı — site teknik olarak yayına hazır, **müşteri sunumu bekliyor** |
 
 ## 🎯 Proje Modu: DEMO ÖNCE
 
@@ -224,11 +224,12 @@ Ziyaretçinin **tarihi ve fiyatı kendi başına görüp talebi başlatması**. 
 | **0** | Keşif & Brief | Cevaplanmış soru listesi, konumlandırma kararı | ✅ Tamamlandı |
 | **1** | Strateji & Kapsam | Konumlandırma, ürün mantığı, veri modeli kilitli | ✅ Tamamlandı |
 | **2** | **Demo İnşası** | Çalışan demo: ana sayfa, ürünler, takvim, talep formu, ~~admin taslağı~~ | ✅ Tamamlandı (admin paneli hariç — DoD'da yoktu, Faz 6'ya alındı) |
-| **3** | Müşteri Sunumu | Demo gösterimi, gerçek veri toplama, onay | ⏳ Devam ediyor |
+| **2B** | **Site Tamamlama & Teknik SEO** | Eksik sayfalar (`/iletisim`, `/sss`, 404), JSON-LD, sitemap, robots, OG görseli | ✅ Tamamlandı |
+| **3** | Müşteri Sunumu | Demo gösterimi, gerçek veri toplama, onay | ⏳ Devam ediyor — **sunum yapılmadı** |
 | **4** | Marka Kimliği | Logo vektörleştirme, palet, tipografi, ton rehberi | ⬜ |
 | **5** | İçerik & Çekim | Profesyonel çekim, metinler (TR/EN), SSS | ⬜ |
 | **6** | Gerçek Veri & Supabase | Seed → veritabanı geçişi, admin paneli, çoklu dil | ⬜ |
-| **7** | SEO & Yayın | Schema, sitemap, GBP optimizasyonu, GA4, domain, SSL | ⬜ |
+| **7** | SEO & Yayın | ~~Schema, sitemap~~ (Faz 2B'de öne çekildi), GBP optimizasyonu, GA4, domain, SSL | 🟡 Kısmen |
 | **8** | Büyüme | İçerik takvimi, yorum toplama, reklam, raporlama | ⬜ |
 
 ### Faz Tanımı — Faz 0 (tamamlandı)
@@ -254,6 +255,27 @@ Konumlandırma B, tek tekne + çok ürün mantığı, karma fiyatlandırma, seed
 **Faz 2 kapsam dışı bırakılanlar** (DoD'da yoktu, bilerek üretilmedi — navigasyona ölü bağlantı konmadı):
 `/deneyimler`, `/hakkimizda`, `/yorumlar`, `/sss`, `/blog`, `/iletisim`, `/rezervasyon`, `/fiyatlar`, `/admin`.
 Not: `/sss` içeriği (5 soru) şimdilik ana sayfada gösteriliyor; `/fiyatlar` işlevini `/turlar` sayfasındaki fiyat tablosu görüyor.
+
+### Faz Tanımı — Faz 2B — Site Tamamlama & Teknik SEO (tamamlandı)
+**Hedef:** Demoyu "eksik sayfası olmayan, arama motoruna hazır" bir siteye çevirmek.
+Bu faz orijinal planda yoktu; Faz 7'nin teknik yarısı öne çekildi.
+
+**Bitti sayılma kriteri (DoD):**
+- [x] C9 — WhatsApp mesajındaki tarih Türkçe biçimde (`Tarih: 30 Ağustos 2026`)
+- [x] C6 — Google Business Profile bağlantısı seed'e girildi; 5.0/34 rozeti artık tıklanabilir
+- [x] `lib/seo.ts` — LocalBusiness, Product+Offer, FAQPage şema üreticileri
+- [x] `app/sitemap.ts` — 10 adres (5 statik + 5 tur), veriye repository üzerinden erişiyor
+- [x] `app/robots.ts` — tümüne izin, sitemap bildirimi
+- [x] `/iletisim`, `/sss`, `404` sayfaları
+- [x] Her sayfaya benzersiz `title` / `description` / `canonical`, OG ve Twitter kartları
+- [x] 1200×630 OG görseli (`/public/og-image.jpg`)
+- [x] `npm run build` hatasız; 16 rota ön-üretiliyor
+- [x] Tüm sayfalar 375px'te taşmasız, kırık iç bağlantı yok
+- [x] **Hiçbir JSON-LD çıktısında `aggregateRating` veya `review` yok**
+
+**⛔ Kalıcı kural:** Yapısal veriye kendi puanımızı (5.0/34) EKLEMİYORUZ. Google bunu
+"self-serving review" sayıp zengin sonuçlardan eleyebiliyor. Gerekçe `lib/seo.ts`
+dosyasının başında yazılı — sonradan eklenmesin.
 
 ### Faz Tanımı — Faz 3 — Müşteri Sunumu (aktif)
 **Hedef:** Demoyu müşteriye göstermek ve eksik gerçek veriyi toplamak.
@@ -298,7 +320,10 @@ Not: `/sss` içeriği (5 soru) şimdilik ana sayfada gösteriliyor; `/fiyatlar` 
 | Yasal (turizm belgesi, sigorta, KVKK) | Yüksek | Faz 7 öncesi belge ve metin kontrolü |
 | Rakiplerin fiyat kırması | Orta | Deneyim paketleriyle fiyat karşılaştırmasından çıkma |
 | **Doğrulanmamış kapasite/mürettebat bilgisi sayfada kesin bilgi gibi görünüyor** (Faz 2'de eklendi) | **Yüksek** | `/tekne` ve tur sayfaları "12 kişiye kadar" ve "2 kişi mürettebat" yazıyor; bu değerler seed'de varsayım. Müşteri sunumundan **önce** teyit alınmalı (soru C3). Teyit gelmezse bu iki alan da "Bilgi bekleniyor"a çevrilmeli |
-| **Google puanı rozeti tıklanamıyor** (Faz 2'de eklendi) | Orta | `googleProfileUrl` boş olduğu için sitenin tek gerçek sosyal kanıtı doğrulanabilir değil. GBP kısa linki alınınca rozet otomatik tıklanabilir hâle geliyor (soru C6) |
+| ~~Google puanı rozeti tıklanamıyor~~ | ~~Orta~~ | ✅ **Kapandı (Faz 2B).** GBP bağlantısı girildi, rozet her sayfada tıklanabilir |
+| **Yapısal veriye puan eklenmesi cazibesi** (Faz 2B'de eklendi) | **Yüksek** | 5.0/34 puanı schema'ya eklemek zengin sonuçların tamamını kaybettirebilir ("self-serving review"). `lib/seo.ts` başında kalıcı uyarı var; kod incelemesinde bu kural kontrol edilmeli |
+| **Yanlış domainle yayına çıkma** (Faz 2B'de eklendi) | **Yüksek** | Canonical, sitemap ve JSON-LD adresleri `SITE_URL`'den üretiliyor; varsayılan `asyachting.com` bir tahmin. Yayından önce domain kesinleşip `.env`'e yazılmalı (soru C11) |
+| **Örnek fiyatların yapısal veriyle yayımlanması** (Faz 2B'de eklendi) | **Yüksek** | Product/Offer şeması `basePrice` alanını yayımlıyor; bu değerler hâlâ demo. Gerçek fiyat girilmeden site indekslenmemeli (soru C12) |
 | **Yer tutucu görseller sunumda "eksik iş" izlenimi verebilir** (Faz 2'de eklendi) | Orta | Görseller marka paletinde ve "YER TUTUCU" damgalı üretildi; sunumda bunun geçici olduğu sözlü olarak da söylenmeli. Kalıcı çözüm Faz 5 çekimi |
 
 ---
@@ -339,6 +364,16 @@ Not: `/sss` içeriği (5 soru) şimdilik ana sayfada gösteriliyor; `/fiyatlar` 
 | 2026-08-17 | Takvim varsayılan salt okunur, `onSelect` verilirse seçilebilir hâle geliyor | Aynı bileşen hem ana sayfa/tekne önizlemesinde hem talep formunda kullanılıyor, kod ikizlenmiyor |
 | 2026-08-17 | Tarih işlemleri `lib/dates.ts` içinde yerel saatle yapılıyor, `toISOString()` kullanılmıyor | Türkiye saatinde `toISOString()` tarihi bir gün geriye kaydırıyor — takvimde yanlış günün dolu görünmesine yol açardı |
 | 2026-08-17 | Mobilde sabit alt bar (Ara + WhatsApp), pop-up yok | Bölüm 5.4 dönüşüm mekaniği; "çıkış niyeti yok, pop-up yok" kuralına uyuluyor |
+| 2026-08-17 | **Faz 2B teknik kararları aşağıda** ⬇️ | — |
+| 2026-08-17 | **Yapısal veriye `aggregateRating` / `review` EKLENMEYECEK** | Google, işletmenin kendi sitesinde kendi puanını işaretlemesini "self-serving review" sayıyor ve zengin sonuçtan tamamen eleyebiliyor. Kazancı yok, kaybı büyük. 5.0/34 sadece görsel rozet + GBP bağlantısıyla gösteriliyor. Kural `lib/seo.ts` başında kalıcı yorum olarak yazılı |
+| 2026-08-17 | Faz 7'nin teknik yarısı (schema, sitemap, robots) Faz 2B olarak öne çekildi | Sayfalar zaten yazılıyordu; SEO altyapısını sonradan eklemek her sayfaya tekrar dokunmayı gerektirirdi |
+| 2026-08-17 | Faz numaralandırması korundu, yeni iş "2B" olarak eklendi | Faz 3 (Müşteri Sunumu) müşteriyle yapılacak bir iş; kod tarafında tamamlanamaz. Yapılmamış bir fazı "tamamlandı" işaretlemek bu dosyanın kendi kuralını çiğnerdi |
+| 2026-08-17 | `SITE_URL` çevre değişkeninden okunuyor, varsayılan `https://asyachting.com` | Domain henüz alınmadı. Alındığında `.env` içine `NEXT_PUBLIC_SITE_URL` yazmak yeterli; hiçbir dosya değişmeyecek |
+| 2026-08-17 | Koordinatlar tek sabitte (`BUSINESS_GEO`) | Hem JSON-LD hem yol tarifi bağlantısı aynı yerden okuyor; ikisi birbirinden ayrışamaz |
+| 2026-08-17 | JSON-LD basılırken `<` karakteri kaçırılıyor | İçerikte `</script>` geçerse etiket erken kapanır ve XSS açığı oluşur |
+| 2026-08-17 | `/sss` açılır kapanır bölümleri `<details>` ile yapıldı | JavaScript gerekmiyor; JS yüklenmeden de çalışıyor ve arama motoru içeriği görüyor |
+| 2026-08-17 | `lib/repository.ts` içindeki tarih biçimlendirmesi yerel `Date` ile kuruluyor | `new Date("2026-08-30")` UTC gece yarısı sayıldığı için bazı saat dilimlerinde günü bir geri kaydırırdı |
+| 2026-08-17 | Menüye `SSS` ve `İletişim` eklendi, telefon numarası `lg` altında gizlendi | Dört menü öğesi + numara `md` genişliğinde başlığı taşırıyordu. 375px'te menü satırı rahat sığıyor |
 
 ---
 
@@ -363,11 +398,17 @@ Not: `/sss` içeriği (5 soru) şimdilik ana sayfada gösteriliyor; `/fiyatlar` 
 - **C3.** `12 kişi` kapasite ve `2 kişi` mürettebat doğru mu? Şu an seed'de varsayım olarak duruyor ve sayfada **kesin bilgi gibi** görünüyor — teyit edilmezse Kural 1 ihlali olur.
 - **C4.** İptal ve iade koşulları nedir? SSS'de eksik olan tek soru bu.
 - **C5.** Sigorta poliçesi ve turizm işletme belgesi var mı? Güvenlik bölümünde yer ayrıldı, içerik bekliyor.
-- **C6.** Google Business Profile kısa linki? Şu an `googleProfileUrl: null` olduğu için 5.0 puan rozeti **tıklanamıyor** — en güçlü sosyal kanıt doğrulanabilir değil.
+- ~~**C6.** Google Business Profile kısa linki?~~ → **Cevaplandı (Faz 2B).** `https://www.google.com/maps?cid=4934811779244890993` seed'e girildi; 5.0/34 rozeti artık her sayfada tıklanabilir ve GBP'ye açılıyor.
 - **C7.** Ticari unvan (`legalName`) — KVKK ve yasal metinler için Faz 7'de zorunlu.
-- **C8.** Instagram hesabı var mı? Footer'da yer ayrıldı, link bekliyor.
-- **C9.** WhatsApp mesajındaki tarih biçimi: şu an `Tarih: 2026-08-30` gibi ISO formatta gidiyor. `30 Ağustos 2026` tercih edilirse `lib/repository.ts` içinde tek satır değişir — bu dosya korunmuş olduğu için dokunulmadı.
+- **C8.** Instagram hesabı var mı? Footer ve `/iletisim` sayfasında yer ayrıldı, link bekliyor. Not: `sameAs` yapısal verisine de otomatik eklenecek.
+- ~~**C9.** WhatsApp mesajındaki tarih biçimi ISO~~ → **Cevaplandı (Faz 2B).** Artık `Tarih: 30 Ağustos 2026` gönderiliyor.
 - **C10.** Yüksek sezon çarpanları (günübirlik 1,25 / gün batımı 1,15 / kahvaltı 1,10 / evlilik teklifi 1,20 / mavi tur 1,30) ve yüksek sezon ayları (Haziran–Eylül) doğru mu? Fiyat motoru bunları canlı uyguluyor.
+
+### 🔴 Faz 2B'de ortaya çıkanlar
+- **C11.** **Domain kararı artık bloke edici.** `SITE_URL` varsayılanı `https://asyachting.com`; sitemap, robots, canonical ve JSON-LD adreslerinin hepsi buradan üretiliyor. Yanlış domainle yayına çıkılırsa canonical adresler baştan hatalı olur. Domain alınınca `.env` içine `NEXT_PUBLIC_SITE_URL` yazılacak, kod değişmeyecek.
+- **C12.** **Product şemasındaki fiyatlar hâlâ ÖRNEK verisi.** Yapısal veride gerçek olmayan fiyat yayımlamak Google tarafından cezalandırılır. Site yayına alınmadan (Faz 7) önce gerçek fiyatlar girilmiş olmalı. Şu an domain olmadığı için indekslenme riski yok.
+- **C13.** OG görseli şimdilik tipografik (marka renkleri + wordmark). Profesyonel çekim gelince tekne fotoğraflı bir sürümle değiştirilmeli — sosyal paylaşımda en çok tıklanan öge bu.
+- **C14.** Analitik (GA4) ve Search Console henüz kurulmadı; domain sonrası Faz 7 işi.
 
 ### Kalan sorular (Faz 2–3'te lazım olacak)
 
@@ -495,3 +536,42 @@ Site hazır olana kadar bekleyecek bir şey yok. Google hesabı zaten en değerl
 | Bloklu tarih | ✅ 22 Ağustos butonu `disabled`, etiket "22 — Dolu" |
 
 > **Not:** LCP ölçümü yerel sunucuda yapıldı; gerçek alan değeri hosting ve ağ gecikmesiyle artacak. Aradaki pay hedefe göre geniş.
+
+### Faz 2B — Site Tamamlama & Teknik SEO
+
+**Yeni sayfalar**
+- `app/iletisim/page.tsx` — telefon, WhatsApp, adres, 24 saat bilgisi, yol tarifi, kısa form
+- `app/sss/page.tsx` — tüm sorular `<details>` ile, FAQPage JSON-LD
+- `app/not-found.tsx` — 404 (arama motorlarına `noindex`)
+
+**SEO altyapısı**
+- `lib/seo.ts` — `SITE_URL`, `BUSINESS_GEO`, `localBusinessSchema`, `productSchema`, `faqSchema`, `jsonLdScript`
+- `app/sitemap.ts` — 10 adres, ürünler repository'den
+- `app/robots.ts` — tümüne izin + sitemap bildirimi
+- `public/og-image.jpg` — 1200×630 paylaşım görseli
+
+**Yeni bileşen**
+- `components/ContactForm.tsx` — konu + mesaj → WhatsApp
+
+**Değiştirilenler**
+- `lib/repository.ts` — tarih Türkçe biçime çevrildi (C9, kullanıcı onayıyla)
+- `data/seed.ts` — `googleProfileUrl` girildi (C6, kullanıcı onayıyla)
+- `app/layout.tsx` — metadataBase, başlık şablonu, OG/Twitter, LocalBusiness JSON-LD
+- `components/SiteHeader.tsx`, `components/SiteFooter.tsx` — yeni sayfalara bağlantılar
+- `app/turlar/page.tsx`, `app/tekne/page.tsx`, `app/turlar/[urun]/page.tsx` — benzersiz başlık/canonical; tur detayına Product JSON-LD
+- `lib/links.ts` — `directionsUrl` eklendi
+
+### Faz 2B doğrulama sonuçları
+
+| Ölçüt | Sonuç |
+|---|---|
+| `next build` | ✅ Hatasız — 16 rota ön-üretildi |
+| Kırık iç bağlantı | ✅ Yok — 14 sayfa tarandı, hepsi 200 |
+| Bilinmeyen adres | ✅ Doğru şekilde 404 dönüyor |
+| JSON-LD ayrıştırma | ✅ 17 bloğun hepsi geçerli JSON |
+| **`aggregateRating` / `review`** | ✅ **Hiçbir çıktıda yok** |
+| Şema kapsamı | LocalBusiness her sayfada · FAQPage `/sss` · Product 5 tur sayfasında |
+| 375px kırılma | ✅ Yedi sayfada da `scrollWidth = 375`, taşan öge sıfır |
+| Kural 4 | ✅ `@/data/seed` importu yalnızca `lib/repository.ts`'te |
+| C9 (tarih) | ✅ `Tarih: 30 Ağustos 2026` |
+| C6 (GBP linki) | ✅ Rozet tıklanabilir, yeni sekmede açılıyor |

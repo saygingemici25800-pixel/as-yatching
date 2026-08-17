@@ -13,9 +13,10 @@ import { getProducts, getSiteInfo } from "@/lib/repository";
 import type { PricingType } from "@/lib/types";
 
 export const metadata: Metadata = {
-  title: "Turlar ve fiyatlar",
+  title: "Turlar ve Fiyatlar | Fethiye Tekne Kiralama",
   description:
     "Fethiye'den kalkan günübirlik özel kiralama, gün batımı turu, sabah kahvaltı turu, evlilik teklifi kurgusu ve konaklamalı mavi tur. Bütün fiyatlar yazılı.",
+  alternates: { canonical: "/turlar" },
 };
 
 /** Üç fiyat tipinin ne anlama geldiğini açıkça yazıyoruz — şeffaflık konumlandırması */
