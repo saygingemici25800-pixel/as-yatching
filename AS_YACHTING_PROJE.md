@@ -404,6 +404,11 @@ Aşağıdaki maddelerin **hepsi** işaretlenmeden bayrak açılmaz:
 | 2026-08-18 | Bayrak tek yerde (`lib/seo.ts → ALLOW_INDEXING`), iki dosya onu okuyor | Güvenlik kontrolünü kopyalamak, birinin güncellenip diğerinin unutulmasına ve sitenin yarı açık kalmasına yol açardı |
 | 2026-08-18 | Kilitliyken `sitemap` satırı `robots.txt`'e hiç yazılmıyor | Taramayı yasaklarken site haritası bildirmek çelişkili sinyal |
 | 2026-08-18 | `.gitignore`'a `!.env.example` istisnası eklendi | Mevcut `.env*` kalıbı örnek dosyayı da yutuyordu; hangi değişkenlerin gerektiğini anlatan tek belge depoya giremezdi |
+| 2026-08-18 | Ana sayfaya hero'dan sonra kaydırmaya bağlı **parallax bölümü** eklendi (GSAP + ScrollTrigger + Lenis) | Müşteri talebi. Kaynak Osmo bileşeni; yapısı korundu, görselleri ve metni markaya uyarlandı |
+| 2026-08-18 | Parallax katmanları **SVG**, PNG değil | ⚠️ Önce PNG üretildi: her katman 197 KB, üçü 591 KB. Yavaş 4G'de hero görselinin (LCP ögesi) önünü tıkayıp **ana sayfa LCP'sini 0,92 s'den 3,98 s'ye çıkardı** — DoD hedefini deldi. Düz iki renkli siluetler SVG'ye çevrilince toplam 1,2 KB'a düştü ve LCP 1,09 s oldu. **Ders: bu sitede düz renkli/vektörel görsel asla PNG olarak eklenmez** |
+| 2026-08-18 | Osmo'nun CDN görselleri kullanılmadı, katmanlar marka paletinde yeniden çizildi | Başkasının CDN'ine bağlanmak kırılgan ve varlık bize ait değil. Ayrıca Kural: görseller `/public/placeholder/` altında toplanır |
+| 2026-08-18 | Bileşene `prefers-reduced-motion` koruması eklendi | Tercih varsa ne GSAP ne Lenis kuruluyor; sahne duruş hâlinde birleşik olduğu için görsel eksiksiz kalıyor |
+| 2026-08-18 | Orijinal bileşenin üç temizlik hatası düzeltildi | (1) `gsap.ticker.add` geri alınmıyordu — yok edilmiş Lenis örneği her karede çağrılmaya devam ederdi. (2) `ScrollTrigger.getAll().forEach(kill)` sayfadaki **tüm** trigger'ları öldürüyordu; artık `gsap.context()` ile sadece kendininkiler. (3) `lagSmoothing(0)` global ayarı geri yüklenmiyordu |
 | 2026-08-18 | `app/not-found.tsx` içindeki `metadata` export'u kaldırıldı | Next.js App Router `not-found.tsx`'te metadata'yı desteklemiyor — yazılan `robots` alanı sessizce yok sayılıyordu. Var olmayan bir korumayı kod içinde varmış gibi bırakmak yanıltıcı. Zaten gereksiz: sayfa HTTP 404 döndüğü için arama motorları meta etiketine bakmadan indekslemiyor |
 | 2026-08-17 | Faz 7'nin teknik yarısı (schema, sitemap, robots) Faz 2B olarak öne çekildi | Sayfalar zaten yazılıyordu; SEO altyapısını sonradan eklemek her sayfaya tekrar dokunmayı gerektirirdi |
 | 2026-08-17 | Faz numaralandırması korundu, yeni iş "2B" olarak eklendi | Faz 3 (Müşteri Sunumu) müşteriyle yapılacak bir iş; kod tarafında tamamlanamaz. Yapılmamış bir fazı "tamamlandı" işaretlemek bu dosyanın kendi kuralını çiğnerdi |
@@ -599,6 +604,14 @@ Site hazır olana kadar bekleyecek bir şey yok. Google hesabı zaten en değerl
 - `app/layout.tsx` — kilitliyken `robots: { index: false, follow: false }`
 - `.gitignore` — `!.env.example` istisnası
 - `app/not-found.tsx` — işlevsiz `metadata` export'u kaldırıldı
+
+**Parallax bölümü (2026-08-18)**
+- `components/ui/parallax-scrolling.tsx` + `.css` — kaydırmaya bağlı katmanlı sahne
+- `public/placeholder/parallax-layer-{1,2,4}.svg` — uzak ufuk + altın güneş, orta adalar, deniz + yelkenli
+- `app/page.tsx` — hero'dan hemen sonra
+- Yeni bağımlılık: `gsap`, `@studio-freight/lenis` (ana sayfa First Load JS 113 → 161 kB)
+- ⚠️ `@studio-freight/lenis` **kullanımdan kalktı**, `lenis` olarak yeniden adlandırıldı. API aynı; `npm i lenis` + tek satır import değişikliğiyle geçilir.
+- ⚠️ Lenis yumuşak kaydırmayı **global** devralır ama bileşen yalnızca ana sayfada olduğu için diğer sayfalar normal kaydırmada kalır. Site geneli tutarlılık istenirse ya her sayfaya taşınmalı ya kaldırılmalı.
 
 **Vercel kurulumu:** Project Settings → Environment Variables altına
 `NEXT_PUBLIC_SITE_URL` ve `NEXT_PUBLIC_ALLOW_INDEXING=false` girilir.

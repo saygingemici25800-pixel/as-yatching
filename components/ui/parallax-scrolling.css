@@ -1,0 +1,133 @@
+/*
+  Parallax bölümü — Osmo kaynaklı efektin AS Yachting markasına uyarlanmış hâli.
+
+  Renkler doğrudan yazılmaz; hepsi app/globals.css içindeki @theme
+  değişkenlerinden okunur. Palet değişirse bu dosya kendiliğinden uyar.
+*/
+
+.parallax {
+  position: relative;
+  background-color: var(--color-canvas);
+  /* Hero ile arada nefes payı — diğer bölümlerin pt-16 / sm:pt-24 ritmi */
+  margin-top: 4rem;
+}
+
+.parallax__header {
+  position: relative;
+  display: block;
+  /* svh: mobil tarayıcı çubuğu açılıp kapandığında yükseklik zıplamaz */
+  height: 100svh;
+  min-height: 30rem;
+  /* Çok uzun ekranlarda bölüm sayfayı ele geçirmesin */
+  max-height: 46rem;
+  overflow: hidden;
+}
+
+.parallax__visuals {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.parallax__layers {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.parallax__layer-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  /* Katmanlar duruş hâlinde hizalı: bölüm ekrana girdiğinde sahne birleşik
+     görünür. Ayrışma kaydırdıkça GSAP tarafından yapılır. */
+  will-change: transform;
+}
+
+.parallax__layer-title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Sahnenin alt yarısı deniz; başlık üst yarıda dursun */
+  padding: 0 1.25rem 22vh;
+  gap: 0.75rem;
+  text-align: center;
+  will-change: transform;
+}
+
+.parallax__eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0;
+}
+
+.parallax__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  color: var(--color-ink);
+  /* Sitedeki diğer h2'lerle aynı ölçekte kalır */
+  font-size: clamp(1.875rem, 4.2vw, 2.75rem);
+  max-width: 20ch;
+  margin: 0;
+}
+
+.parallax__rule {
+  width: 4.5rem;
+  height: 1px;
+  background-color: var(--color-accent);
+}
+
+.parallax__caption {
+  max-width: 34ch;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-ink-soft);
+  margin: 0;
+}
+
+/* Denizin alt kenarı sayfaya sert bir çizgiyle bitmesin */
+.parallax__fade {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 10%;
+  background-image: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-canvas)
+  );
+  pointer-events: none;
+}
+
+/*
+  Hareket azaltma tercihi: animasyon hiç kurulmuyor (JS tarafında da).
+  Sahne zaten duruş hâlinde birleşik olduğu için görsel olarak eksiksiz kalır,
+  yalnızca kaydırmaya tepki vermez.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .parallax__layer-img,
+  .parallax__layer-title {
+    transform: none !important;
+  }
+}
+
+@media (min-width: 640px) {
+  .parallax {
+    margin-top: 6rem;
+  }
+}

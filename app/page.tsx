@@ -4,6 +4,7 @@ import AvailabilityCalendar from "@/components/AvailabilityCalendar";
 import DemoNotice from "@/components/DemoNotice";
 import GoogleRating from "@/components/GoogleRating";
 import ProductCard from "@/components/ProductCard";
+import { ParallaxScrolling } from "@/components/ui/parallax-scrolling";
 import { ArrowIcon, CheckIcon, WhatsappIcon } from "@/components/icons";
 import { whatsappUrl } from "@/lib/links";
 import {
@@ -107,6 +108,13 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ---------- Parallax ---------- */}
+      <ParallaxScrolling
+        eyebrow="Fethiye körfezi"
+        title="Sabah çıkıyoruz, akşam dönüyoruz"
+        caption="Kızılada, Akvaryum Koyu, Samanlık Koyu. Rotayı grubun temposuna göre birlikte belirliyoruz."
+      />
 
       {/* ---------- Vaatler ---------- */}
       <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-20">

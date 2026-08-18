@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" role="presentation">
+  <g fill="#1C2A38" fill-opacity=".92">
+    <path d="M828 680 L828 778 L774 778 Z"/>
+    <path d="M840 698 L888 778 L840 778 Z"/>
+    <path d="M775 786 L885 786 L863 806 L797 806 Z"/>
+    <path d="M-50 812 Q240 786 380 796 Q520 806 670 792 Q820 778 970 791 Q1120 804 1260 793 Q1400 782 1525 791 L1650 800 L1650 900 L-50 900 Z"/>
+  </g>
+</svg>
