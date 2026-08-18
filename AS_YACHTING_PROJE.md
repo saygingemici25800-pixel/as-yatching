@@ -6,11 +6,11 @@
 | Alan | Değer |
 |---|---|
 | Proje adı | AS Yachting — Marka & Web Platformu |
-| Versiyon | v0.6 (Site tamamlandı, teknik SEO kuruldu) |
-| Son güncelleme | 2026-08-17 |
+| Versiyon | v0.7 (İndeksleme kilidi + Vercel hazır) |
+| Son güncelleme | 2026-08-18 |
 | Güncelleyen | Claude Code (Faz 2B uygulaması) |
 | Aktif faz | **Faz 3 — Müşteri Sunumu** |
-| Durum | ✅ Faz 2B tamamlandı — site teknik olarak yayına hazır, **müşteri sunumu bekliyor** |
+| Durum | ✅ Deploy edilebilir · 🔒 **Arama motorlarına KAPALI** — kilit Faz 7 yayın listesi bitince açılır |
 
 ## 🎯 Proje Modu: DEMO ÖNCE
 
@@ -291,6 +291,37 @@ dosyasının başında yazılı — sonradan eklenmesin.
 - [ ] Profesyonel çekim için karar ve bütçe alındı (Faz 5 kritik yolu)
 - [ ] Domain adı seçildi
 
+### Faz Tanımı — Faz 7 — SEO & Yayın · **YAYIN KONTROL LİSTESİ**
+
+> Kod içindeki `⛔ KRİTİK KURAL 3` yorumları bu listeye işaret eder.
+> `app/robots.ts`, `app/layout.tsx`, `lib/seo.ts` ve `.env.example`.
+
+**Site şu an arama motorlarına KAPALI.** Varsayılan olarak `robots.txt`
+`Disallow: /` veriyor ve her sayfa `noindex, nofollow` basıyor. Kilit tek bir
+bayrakla açılır: `NEXT_PUBLIC_ALLOW_INDEXING`.
+
+Aşağıdaki maddelerin **hepsi** işaretlenmeden bayrak açılmaz:
+
+- [ ] **İçerik gerçek:** tekne adı, tipi, boyu, kabin sayısı, yapım yılı girildi — `/tekne` sayfasında "Bilgi bekleniyor" satırı kalmadı
+- [ ] **Kapasite ve mürettebat teyitli** (soru C3) — varsayım olarak duran `12 kişi` / `2 kişi` doğrulandı
+- [ ] **Fiyatlar gerçek:** `data/seed.ts` içinde gerçek fiyatlar var ve `isSamplePrice: false` yapıldı → `ÖRNEK` rozetleri kayboldu, Product şeması `Offer` yayımlamaya başladı
+- [ ] **Yüksek sezon çarpanları teyitli** (soru C10)
+- [ ] **İptal ve iade koşulları** SSS'e eklendi
+- [ ] **Sigorta ve turizm işletme belgesi** bilgisi `/tekne` güvenlik bölümüne eklendi
+- [ ] **Profesyonel fotoğraflar** `/public/placeholder/` içine kondu — "YER TUTUCU" damgalı görsel kalmadı
+- [ ] **OG görseli** tekne fotoğraflı sürümle değiştirildi (soru C13)
+- [ ] **Domain alındı** ve `NEXT_PUBLIC_SITE_URL` doğru değerle ayarlandı (soru C11) — canonical, sitemap ve JSON-LD adresleri buradan üretiliyor
+- [ ] **Ticari unvan / KVKK ve yasal metinler** hazır (soru C7)
+- [ ] **GA4 ve Google Search Console** kuruldu (soru C14)
+- [ ] **Google Business Profile** siteyle bağlandı
+- [ ] `npm run build` hatasız, JSON-LD çıktılarında `aggregateRating` / `review` yok
+- [ ] **EN SON ADIM → `NEXT_PUBLIC_ALLOW_INDEXING=true` yapıldı** ve yeniden deploy alındı
+
+> ⚠️ Son madde gerçekten son olmalı. `NEXT_PUBLIC_` önekli değişkenler derleme
+> anında gömülür; bayrağı değiştirmek tek başına yetmez, **yeniden build/deploy
+> gerekir**. Bayrak erken açılırsa Google'a gerçek olmayan fiyat ve eksik tekne
+> bilgisi indekslenir; sonradan temizlemesi haftalar sürer.
+
 ---
 
 ## 7. Ölçüm ve Hedefler (KPI)
@@ -322,7 +353,8 @@ dosyasının başında yazılı — sonradan eklenmesin.
 | **Doğrulanmamış kapasite/mürettebat bilgisi sayfada kesin bilgi gibi görünüyor** (Faz 2'de eklendi) | **Yüksek** | `/tekne` ve tur sayfaları "12 kişiye kadar" ve "2 kişi mürettebat" yazıyor; bu değerler seed'de varsayım. Müşteri sunumundan **önce** teyit alınmalı (soru C3). Teyit gelmezse bu iki alan da "Bilgi bekleniyor"a çevrilmeli |
 | ~~Google puanı rozeti tıklanamıyor~~ | ~~Orta~~ | ✅ **Kapandı (Faz 2B).** GBP bağlantısı girildi, rozet her sayfada tıklanabilir |
 | **Yapısal veriye puan eklenmesi cazibesi** (Faz 2B'de eklendi) | **Yüksek** | 5.0/34 puanı schema'ya eklemek zengin sonuçların tamamını kaybettirebilir ("self-serving review"). `lib/seo.ts` başında kalıcı uyarı var; kod incelemesinde bu kural kontrol edilmeli |
-| **Yanlış domainle yayına çıkma** (Faz 2B'de eklendi) | **Yüksek** | Canonical, sitemap ve JSON-LD adresleri `SITE_URL`'den üretiliyor; varsayılan `asyachting.com` bir tahmin. Yayından önce domain kesinleşip `.env`'e yazılmalı (soru C11) |
+| **Yanlış domainle yayına çıkma** (Faz 2B'de eklendi) | Orta *(indeksleme kilidiyle düştü)* | Canonical, sitemap ve JSON-LD adresleri `SITE_URL`'den üretiliyor; varsayılan bir tahmin. Site aramaya kapalı olduğu için yanlış adres indekslenmiyor; yine de domain kesinleşince `NEXT_PUBLIC_SITE_URL` ayarlanmalı (soru C11) |
+| **Demo içeriğin indekslenmesi** (Faz 2B'de eklendi) | ~~Yüksek~~ → Düşük | ✅ **Kilit kuruldu.** Varsayılan `Disallow: /` + her sayfada `noindex, nofollow`. Kalan risk yalnızca `NEXT_PUBLIC_ALLOW_INDEXING`'in erken açılması; bu yüzden bayrak Faz 7 yayın listesinin **en son maddesi** olarak konumlandırıldı |
 | ~~Örnek fiyatların yapısal veriyle yayımlanması~~ | ~~Yüksek~~ | ✅ **Kapandı — koda gömüldü.** `productSchema` örnek fiyatlı üründe `offers` üretmiyor. Riskin "yayından önce hatırlarız"a bırakılmaması için koruma kod seviyesinde; gerekçesi `lib/seo.ts` başında KRİTİK KURAL 2 olarak yazılı |
 | **Yer tutucu görseller sunumda "eksik iş" izlenimi verebilir** (Faz 2'de eklendi) | Orta | Görseller marka paletinde ve "YER TUTUCU" damgalı üretildi; sunumda bunun geçici olduğu sözlü olarak da söylenmeli. Kalıcı çözüm Faz 5 çekimi |
 
@@ -367,6 +399,12 @@ dosyasının başında yazılı — sonradan eklenmesin.
 | 2026-08-17 | **Faz 2B teknik kararları aşağıda** ⬇️ | — |
 | 2026-08-17 | **Yapısal veriye `aggregateRating` / `review` EKLENMEYECEK** | Google, işletmenin kendi sitesinde kendi puanını işaretlemesini "self-serving review" sayıyor ve zengin sonuçtan tamamen eleyebiliyor. Kazancı yok, kaybı büyük. 5.0/34 sadece görsel rozet + GBP bağlantısıyla gösteriliyor. Kural `lib/seo.ts` başında kalıcı yorum olarak yazılı |
 | 2026-08-17 | **Örnek fiyat `Offer` olarak yayımlanmayacak — koruma koda gömüldü** | Demo aşamasında bizi koruyan tek şey domainin alınmamış olmasıydı; domain alındığı gün bu koruma kendiliğinden kalkıyor ve o an seed'de örnek fiyat varsa Google'a yanlış fiyat gidiyordu. `productSchema` artık `isSamplePrice: true` iken `offers` alanını hiç üretmiyor. Fiyatsız Product hâlâ geçerli bir şemadır, sadece zengin sonuçta fiyat göstermez |
+| 2026-08-18 | **İndeksleme kilidi — site varsayılan olarak aramaya KAPALI** | Demo fiyat ve yer tutucu içerikle indekslenmek, sonradan temizlenmesi haftalar süren bir hasar. `NEXT_PUBLIC_ALLOW_INDEXING` `"true"` olmadıkça `robots.txt` `Disallow: /` veriyor ve her sayfa `noindex, nofollow` basıyor. Kilit "yayına alırken hatırlarız"a bırakılmadı; **açık olması için bilinçli eylem gerekiyor**, kapalı olması için hiçbir şey gerekmiyor |
+| 2026-08-18 | Kilit `robots.txt` ile yetinmiyor, sayfa düzeyinde `noindex` de basıyor | `robots.txt` taramayı engeller ama dış bir bağlantı üzerinden bulunan sayfa yine de indekslenebilir. İki katman birlikte gerekiyor |
+| 2026-08-18 | Bayrak tek yerde (`lib/seo.ts → ALLOW_INDEXING`), iki dosya onu okuyor | Güvenlik kontrolünü kopyalamak, birinin güncellenip diğerinin unutulmasına ve sitenin yarı açık kalmasına yol açardı |
+| 2026-08-18 | Kilitliyken `sitemap` satırı `robots.txt`'e hiç yazılmıyor | Taramayı yasaklarken site haritası bildirmek çelişkili sinyal |
+| 2026-08-18 | `.gitignore`'a `!.env.example` istisnası eklendi | Mevcut `.env*` kalıbı örnek dosyayı da yutuyordu; hangi değişkenlerin gerektiğini anlatan tek belge depoya giremezdi |
+| 2026-08-18 | `app/not-found.tsx` içindeki `metadata` export'u kaldırıldı | Next.js App Router `not-found.tsx`'te metadata'yı desteklemiyor — yazılan `robots` alanı sessizce yok sayılıyordu. Var olmayan bir korumayı kod içinde varmış gibi bırakmak yanıltıcı. Zaten gereksiz: sayfa HTTP 404 döndüğü için arama motorları meta etiketine bakmadan indekslemiyor |
 | 2026-08-17 | Faz 7'nin teknik yarısı (schema, sitemap, robots) Faz 2B olarak öne çekildi | Sayfalar zaten yazılıyordu; SEO altyapısını sonradan eklemek her sayfaya tekrar dokunmayı gerektirirdi |
 | 2026-08-17 | Faz numaralandırması korundu, yeni iş "2B" olarak eklendi | Faz 3 (Müşteri Sunumu) müşteriyle yapılacak bir iş; kod tarafında tamamlanamaz. Yapılmamış bir fazı "tamamlandı" işaretlemek bu dosyanın kendi kuralını çiğnerdi |
 | 2026-08-17 | `SITE_URL` çevre değişkeninden okunuyor, varsayılan `https://asyachting.com` | Domain henüz alınmadı. Alındığında `.env` içine `NEXT_PUBLIC_SITE_URL` yazmak yeterli; hiçbir dosya değişmeyecek |
@@ -554,6 +592,18 @@ Site hazır olana kadar bekleyecek bir şey yok. Google hesabı zaten en değerl
 **Yeni bileşen**
 - `components/ContactForm.tsx` — konu + mesaj → WhatsApp
 
+**İndeksleme kilidi ve Vercel hazırlığı (2026-08-18)**
+- `.env.example` — `NEXT_PUBLIC_SITE_URL` ve `NEXT_PUBLIC_ALLOW_INDEXING`, açıklamalarıyla
+- `lib/seo.ts` — `ALLOW_INDEXING` bayrağı (tek kaynak)
+- `app/robots.ts` — kilitliyken `Disallow: /`, sitemap bildirimi yok
+- `app/layout.tsx` — kilitliyken `robots: { index: false, follow: false }`
+- `.gitignore` — `!.env.example` istisnası
+- `app/not-found.tsx` — işlevsiz `metadata` export'u kaldırıldı
+
+**Vercel kurulumu:** Project Settings → Environment Variables altına
+`NEXT_PUBLIC_SITE_URL` ve `NEXT_PUBLIC_ALLOW_INDEXING=false` girilir.
+Başka ayar gerekmiyor; Next.js 15 Vercel'de hazır çalışır.
+
 **Değiştirilenler**
 - `lib/repository.ts` — tarih Türkçe biçime çevrildi (C9, kullanıcı onayıyla)
 - `data/seed.ts` — `googleProfileUrl` girildi (C6, kullanıcı onayıyla)
@@ -577,3 +627,6 @@ Site hazır olana kadar bekleyecek bir şey yok. Google hesabı zaten en değerl
 | Kural 4 | ✅ `@/data/seed` importu yalnızca `lib/repository.ts`'te |
 | C9 (tarih) | ✅ `Tarih: 30 Ağustos 2026` |
 | C6 (GBP linki) | ✅ Rozet tıklanabilir, yeni sekmede açılıyor |
+| **İndeksleme kilidi — bayrak KAPALI** | ✅ `robots.txt` = `Disallow: /`, sitemap satırı yok; altı sayfanın hepsinde `noindex, nofollow` |
+| **İndeksleme kilidi — bayrak `true`** | ✅ `Allow: /` + sitemap bildirimi geri geliyor; `robots` meta etiketi hiç üretilmiyor |
+| Her iki bayrak durumunda build | ✅ Çıkış kodu 0 |

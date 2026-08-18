@@ -45,6 +45,20 @@ import type { Faq, Product, SiteInfo } from "./types";
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://asyachting.com";
 
+/**
+ * ⛔ KRİTİK KURAL 3 — İNDEKSLEME KİLİDİ (ayrıntı: app/robots.ts)
+ *
+ * Varsayılan KAPALI. Yalnızca `NEXT_PUBLIC_ALLOW_INDEXING=true` iken açılır.
+ * `app/robots.ts` ve `app/layout.tsx` bu tek bayrağı okur — kontrolün iki
+ * ayrı yerde kopyalanmaması bilinçli: biri güncellenip diğeri unutulursa
+ * site yarı açık kalır.
+ *
+ * NEXT_PUBLIC_ önekli değişkenler derleme anında gömülür; bayrağı
+ * değiştirdikten sonra YENİDEN BUILD almak şart.
+ */
+export const ALLOW_INDEXING =
+  process.env.NEXT_PUBLIC_ALLOW_INDEXING === "true";
+
 /** Paylaşım görseli — 1200x630 */
 export const OG_IMAGE_PATH = "/og-image.jpg";
 

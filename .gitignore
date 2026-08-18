@@ -32,6 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...ama örnek dosya depoda kalmalı: hangi değişkenlerin gerektiğini o anlatıyor
+!.env.example
 
 # vercel
 .vercel

@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowIcon } from "@/components/icons";
 
-export const metadata: Metadata = {
-  title: "Sayfa bulunamadı",
-  robots: { index: false, follow: true },
-};
-
+/**
+ * Not: `not-found.tsx` metadata export'unu DESTEKLEMEZ — buraya yazılan
+ * `robots` alanı sessizce yok sayılır, o yüzden hiç yazılmıyor.
+ * Zaten gerek de yok: sayfa HTTP 404 döndüğü için arama motorları
+ * meta etiketine bakmadan indekslemez. 404 durum kodu asıl sinyaldir.
+ */
 export default function NotFound() {
   return (
     <div className="mx-auto flex max-w-6xl flex-col items-start px-4 py-24 sm:px-6 sm:py-32">

@@ -6,6 +6,7 @@ import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { getSiteInfo } from "@/lib/repository";
 import {
+  ALLOW_INDEXING,
   OG_IMAGE_PATH,
   SITE_URL,
   jsonLdScript,
@@ -29,7 +30,23 @@ const inter = Inter({
 const DESCRIPTION =
   "Fethiye Limanı'ndan günübirlik ve konaklamalı tekne turları. Fiyatlar sitede yazılı, müsait tarihler takvimde açık.";
 
+/**
+ * ⛔ KRİTİK KURAL 3: Site demo fiyatlarla ve yer tutucu içerikle çalışıyor.
+ * Yayın kontrol listesi (AS_YACHTING_PROJE.md → Bölüm 6, "Faz Tanımı — Faz 7
+ * — SEO & Yayın") tamamlanmadan NEXT_PUBLIC_ALLOW_INDEXING true yapılmaz.
+ * Aksi halde Google'a gerçek olmayan fiyat ve eksik tekne bilgisi indekslenir,
+ * sonradan temizlemesi haftalar sürer.
+ *
+ * robots.txt tek başına yetmez: dış bir bağlantı üzerinden bulunan sayfa
+ * yine de indekslenebilir. Sayfa düzeyinde `noindex` bunu da kapatır.
+ * Bayrak açıkken `robots` alanı hiç üretilmez (varsayılan davranış = indeksle).
+ */
+const INDEXING_METADATA: Metadata = ALLOW_INDEXING
+  ? {}
+  : { robots: { index: false, follow: false } };
+
 export const metadata: Metadata = {
+  ...INDEXING_METADATA,
   // Domain kesinleşince .env içine NEXT_PUBLIC_SITE_URL yazılacak (lib/seo.ts)
   metadataBase: new URL(SITE_URL),
   title: {
