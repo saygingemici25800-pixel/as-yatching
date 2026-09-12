@@ -47,7 +47,7 @@ export default async function HomePage() {
         <p className="eyebrow">Fethiye Limanı · Günübirlik ve konaklamalı</p>
         <h1 className="mt-4 max-w-3xl text-[2.375rem] leading-[1.05] sm:text-5xl lg:text-[4rem]">
           <span className="block">Fethiye&apos;de tekne kiralama</span>
-          <span className="mt-2 block text-gold-light/80">
+          <span className="mt-2 block text-surface/85">
             Tarihi seçin, fiyatı ve müsaitliği görün
           </span>
         </h1>
