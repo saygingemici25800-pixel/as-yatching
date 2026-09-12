@@ -122,10 +122,12 @@ export function ParallaxScrolling({
               className="parallax__layer-img"
             />
             <div data-parallax-layer="3" className="parallax__layer-title">
-              {eyebrow && <p className="parallax__eyebrow">{eyebrow}</p>}
-              <h2 className="parallax__title">{title}</h2>
-              <span className="parallax__rule" aria-hidden />
-              {caption && <p className="parallax__caption">{caption}</p>}
+              <div className="parallax__card">
+                {eyebrow && <p className="parallax__eyebrow">{eyebrow}</p>}
+                <h2 className="parallax__title">{title}</h2>
+                <span className="parallax__rule" aria-hidden />
+                {caption && <p className="parallax__caption">{caption}</p>}
+              </div>
             </div>
             <img
               src="/placeholder/parallax-layer-4.svg"

@@ -20,6 +20,7 @@ export default function PhotoStrip({
   return (
     <section aria-label="Tekneden kareler">
       <ImmersiveScrollGallery images={PHOTOS}>
+        <div className="mx-auto max-w-xl rounded-sm border border-line bg-surface/90 px-6 py-8 text-center backdrop-blur-sm sm:px-10 sm:py-10">
         <p className="eyebrow">Tekneden kareler</p>
         <h2 className="mt-3 text-3xl sm:text-5xl">
           Gerçek tekne, gerçek koylar
@@ -38,6 +39,7 @@ export default function PhotoStrip({
             Instagram: @as_yachting
           </a>
         )}
+      </div>
       </ImmersiveScrollGallery>
     </section>
   );

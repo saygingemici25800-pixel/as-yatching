@@ -18,6 +18,7 @@ export default function GoogleReviews({
   return (
     <section aria-label="Google yorumları">
       <ImmersiveScrollReviews reviews={reviews}>
+        <div className="mx-auto max-w-xl rounded-sm border border-line bg-surface/90 px-6 py-8 text-center backdrop-blur-sm sm:px-10 sm:py-10">
         <p className="eyebrow">Misafirlerimiz</p>
         <p className="mt-3 font-display text-6xl sm:text-7xl">
           {info.googleRating.toLocaleString("tr-TR", {
@@ -42,6 +43,7 @@ export default function GoogleReviews({
             size="sm"
           />
         </div>
+      </div>
       </ImmersiveScrollReviews>
     </section>
   );
