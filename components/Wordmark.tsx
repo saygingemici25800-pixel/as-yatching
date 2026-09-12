@@ -9,7 +9,7 @@ export default function Wordmark({ className = "" }: { className?: string }) {
   return (
     <Link
       href="/"
-      className={`font-display text-accent leading-none tracking-tight ${className}`}
+      className={`text-gold-glow font-display leading-none tracking-tight ${className}`}
       aria-label="As Yachting — ana sayfa"
     >
       As Yachting

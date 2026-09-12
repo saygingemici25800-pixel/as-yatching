@@ -14,6 +14,8 @@
   --color-line: color-mix(in srgb, #b3edeb 25%, transparent);
   --color-deep: #1741a1; /* gölge ve karartmalar (text-shadow, radyal halo, veil) */
   --color-sky: #b3edeb; /* üst çubuk ve mobil bar zemini (açık aqua) */
+  --color-gold: #f3d98a; /* parlak kremsi altın — logo, menü, WhatsApp ve ses butonu */
+  --color-gold-deep: #d9b45a; /* altın hover / kenarlık */
 
   /* Fontlar next/font ile kendi sunucumuzdan servis ediliyor (LCP için).
      --font-caviar ve --font-inter değişkenlerini app/layout.tsx <html>'e basar. */
@@ -85,6 +87,19 @@ h1, h2, h3 {
     transparent
   );
   pointer-events: none;
+}
+
+/*
+  Altın metin (logo, menü, hero butonları). Açık zeminde (sky/krem) okunsun
+  diye ince sıcak koyu gölge + hafif parlama. @utility olarak tanımlı:
+  hover:text-gold-deep gibi varyantlar normal sırayla üstüne yazabilir.
+*/
+@utility text-gold-glow {
+  color: var(--color-gold);
+  /* Gölge 0.5: sky (#b3edeb) üstünde 0.35 yetersiz kaldı (375/1280 kontrolü) */
+  text-shadow:
+    0 1px 1px rgb(122 26 14 / 0.5),
+    0 0 12px rgb(243 217 138 / 0.45);
 }
 
 .eyebrow {

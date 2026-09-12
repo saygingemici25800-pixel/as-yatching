@@ -26,7 +26,7 @@ export default async function SiteHeader() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="text-ink transition-colors hover:text-accent"
+                  className="text-gold-glow transition-colors hover:text-gold-deep"
                 >
                   <RandomLetterSwap
                     label={item.label}
@@ -53,7 +53,7 @@ export default async function SiteHeader() {
             )}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-sm bg-accent px-3.5 py-2 text-sm text-deep transition-opacity hover:opacity-90"
+            className="inline-flex items-center gap-2 rounded-sm border border-gold-deep bg-gold px-3.5 py-2 text-sm text-deep transition-colors hover:bg-gold-deep"
           >
             <WhatsappIcon className="size-4" />
             WhatsApp
@@ -71,7 +71,7 @@ export default async function SiteHeader() {
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="text-ink-soft hover:text-accent"
+                className="text-gold-glow hover:text-gold-deep"
               >
                 <RandomLetterSwap label={item.label} staggerDuration={0.025} />
               </Link>

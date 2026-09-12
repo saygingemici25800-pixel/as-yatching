@@ -70,7 +70,7 @@ export default async function HomePage() {
             )}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden items-center justify-center gap-2 rounded-sm border border-line px-6 py-3.5 text-sm font-medium text-ink transition-colors hover:border-accent md:inline-flex"
+            className="text-gold-glow hidden items-center justify-center gap-2 rounded-sm border border-gold px-6 py-3.5 text-sm font-medium transition-colors hover:border-gold-deep md:inline-flex"
           >
             <WhatsappIcon className="size-4" />
             WhatsApp&apos;tan yazın

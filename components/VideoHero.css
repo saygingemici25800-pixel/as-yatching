@@ -105,8 +105,9 @@
   padding: 0.5rem 0.875rem;
   font-size: 0.75rem;
   letter-spacing: 0.04em;
-  color: var(--color-ink);
-  border: 1px solid color-mix(in srgb, var(--color-ink) 40%, transparent);
+  color: var(--color-gold);
+  text-shadow: 0 1px 1px rgb(122 26 14 / 0.35);
+  border: 1px solid color-mix(in srgb, var(--color-gold) 60%, transparent);
   border-radius: 999px;
   background: color-mix(in srgb, var(--color-deep) 35%, transparent);
   backdrop-filter: blur(6px);
@@ -115,7 +116,7 @@
 }
 
 .vhero__sound:hover {
-  border-color: var(--color-accent);
+  border-color: var(--color-gold-deep);
 }
 
 @media (min-width: 640px) {
@@ -129,17 +130,17 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--color-ink) 50%, transparent);
+  background: color-mix(in srgb, var(--color-gold) 50%, transparent);
 }
 
 .vhero__sound[aria-pressed="true"] .vhero__sound-dot {
-  background: var(--color-accent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 30%, transparent);
+  background: var(--color-gold);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-gold) 30%, transparent);
   animation: vhero-pulse 1.6s ease-in-out infinite;
 }
 
 @keyframes vhero-pulse {
-  0%, 100% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 35%, transparent); }
+  0%, 100% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-gold) 35%, transparent); }
   50%      { box-shadow: 0 0 0 7px transparent; }
 }
 
