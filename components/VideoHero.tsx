@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useSiteAudio } from "@/components/SiteAudioProvider";
 import "./VideoHero.css";
 
 /**
@@ -14,9 +15,8 @@ import "./VideoHero.css";
  *  - Kaydırma ilerledikçe (GSAP ScrollTrigger, scrub) video hafifçe yaklaşır,
  *    karartma artar, metin yukarı süzülüp kaybolur; en sonda sahne kenarlardan
  *    daralıp çerçeveye oturur ve bir sonraki bölüm üstüne akar.
- *  - Video sessiz ve otomatik oynar (tarayıcı kuralı). Müzik (sngdestek.com
- *    ile aynı loop) ayrı bir <audio>; kullanıcı butonla açar. Hero ekrandan çıkınca ses kendiliğinden
- *    kısılır, geri gelince açılır.
+ *  - Video sessiz ve otomatik oynar (tarayıcı kuralı). Ses site geneli
+ *    (SiteAudioProvider); buradaki buton onu açar, sayfa değişse de çalar.
  *  - Hareket azaltma tercihi ya da veri tasarrufu açıksa video hiç yüklenmez,
  *    poster görseli kalır.
  *
@@ -25,18 +25,12 @@ import "./VideoHero.css";
 
 const VIDEO_SRC = "/hero/hero.mp4";
 const POSTER_SRC = "/hero/hero-poster.jpg";
-const AUDIO_SRC = "/hero/sea.mp3";
-const AUDIO_VOLUME = 0.35;
 
 export default function VideoHero({ children }: { children: ReactNode }) {
   const rootRef = useRef<HTMLElement>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const fadeTween = useRef<gsap.core.Tween | null>(null);
 
   const [motionOk, setMotionOk] = useState(false);
-  const [soundOn, setSoundOn] = useState(false);
-  const soundOnRef = useRef(false);
-  const inViewRef = useRef(true);
+  const { on: soundOn, toggle: toggleSound, setHeroVisible } = useSiteAudio();
 
   // Video yalnızca istemcide, tercihler okunduktan sonra yükleniyor.
   useEffect(() => {
@@ -87,47 +81,19 @@ export default function VideoHero({ children }: { children: ReactNode }) {
     return () => ctx.revert();
   }, [motionOk]);
 
-  // Ses: yumuşak aç/kapa
-  const fadeAudio = (to: number) => {
-    const el = audioRef.current;
-    if (!el) return;
-    fadeTween.current?.kill();
-    if (to > 0 && el.paused) {
-      el.volume = 0;
-      void el.play().catch(() => undefined);
-    }
-    fadeTween.current = gsap.to(el, {
-      volume: to,
-      duration: 0.9,
-      ease: "sine.inOut",
-      onComplete: () => {
-        if (to === 0) el.pause();
-      },
-    });
-  };
-
-  const toggleSound = () => {
-    const next = !soundOnRef.current;
-    soundOnRef.current = next;
-    setSoundOn(next);
-    fadeAudio(next && inViewRef.current ? AUDIO_VOLUME : 0);
-  };
-
-  // Hero görünümden çıkınca ses kısılır, dönünce açılır
+  // Hero görünürken layout'taki ses rozeti gizlenir
   useEffect(() => {
     if (!rootRef.current) return;
     const io = new IntersectionObserver(
-      ([entry]) => {
-        inViewRef.current = entry.isIntersecting;
-        if (soundOnRef.current) {
-          fadeAudio(entry.isIntersecting ? AUDIO_VOLUME : 0);
-        }
-      },
+      ([entry]) => setHeroVisible(entry.isIntersecting),
       { threshold: 0.15 },
     );
     io.observe(rootRef.current);
-    return () => io.disconnect();
-  }, []);
+    return () => {
+      io.disconnect();
+      setHeroVisible(false);
+    };
+  }, [setHeroVisible]);
 
   return (
     <section ref={rootRef} className="vhero" aria-label="Tanıtım">
@@ -170,8 +136,6 @@ export default function VideoHero({ children }: { children: ReactNode }) {
         </div>
 
         <div className="vhero__content">{children}</div>
-
-        <audio ref={audioRef} src={AUDIO_SRC} loop preload="none" />
 
         <div className="vhero__hint" aria-hidden>
           <span />

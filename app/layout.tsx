@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import MobileContactBar from "@/components/MobileContactBar";
 import SiteFooter from "@/components/SiteFooter";
+import SiteAudioProvider from "@/components/SiteAudioProvider";
 import SiteHeader from "@/components/SiteHeader";
 import { getSiteInfo } from "@/lib/repository";
 import {
@@ -101,10 +102,12 @@ export default async function RootLayout({
         >
           İçeriğe geç
         </a>
-        <SiteHeader />
-        <main id="icerik">{children}</main>
-        <SiteFooter />
-        <MobileContactBar />
+        <SiteAudioProvider>
+          <SiteHeader />
+          <main id="icerik">{children}</main>
+          <SiteFooter />
+          <MobileContactBar />
+        </SiteAudioProvider>
       </body>
     </html>
   );
