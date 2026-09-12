@@ -17,14 +17,13 @@ import {
 } from "@/lib/seo";
 
 // latin-ext alt kümesi Türkçe karakterleri (ş ğ ı İ ç ö ü) kapsar.
-// Başlık fontu: Zodiak (lisanslı, app/fonts/). Şimdilik yalnızca Black kesimi var;
-// diğer ağırlıklar gelince buraya eklenir.
-const zodiak = localFont({
-  src: [
-    { path: "./fonts/Zodiak-Black.otf", weight: "900", style: "normal" },
-    { path: "./fonts/Zodiak-BlackItalic.otf", weight: "900", style: "italic" },
-  ],
-  variable: "--font-zodiak",
+// Başlık fontu: Caviar Dreams (app/fonts/). Tek kesim (Regular).
+// Zodiak Black dosyaları da app/fonts/ altında duruyor; istenirse geri alınır.
+const caviar = localFont({
+  src: "./fonts/CaviarDreams.ttf",
+  weight: "400",
+  style: "normal",
+  variable: "--font-caviar",
   display: "swap",
 });
 
@@ -92,7 +91,7 @@ export default async function RootLayout({
   const info = await getSiteInfo();
 
   return (
-    <html lang="tr" className={`${zodiak.variable} ${inter.variable}`}>
+    <html lang="tr" className={`${caviar.variable} ${inter.variable}`}>
       <body className="antialiased">
         {/*
           LocalBusiness yapısal verisi — her sayfada bulunur.

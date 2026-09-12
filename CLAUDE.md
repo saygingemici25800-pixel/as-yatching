@@ -31,7 +31,7 @@ Vurgu        #B08D3F   (sadece ince çizgi, ikon, küçük etiket — ASLA blok 
 Kenarlık     #D9C2AD
 ```
 
-- Başlık fontu: Zodiak (lisanslı, app/fonts/ — şimdilik Black kesimi)
+- Başlık fontu: Caviar Dreams (app/fonts/CaviarDreams.ttf, tek kesim)
 - Gövde fontu: sans (Inter)
 - Siyah zeminli, altın yazılı blok bölüm **yapılmaz**
 - Logo: açık zeminli altın el yazısı. Wordmark **"As Yachting"** — alt çizgi yok, "Luxury" yok

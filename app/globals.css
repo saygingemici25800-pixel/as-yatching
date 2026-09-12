@@ -11,8 +11,8 @@
   --color-line: #d9c2ad;
 
   /* Fontlar next/font ile kendi sunucumuzdan servis ediliyor (LCP için).
-     --font-zodiak ve --font-inter değişkenlerini app/layout.tsx <html>'e basar. */
-  --font-display: var(--font-zodiak), "Zodiak", Georgia, serif;
+     --font-caviar ve --font-inter değişkenlerini app/layout.tsx <html>'e basar. */
+  --font-display: var(--font-caviar), "Caviar Dreams", "Futura", sans-serif;
   --font-body: var(--font-inter), "Inter", system-ui, sans-serif;
 }
 
@@ -24,9 +24,9 @@ body {
 
 h1, h2, h3 {
   font-family: var(--font-display);
-  font-weight: 900; /* Zodiak Black — eldeki tek kesim */
-  font-style: italic; /* Zodiak Black Italic — daha zarif */
-  letter-spacing: 0;
+  font-weight: 400; /* Caviar Dreams — tek kesim */
+  font-style: normal;
+  letter-spacing: 0.01em;
 }
 
 /*
@@ -34,10 +34,6 @@ h1, h2, h3 {
   Sadece ince çizgi, ikon, küçük etiket ve hover durumu.
   Siyah veya lacivert zeminli altın yazılı blok bölüm YAPILMAZ.
 */
-
-.font-display {
-  font-style: italic;
-}
 
 .eyebrow {
   font-size: 0.6875rem;
