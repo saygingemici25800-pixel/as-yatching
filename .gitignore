@@ -41,3 +41,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Koy fotoğraflarının ham halleri (1–7 MB); optimize webp'ler commit'lenir
+public/koylar/raw/

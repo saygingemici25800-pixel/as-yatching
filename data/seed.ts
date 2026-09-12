@@ -136,7 +136,7 @@ export const products: Product[] = [
       { time: "20:30", name: "Limana dönüş", note: null },
     ],
     priceIncludes: standardIncludes,
-    images: ["/foto/grup-guverte.jpg"],
+    images: ["/koylar/oludeniz-gunbatimi.webp"], // Ölüdeniz gün batımı, Kumburnu
     featured: true,
     isSamplePrice: true,
   },
@@ -306,9 +306,12 @@ export const googleReviews: GoogleReview[] = [
 /**
  * KOYLAR — ana sayfa "Nereye gidiyoruz?" coverflow'u.
  *
- * TODO: Görseller yer tutucu. /public/placeholder/koylar/ altındaki dosyalar
- * PhotoStrip'in tekne fotoğraflarının kopyası; gerçek koy fotoğrafları gelince
- * yalnızca o klasör değişir, buradaki yollar aynı kalır.
+ * Görseller işletmeden alınan gerçek fotoğraflar; ham halleri
+ * public/koylar/raw/ (gitignore), optimize webp'ler public/koylar/ altında
+ * (<slug>.webp uzun kenar 1600px, <slug>-thumb.webp 640px).
+ *
+ * `image: null` olan koylar arayüzde GÖSTERİLMEZ (fotoğraf gelince yol
+ * yazılır, başka değişiklik gerekmez).
  *
  * TODO: distanceFromHarbor / stayDuration / tours / highlight işletmeden
  * alınacak. Bilinmeyen her değer "—" olarak gösterilir; UYDURULMAZ.
@@ -317,6 +320,17 @@ export const googleReviews: GoogleReview[] = [
  */
 export const bays: Bay[] = [
   {
+    slug: "fethiye-limani",
+    name: "Fethiye Limanı",
+    blurb: "Kalkış noktamız: Fethiye Limanı beton iskele. Bütün turlar buradan başlar.",
+    distanceFromHarbor: "Kalkış noktası",
+    stayDuration: "—", // TODO: buluşma / kalkış saati düzeni
+    tours: "Tüm turlar",
+    highlight: "Buradan çıkıyoruz",
+    image: "/koylar/fethiye-limani.webp",
+    imageThumb: "/koylar/fethiye-limani-thumb.webp",
+  },
+  {
     slug: "kizilada",
     name: "Kızılada",
     blurb: "Limandan çıkınca ilk durak; günübirlik rotanın yüzme molası.",
@@ -324,7 +338,8 @@ export const bays: Bay[] = [
     stayDuration: "—", // TODO: koyda kalış
     tours: "Günübirlik özel kiralama", // products[].route → 11:00 Kızılada
     highlight: "Yüzme molası", // products[].route notu
-    image: "/placeholder/koylar/kizilada.jpg",
+    image: null, // TODO: Kızılada fotoğrafı gelince /koylar/kizilada.webp
+    imageThumb: null,
   },
   {
     slug: "akvaryum-koyu",
@@ -334,7 +349,8 @@ export const bays: Bay[] = [
     stayDuration: "—", // TODO: koyda kalış
     tours: "Günübirlik özel kiralama", // products[].route → 13:00 Akvaryum Koyu
     highlight: "Öğle yemeği durağı", // products[].route notu: Öğle molası
-    image: "/placeholder/koylar/akvaryum-koyu.jpg",
+    image: "/koylar/akvaryum-koyu.webp",
+    imageThumb: "/koylar/akvaryum-koyu-thumb.webp",
   },
   {
     slug: "samanlik-koyu",
@@ -344,7 +360,8 @@ export const bays: Bay[] = [
     stayDuration: "—", // TODO: koyda kalış
     tours: "Günübirlik özel kiralama", // products[].route → 15:00 Samanlık Koyu
     highlight: "Şnorkel", // products[].route notu
-    image: "/placeholder/koylar/samanlik-koyu.jpg",
+    image: null, // TODO: Samanlık Koyu fotoğrafı gelince /koylar/samanlik-koyu.webp
+    imageThumb: null,
   },
   {
     slug: "oludeniz",
@@ -354,7 +371,8 @@ export const bays: Bay[] = [
     stayDuration: "—", // TODO: koyda kalış
     tours: "—", // TODO: hangi turların rotasında
     highlight: "—", // TODO: öne çıkan özellik
-    image: "/placeholder/koylar/oludeniz.jpg",
+    image: "/koylar/oludeniz.webp", // kuş bakışı lagün
+    imageThumb: "/koylar/oludeniz-thumb.webp",
   },
   {
     slug: "gemiler-adasi",
@@ -364,7 +382,8 @@ export const bays: Bay[] = [
     stayDuration: "—", // TODO: koyda kalış
     tours: "—", // TODO: hangi turların rotasında
     highlight: "—", // TODO: öne çıkan özellik
-    image: "/placeholder/koylar/gemiler-adasi.jpg",
+    image: "/koylar/gemiler-adasi.webp",
+    imageThumb: "/koylar/gemiler-adasi-thumb.webp",
   },
   {
     slug: "kelebekler-vadisi",
@@ -374,6 +393,7 @@ export const bays: Bay[] = [
     stayDuration: "—", // TODO: koyda kalış
     tours: "—", // TODO: hangi turların rotasında
     highlight: "—", // TODO: öne çıkan özellik
-    image: "/placeholder/koylar/kelebekler-vadisi.jpg",
+    image: "/koylar/kelebekler-vadisi.webp",
+    imageThumb: "/koylar/kelebekler-vadisi-thumb.webp",
   },
 ];

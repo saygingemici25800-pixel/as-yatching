@@ -114,6 +114,8 @@ export interface Bay {
   tours: string;
   /** Kısa etiket, örn. "Öğle yemeği durağı" — bilinmiyorsa "—" */
   highlight: string;
-  /** /public altındaki yol */
-  image: string;
+  /** /public altındaki yol (uzun kenar 1600px webp). null → listede gösterilmez */
+  image: string | null;
+  /** Küçük varyant (uzun kenar 640px webp); image null ise null */
+  imageThumb: string | null;
 }

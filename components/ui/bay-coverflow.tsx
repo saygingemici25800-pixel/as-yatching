@@ -7,7 +7,6 @@ import {
   useRef,
   useState,
   type KeyboardEvent,
-  type PointerEvent as ReactPointerEvent,
 } from "react";
 import {
   AnimatePresence,
@@ -17,6 +16,7 @@ import {
   useMotionValueEvent,
   useTransform,
   type MotionValue,
+  type PanInfo,
 } from "framer-motion";
 import type { Bay } from "@/lib/types";
 
@@ -30,20 +30,22 @@ import type { Bay } from "@/lib/types";
  *
  * Çıkarılanlar: next-intl, three.js intro ve logo filigranı, lucide, cn,
  * sanal wheel/touch scroll (sayfa kaydırmasını yakalıyordu), boştaki otomatik
- * dönüş ve onun rAF döngüsü. Dönüş artık framer-motion `animate` ile yalnızca
- * etkileşimde çalışır; boşta hiçbir döngü yok.
+ * dönüş ve onun rAF döngüsü. Dönüş yalnızca etkileşimde çalışır.
  *
- * Etkileşim: sağ/sol ok, yatay sürükleme (pointer events, touch-action
- * pan-y: dikey sayfa kaydırması tarayıcıda kalır), klavye ok tuşları, kart
- * ve nokta tıklaması. Bırakınca en yakın karta oturur (snap).
+ * Gezinme: yatay sürükleme / swipe (framer-motion drag, eşik ~40px, bırakınca
+ * en yakın karta snap), klavye ok tuşları, alttaki gösterge ve kart tıklaması.
+ * Ok butonu ve otomatik geçiş yok. `drag="x"` + `dragDirectionLock` +
+ * `touch-action: pan-y`: dikey hareket baskınsa sürükleme başlamaz, sayfa
+ * kaydırması tarayıcıda kalır.
  *
  * Scroll yapısı: normal akışta bir blok. sticky yok, pin yok, Lenis'e
  * bağlanmıyor, sabit viewport yüksekliği yok.
  *
  * prefers-reduced-motion: perspektif ve derinlik kapalı, kartlar düz yatay
  * sırada; geçişler kısa ve doğrusal. Tercih mount SONRASI okunur: sunucu ve
- * ilk istemci render'ı aynı (3D) çıktıyı üretir, hidrasyon uyuşmazlığı olmaz
- * (framer'ın useReducedMotion'ı ilk render'da istemcide farklı değer veriyordu).
+ * ilk istemci render'ı aynı (3D) çıktıyı üretir, hidrasyon uyuşmazlığı olmaz.
+ *
+ * Fotoğrafı olmayan koylar (`image: null`) listeye alınmaz.
  */
 
 const PERSPECTIVE = 1200;
@@ -54,6 +56,12 @@ const SPRING = {
   restDelta: 0.001,
 } as const;
 const FLAT_TWEEN = { duration: 0.25, ease: "easeOut" } as const;
+/** Bu kadar px'in altındaki sürükleme kart değiştirmez */
+const DRAG_THRESHOLD = 40;
+/** Hızlı fırlatma eşiği (px/sn) */
+const FLING_VELOCITY = 350;
+
+type BayWithImage = Bay & { image: string };
 
 const lerp = (a: number, b: number, t: number) => a * (1 - t) + b * t;
 const clamp = (v: number, min: number, max: number) =>
@@ -75,7 +83,7 @@ const facingAngle = (deg: number) => {
 // BayCard — çemberdeki tek kart
 // ---------------------------------------------------------------------------
 interface BayCardProps {
-  bay: Bay;
+  bay: BayWithImage;
   index: number;
   total: number;
   radius: number;
@@ -174,8 +182,10 @@ function BayCard({
             alt={bay.name}
             fill
             draggable={false}
-            // Öndeki kart 3D ölçekle büyümüyor (z=0), CSS ölçüsü yeterli.
-            sizes="(min-width: 640px) 320px, 80vw"
+            priority={false}
+            // Öndeki kart 3D ölçekle büyümüyor (z=0): masaüstünde 300px,
+            // mobilde sahnenin %78'i (~78vw). Yanlar daha küçük çizilir.
+            sizes="(min-width: 640px) 300px, 78vw"
             className="object-cover"
           />
           {/* Kart içi ad: yanlardaki kartlar altyazısız kalmasın */}
@@ -194,11 +204,12 @@ function BayCard({
 // BayCoverflow
 // ---------------------------------------------------------------------------
 export default function BayCoverflow({ bays }: { bays: Bay[] }) {
+  const items = bays.filter((b): b is BayWithImage => b.image !== null);
   const flat = usePrefersReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
   const [stageWidth, setStageWidth] = useState(0);
 
-  const total = bays.length;
+  const total = items.length;
   const position = useMotionValue(0);
   const targetRef = useRef(0);
   const [active, setActive] = useState(0);
@@ -249,71 +260,36 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
     [goTo, total],
   );
 
-  // --- Sürükleme (pointer events) ---
-  const drag = useRef({
-    active: false,
-    moved: false,
-    startX: 0,
-    startPos: 0,
-    lastX: 0,
-    lastT: 0,
-    velocity: 0, // px/ms
-  });
+  // --- Sürükleme (framer-motion drag; sahne yerinde kalır, kartlar konumu izler) ---
+  const dragStartPos = useRef(0);
   const suppressClick = useRef(false);
 
-  const onPointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
-    if (e.button !== 0) return;
+  const onDragStart = () => {
     position.stop();
-    const d = drag.current;
-    d.active = true;
-    d.moved = false;
-    d.startX = e.clientX;
-    d.startPos = position.get();
-    d.lastX = e.clientX;
-    d.lastT = e.timeStamp;
-    d.velocity = 0;
-  };
-
-  const onPointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
-    const d = drag.current;
-    if (!d.active) return;
-    const dx = e.clientX - d.startX;
-    if (!d.moved) {
-      if (Math.abs(dx) < 4) return;
-      d.moved = true;
-      e.currentTarget.setPointerCapture(e.pointerId);
-    }
-    const dt = Math.max(1, e.timeStamp - d.lastT);
-    d.velocity = (e.clientX - d.lastX) / dt;
-    d.lastX = e.clientX;
-    d.lastT = e.timeStamp;
-    // Bir kart genişliği kadar sürükleme ≈ bir kart ilerleme
-    position.set(d.startPos - dx / (width * 0.9));
-  };
-
-  const endDrag = (e: ReactPointerEvent<HTMLDivElement>) => {
-    const d = drag.current;
-    if (!d.active) return;
-    d.active = false;
-    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
-      e.currentTarget.releasePointerCapture(e.pointerId);
-    }
-    if (!d.moved) return;
-    // Kart tıklaması sürükleme sonunda tetiklenmesin
+    dragStartPos.current = position.get();
     suppressClick.current = true;
+  };
+  const onDrag = (_: unknown, info: PanInfo) => {
+    // Bir kart genişliği kadar sürükleme ≈ bir kart ilerleme; parmağı izler
+    position.set(dragStartPos.current - info.offset.x / (width * 0.9));
+  };
+  const onDragEnd = (_: unknown, info: PanInfo) => {
+    // Kart tıklaması sürükleme sonunda tetiklenmesin
     setTimeout(() => (suppressClick.current = false), 0);
 
-    const current = position.get();
-    const nearest = Math.round(current);
-    // Hızlı fırlatma bir sonraki karta taşır; en fazla bir kart ileri/geri
-    const fling = Math.abs(d.velocity) > 0.35 ? (d.velocity > 0 ? -1 : 1) : 0;
-    const target = clamp(
-      fling !== 0 && Math.sign(current - nearest) === fling
-        ? nearest + fling
-        : nearest,
-      Math.floor(d.startPos) - 1,
-      Math.ceil(d.startPos) + 1,
-    );
+    const start = Math.round(dragStartPos.current);
+    const dx = info.offset.x;
+    if (Math.abs(dx) < DRAG_THRESHOLD) {
+      goTo(start);
+      return;
+    }
+    let target = Math.round(position.get());
+    // Eşiği geçen ama yarım kartı bulmayan hızlı fırlatma bir kart taşır
+    if (target === start && Math.abs(info.velocity.x) > FLING_VELOCITY) {
+      target = start + (dx < 0 ? 1 : -1);
+    } else if (target === start) {
+      target = start + (dx < 0 ? 1 : -1);
+    }
     goTo(target);
   };
 
@@ -336,22 +312,28 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
   );
 
   if (total === 0) return null;
-  const current = bays[active];
+  const current = items[active];
 
   return (
     <div className="relative">
-      {/* Sahne: yatay taşma burada kesilir, sayfa yana kaymaz */}
-      <div
+      {/* Sahne: yatay taşma burada kesilir, sayfa yana kaymaz.
+          drag="x" + dragConstraints 0/0 + dragElastic 0 → sahne yerinden
+          oynamaz, yalnızca info.offset okunur. */}
+      <motion.div
         ref={stageRef}
         role="group"
         aria-roledescription="kaydırmalı galeri"
         aria-label="Koylar"
         tabIndex={0}
         onKeyDown={onKeyDown}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
+        drag="x"
+        dragDirectionLock
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0}
+        dragMomentum={false}
+        onDragStart={onDragStart}
+        onDrag={onDrag}
+        onDragEnd={onDragEnd}
         className="relative w-full cursor-grab select-none overflow-hidden rounded-2xl [touch-action:pan-y] active:cursor-grabbing"
         style={{ height: stageHeight }}
       >
@@ -363,7 +345,7 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
             className="relative h-0 w-0"
             style={{ transformStyle: flat ? "flat" : "preserve-3d" }}
           >
-            {bays.map((bay, i) => (
+            {items.map((bay, i) => (
               <BayCard
                 key={bay.slug}
                 bay={bay}
@@ -381,28 +363,44 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
           </div>
         </div>
 
-        {/* Oklar */}
-        <button
-          type="button"
-          onClick={() => stepBy(-1)}
-          aria-label="Önceki koy"
-          className="absolute left-2 top-1/2 z-50 inline-flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-surface/85 text-ink backdrop-blur-sm transition-colors hover:border-accent sm:left-3 sm:size-11"
-        >
-          <ChevronIcon className="size-4 rotate-180" />
-        </button>
-        <button
-          type="button"
-          onClick={() => stepBy(1)}
-          aria-label="Sonraki koy"
-          className="absolute right-2 top-1/2 z-50 inline-flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-surface/85 text-ink backdrop-blur-sm transition-colors hover:border-accent sm:right-3 sm:size-11"
-        >
-          <ChevronIcon className="size-4" />
-        </button>
+        {/* Fotoğraf → metin geçişini yumuşatan gradient */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-2/5 bg-gradient-to-b from-transparent to-[rgb(0_51_87/0.35)]"
+        />
+      </motion.div>
+
+      {/* Gösterge: her koy için ince çizgi, aktif olan altın ve uzun */}
+      <div
+        className="mt-4 flex justify-center gap-2"
+        role="tablist"
+        aria-label="Koy seç"
+      >
+        {items.map((bay, i) => (
+          <button
+            key={bay.slug}
+            type="button"
+            role="tab"
+            aria-selected={i === active}
+            aria-label={bay.name}
+            onClick={() => select(i)}
+            className={`h-1 rounded-full transition-all duration-300 ${
+              i === active
+                ? "w-7 bg-accent"
+                : "w-2.5 bg-surface/45 hover:bg-surface/75"
+            }`}
+          />
+        ))}
       </div>
 
-      {/* Aktif koy bilgisi */}
+      {/* Aktif koy bilgisi — PhotoStrip/GoogleReviews başlık reçetesi:
+          surface metin + lacivert text-shadow + arkada kenarsız radyal karartma.
+          Karartma 4rem dışa taştığı için sarmalayıcı yatayda kırpar
+          (overflow-x: clip — scroll kabı oluşturmaz, sticky'yi etkilemez);
+          aksi hâlde 375px'te sayfa genişliği 423px'e çıkıyordu. */}
+      <div className="overflow-x-clip">
       <div
-        className="mx-auto mt-6 max-w-md sm:mt-8"
+        className="relative isolate mx-auto mt-6 max-w-md text-center text-surface [text-shadow:0_1px_3px_rgb(0_51_87/0.7),0_2px_28px_rgb(0_51_87/0.9)] before:pointer-events-none before:absolute before:-inset-16 before:-z-10 before:rounded-full before:bg-[radial-gradient(closest-side,rgb(0_51_87/0.45),transparent)] sm:mt-8"
         aria-live="polite"
         aria-atomic="true"
       >
@@ -414,37 +412,21 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
             exit={{ opacity: 0, y: flat ? 0 : -6 }}
             transition={{ duration: flat ? 0.15 : 0.28, ease: "easeOut" }}
           >
-            <p className="eyebrow text-center">{current.highlight}</p>
-            <h3 className="mt-2 text-center text-2xl sm:text-3xl">
+            <p className="eyebrow">{current.highlight}</p>
+            <h3 className="mt-2 text-2xl text-surface sm:text-3xl">
               {current.name}
             </h3>
-            <p className="mt-2 text-center text-sm leading-relaxed text-ink-soft">
+            <p className="mt-2 text-sm leading-relaxed text-surface/90">
               {current.blurb}
             </p>
-            <dl className="mt-5 border-t border-line text-sm">
+            <dl className="mt-5 border-t border-surface/25 text-sm">
               <InfoRow label="Limandan uzaklık" value={current.distanceFromHarbor} />
-              <InfoRow label="Koyda kalış" value={current.stayDuration} />
-              <InfoRow label="Hangi turlarda" value={current.tours} />
+              <InfoRow label="Kalış süresi" value={current.stayDuration} />
+              <InfoRow label="Hangi tur" value={current.tours} />
             </dl>
           </motion.div>
         </AnimatePresence>
-
-        {/* Noktalar */}
-        <div className="mt-5 flex justify-center gap-2" role="tablist" aria-label="Koy seç">
-          {bays.map((bay, i) => (
-            <button
-              key={bay.slug}
-              type="button"
-              role="tab"
-              aria-selected={i === active}
-              aria-label={bay.name}
-              onClick={() => select(i)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === active ? "w-6 bg-accent" : "w-1.5 bg-line hover:bg-ink-soft/50"
-              }`}
-            />
-          ))}
-        </div>
+      </div>
       </div>
     </div>
   );
@@ -465,26 +447,9 @@ function usePrefersReducedMotion() {
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-baseline justify-between gap-4 border-b border-line py-2.5">
-      <dt className="text-ink-soft">{label}</dt>
-      <dd className="text-right text-ink">{value}</dd>
+    <div className="flex items-baseline justify-between gap-4 border-b border-surface/25 py-2.5">
+      <dt className="eyebrow">{label}</dt>
+      <dd className="text-right font-medium text-surface">{value}</dd>
     </div>
-  );
-}
-
-function ChevronIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden
-    >
-      <path d="M9 6l6 6-6 6" />
-    </svg>
   );
 }
