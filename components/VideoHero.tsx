@@ -14,9 +14,8 @@ import "./VideoHero.css";
  *  - Kaydırma ilerledikçe (GSAP ScrollTrigger, scrub) video hafifçe yaklaşır,
  *    karartma artar, metin yukarı süzülüp kaybolur; en sonda sahne kenarlardan
  *    daralıp çerçeveye oturur ve bir sonraki bölüm üstüne akar.
- *  - Video sessiz ve otomatik oynar (tarayıcı kuralı). Seyir sesi (motor +
- *    pruva suyu + rüzgar, sentetik) ayrı bir
- *    <audio>; kullanıcı butonla açar. Hero ekrandan çıkınca ses kendiliğinden
+ *  - Video sessiz ve otomatik oynar (tarayıcı kuralı). Müzik (sngdestek.com
+ *    ile aynı loop) ayrı bir <audio>; kullanıcı butonla açar. Hero ekrandan çıkınca ses kendiliğinden
  *    kısılır, geri gelince açılır.
  *  - Hareket azaltma tercihi ya da veri tasarrufu açıksa video hiç yüklenmez,
  *    poster görseli kalır.
@@ -27,7 +26,7 @@ import "./VideoHero.css";
 const VIDEO_SRC = "/hero/hero.mp4";
 const POSTER_SRC = "/hero/hero-poster.jpg";
 const AUDIO_SRC = "/hero/sea.mp3";
-const AUDIO_VOLUME = 0.45;
+const AUDIO_VOLUME = 0.35;
 
 export default function VideoHero({ children }: { children: ReactNode }) {
   const rootRef = useRef<HTMLElement>(null);
@@ -166,7 +165,7 @@ export default function VideoHero({ children }: { children: ReactNode }) {
             className="vhero__sound"
           >
             <span className="vhero__sound-dot" aria-hidden />
-            {soundOn ? "Ses açık" : "Sesi aç"}
+            {soundOn ? "Müzik açık" : "Müziği aç"}
           </button>
         </div>
 
