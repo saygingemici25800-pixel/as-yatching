@@ -86,6 +86,9 @@ export default async function HomePage() {
         </div>
       </VideoHero>
 
+      {/* ---------- Gerçek kareler (hero animasyonu biter bitmez) ---------- */}
+      <PhotoStrip instagram={info.instagram} />
+
       {/* ---------- Google puanı (hero altı) ---------- */}
       <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
         <GoogleRating
@@ -142,9 +145,6 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
-
-      {/* ---------- Instagram kareleri ---------- */}
-      <PhotoStrip instagram={info.instagram} />
 
       {/* ---------- Müsaitlik önizleme ---------- */}
       <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24">

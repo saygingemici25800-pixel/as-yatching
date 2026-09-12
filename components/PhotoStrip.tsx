@@ -1,15 +1,15 @@
 import Image from "next/image";
 
 /**
- * Instagram'dan alınan gerçek fotoğraflar (@as_yachting).
- * Kaynak çözünürlük 640px — profesyonel çekim gelince /public/foto/ değişir.
+ * Gerçek tekne fotoğrafları (işletmeden alındı). Profesyonel çekim gelince
+ * sadece /public/foto/ değişir.
  */
 const PHOTOS = [
-  { src: "/foto/tekne-koy.jpg", alt: "Tekne koyda demirli" },
-  { src: "/foto/kaptan-dumen.jpg", alt: "Kaptan dümende" },
-  { src: "/foto/guverte.jpg", alt: "Güverteden koy manzarası" },
-  { src: "/foto/tekne-marina.jpg", alt: "Tekne Fethiye Limanı'nda" },
-  { src: "/foto/kaptan.jpg", alt: "Kaptanımız" },
+  { src: "/foto/tekne-kadeh.jpg", alt: "Güvertede kadeh kaldıran misafirler" },
+  { src: "/foto/cift-ogle-yemegi.jpg", alt: "Koyda öğle yemeği" },
+  { src: "/foto/kaptan-dumen.jpg", alt: "Kaptan ve küçük misafir dümende" },
+  { src: "/foto/aile-koy.jpg", alt: "Aile sofrası, turkuaz koy" },
+  { src: "/foto/aile-sofra.jpg", alt: "Teknede balık sofrası" },
 ];
 
 export default function PhotoStrip({
@@ -18,7 +18,7 @@ export default function PhotoStrip({
   instagram: string | null;
 }) {
   return (
-    <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24">
+    <section className="mx-auto max-w-6xl px-4 pt-6 sm:px-6 sm:pt-8">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="eyebrow">Tekneden kareler</p>
