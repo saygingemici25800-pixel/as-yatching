@@ -1,6 +1,12 @@
 import Link from "next/link";
 import Wordmark from "@/components/Wordmark";
-import { ClockIcon, PhoneIcon, PinIcon, WhatsappIcon } from "@/components/icons";
+import {
+  ClockIcon,
+  InstagramIcon,
+  PhoneIcon,
+  PinIcon,
+  WhatsappIcon,
+} from "@/components/icons";
 import { telUrl, whatsappUrl } from "@/lib/links";
 import { getSiteInfo } from "@/lib/repository";
 
@@ -41,6 +47,19 @@ export default async function SiteFooter() {
                 WhatsApp&apos;tan yazın
               </a>
             </li>
+            {info.instagram && (
+              <li>
+                <a
+                  href={info.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 hover:text-accent"
+                >
+                  <InstagramIcon className="size-4 text-accent" />
+                  Instagram: @as_yachting
+                </a>
+              </li>
+            )}
             <li className="flex items-start gap-2 text-ink-soft">
               <ClockIcon className="mt-0.5 size-4 shrink-0 text-accent" />
               {info.workingHours}

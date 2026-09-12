@@ -8,7 +8,7 @@ import PhotoStrip from "@/components/PhotoStrip";
 import ProductCard from "@/components/ProductCard";
 import VideoHero from "@/components/VideoHero";
 import { ParallaxScrolling } from "@/components/ui/parallax-scrolling";
-import { ArrowIcon, CheckIcon, WhatsappIcon } from "@/components/icons";
+import { ArrowIcon, WhatsappIcon } from "@/components/icons";
 import { whatsappUrl } from "@/lib/links";
 import {
   getAvailabilityBlocks,
@@ -20,21 +20,6 @@ import {
   getProducts,
   getSiteInfo,
 } from "@/lib/repository";
-
-const PROMISES = [
-  {
-    title: "Fiyat sitede yazılı",
-    body: "Her turun fiyatı ve fiyata dahil olan kalemler ürün sayfasında yazılı. Fiyat öğrenmek için kimseyi aramanız gerekmiyor.",
-  },
-  {
-    title: "Müsaitlik takvimde açık",
-    body: "Dolu tarihler takvimde kapalı görünür. Hangi günün boş olduğunu kendiniz görüyorsunuz.",
-  },
-  {
-    title: "Sürpriz ücret yok",
-    body: "Kaptan, yakıt, liman ve koy ücretleri fiyata dahil. Dahil olmayan kalemler de ayrı ayrı yazılı.",
-  },
-];
 
 export default async function HomePage() {
   const [info, featured, products, boats, faqs, reviews, bays] =
@@ -165,26 +150,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ---------- Vaatler ---------- */}
-      <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-20">
-        <ul className="grid gap-6 sm:grid-cols-3">
-          {PROMISES.map((item) => (
-            <li
-              key={item.title}
-              className="rounded-sm border border-line bg-surface p-5"
-            >
-              <CheckIcon className="size-5 text-accent" />
-              <h2 className="mt-3 text-lg">{item.title}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-                {item.body}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </section>
-
       {/* ---------- Gerçek kareler (PhotoStrip) ---------- */}
-      <PhotoStrip instagram={info.instagram} />
+      <PhotoStrip />
 
       {/* ---------- Google yorumları ---------- */}
       <GoogleReviews reviews={reviews} info={info} />

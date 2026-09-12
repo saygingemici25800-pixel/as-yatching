@@ -76,12 +76,14 @@ export default function ImmersiveScrollGallery({
           </motion.div>
         ))}
 
-        <motion.div
-          style={{ opacity: opacityText, scale: scaleText }}
-          className="relative mx-auto flex h-full w-full max-w-3xl items-center justify-center p-8 text-center"
-        >
-          <div>{children}</div>
-        </motion.div>
+        {children != null && children !== false && (
+          <motion.div
+            style={{ opacity: opacityText, scale: scaleText }}
+            className="relative mx-auto flex h-full w-full max-w-3xl items-center justify-center p-8 text-center"
+          >
+            <div>{children}</div>
+          </motion.div>
+        )}
       </div>
     </div>
   );
