@@ -30,7 +30,8 @@ Metin (ink)        #F4E091  sarı — başlık ve ana metin
 İkincil (ink-soft) #B3EDEB  aqua — açıklamalar
 Vurgu (accent)     #F2C488  peach — eyebrow, ikon, ince çizgi, hover, seçili, birincil buton
 Kenarlık (line)    aqua %25 şeffaf
-Lacivert (navy)    #1741A1  üst çubuk ve mobil bar zemini (opak, blur yok; altın metin)
+Lacivert (navy)    #1741A1  üst çubuk ve mobil bar zemini (opak; krem menü, ivory logo, krem butonlar)
+Fildişi (ivory)    #FFF8EE  wordmark
 Krem (cream)       #FFFBF3  açık krem yüzey tonu
 Gök (sky)          #B3EDEB  açık aqua (yüzey tonu)
 Derinlik (deep)    #1741A1  gölge, veil ve radyal karartmalar

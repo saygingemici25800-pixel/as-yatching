@@ -10,11 +10,11 @@ export default async function MobileContactBar() {
   const info = await getSiteInfo();
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-line bg-navy md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-cream/20 bg-navy md:hidden">
       <div className="grid grid-cols-2 gap-2 p-3">
         <a
           href={telUrl(info.phone)}
-          className="inline-flex items-center justify-center gap-2 rounded-sm border border-gold px-3 py-3 text-sm font-medium text-gold"
+          className="inline-flex items-center justify-center gap-2 rounded-sm bg-cream px-3 py-3 text-sm font-medium text-navy transition-colors hover:bg-surface"
         >
           <PhoneIcon className="size-4" />
           Ara
@@ -26,7 +26,7 @@ export default async function MobileContactBar() {
           )}
           target="_blank"
           rel="noopener noreferrer"
-          className="gold-glow-box inline-flex items-center justify-center gap-2 rounded-sm border border-gold-deep bg-gold px-3 py-3 text-sm font-medium text-navy transition-colors hover:bg-gold-deep"
+          className="inline-flex items-center justify-center gap-2 rounded-sm bg-cream px-3 py-3 text-sm font-medium text-navy transition-colors hover:bg-surface"
         >
           <WhatsappIcon className="size-4" />
           WhatsApp

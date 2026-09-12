@@ -16,7 +16,7 @@ export default async function SiteHeader() {
   const info = await getSiteInfo();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-navy">
+    <header className="sticky top-0 z-40 border-b border-cream/20 bg-navy">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
         <Wordmark className="text-[1.75rem] sm:text-[2.125rem]" />
 
@@ -26,7 +26,7 @@ export default async function SiteHeader() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="gold-glow transition-colors hover:text-gold-deep"
+                  className="nav-cream text-cream transition-colors hover:text-gold"
                 >
                   <RandomLetterSwap
                     label={item.label}
@@ -53,7 +53,7 @@ export default async function SiteHeader() {
             )}
             target="_blank"
             rel="noopener noreferrer"
-            className="gold-glow-box inline-flex items-center gap-2 rounded-sm border border-gold-deep bg-gold px-3.5 py-2 text-sm text-navy transition-colors hover:bg-gold-deep"
+            className="inline-flex items-center gap-2 rounded-sm bg-cream px-3.5 py-2 text-sm text-navy transition-colors hover:bg-surface"
           >
             <WhatsappIcon className="size-4" />
             WhatsApp
@@ -63,7 +63,7 @@ export default async function SiteHeader() {
 
       {/* Mobil menü: hamburger yok, iki bağlantı zaten sığıyor */}
       <nav
-        className="border-t border-line md:hidden"
+        className="border-t border-cream/20 md:hidden"
         aria-label="Ana menü (mobil)"
       >
         <ul className="mx-auto flex max-w-6xl items-center gap-6 px-4 py-2.5 text-sm">
@@ -71,7 +71,7 @@ export default async function SiteHeader() {
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="gold-glow hover:text-gold-deep"
+                className="nav-cream text-cream hover:text-gold"
               >
                 <RandomLetterSwap label={item.label} staggerDuration={0.025} />
               </Link>
