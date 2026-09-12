@@ -4,6 +4,7 @@ import type {
   Bay,
   Boat,
   MapPoint,
+  TourRoute,
   Faq,
   Product,
   SiteInfo,
@@ -441,4 +442,31 @@ export const mapPoints: MapPoint[] = [
   { slug: "akvaryum-koyu", name: "Akvaryum Koyu", kind: "bay", x: 458.0, y: 413.0, icon: "snorkel", labelDx: 0, labelDy: 28, labelAnchor: "middle" },
   { slug: "samanlik-koyu", name: "Samanlık Koyu", kind: "bay", x: 508.2, y: 223.4, priority: 2, labelDx: -10, labelDy: 4, labelAnchor: "end" },
   { slug: "gemiler-adasi", name: "Gemiler Adası", kind: "island", x: 482.9, y: 391.8, priority: 2, labelDx: 8, labelDy: -6, labelAnchor: "start" },
+];
+
+/**
+ * TUR ROTALARI — illüstratif haritadaki tur seçici.
+ * TODO: duraklar işletmeyle teyit edilecek (şimdilik ürün rotalarından ve
+ * koy listesinden türetildi). Rota çizgileri suda kalacak şekilde
+ * illustrated-map.tsx içindeki ara noktalarla çizilir.
+ */
+export const routes: TourRoute[] = [
+  {
+    slug: "gunubirlik",
+    name: "Günübirlik",
+    productSlug: "gunubirlik-ozel-kiralama",
+    stops: ["fethiye-limani", "kizilada", "akvaryum-koyu", "yassica", "fethiye-limani"], // TODO: teyit
+  },
+  {
+    slug: "gun-batimi",
+    name: "Gün batımı",
+    productSlug: "gun-batimi-turu",
+    stops: ["fethiye-limani", "sovalye", "kizilada", "fethiye-limani"], // TODO: teyit
+  },
+  {
+    slug: "mavi-tur",
+    name: "Mavi tur",
+    productSlug: "mavi-tur",
+    stops: ["fethiye-limani", "yassica", "oludeniz", "kelebekler-vadisi"], // TODO: teyit (Göcek yönü 12 Adalar → Ölüdeniz → Kelebekler)
+  },
 ];

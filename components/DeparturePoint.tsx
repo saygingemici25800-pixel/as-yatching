@@ -1,7 +1,7 @@
 import IllustratedMap from "@/components/ui/illustrated-map";
 import { ArrowIcon, PinIcon, WhatsappIcon } from "@/components/icons";
 import { directionsUrl, whatsappUrl } from "@/lib/links";
-import type { Bay, MapPoint, SiteInfo } from "@/lib/types";
+import type { Bay, MapPoint, SiteInfo, TourRoute } from "@/lib/types";
 
 /**
  * "Nereden kalkıyoruz?" — kalkış noktası kartı + illüstratif körfez haritası.
@@ -21,10 +21,12 @@ export default function DeparturePoint({
   info,
   points,
   bays,
+  routes,
 }: {
   info: SiteInfo;
   points: MapPoint[];
   bays: Bay[];
+  routes: TourRoute[];
 }) {
   const { departure } = info;
 
@@ -93,6 +95,7 @@ export default function DeparturePoint({
         <IllustratedMap
           points={points}
           bays={bays}
+          routes={routes}
           harborLabel={departure.label}
           className="min-w-0"
         />

@@ -19,11 +19,12 @@ import {
   getGoogleReviews,
   getMapPoints,
   getProducts,
+  getRoutes,
   getSiteInfo,
 } from "@/lib/repository";
 
 export default async function HomePage() {
-  const [info, featured, products, boats, faqs, reviews, bays, mapPoints] =
+  const [info, featured, products, boats, faqs, reviews, bays, mapPoints, routes] =
     await Promise.all([
       getSiteInfo(),
       getFeaturedProducts(),
@@ -33,6 +34,7 @@ export default async function HomePage() {
       getGoogleReviews(),
       getBays(),
       getMapPoints(),
+      getRoutes(),
     ]);
 
   const boat = boats[0];
@@ -171,7 +173,7 @@ export default async function HomePage() {
       />
 
       {/* ---------- Nereden kalkıyoruz? (harita) ---------- */}
-      <DeparturePoint info={info} points={mapPoints} bays={bays} />
+      <DeparturePoint info={info} points={mapPoints} bays={bays} routes={routes} />
 
       {/* ---------- Sık sorulanlar ---------- */}
       <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24">

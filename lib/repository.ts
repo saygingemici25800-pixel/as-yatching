@@ -6,6 +6,7 @@ import {
   googleReviews,
   mapPoints,
   products,
+  routes,
   siteInfo,
 } from "@/data/seed";
 import type {
@@ -18,6 +19,7 @@ import type {
   MapPoint,
   Product,
   SiteInfo,
+  TourRoute,
 } from "./types";
 
 /**
@@ -60,6 +62,10 @@ export async function getBays(): Promise<Bay[]> {
 
 export async function getMapPoints(): Promise<MapPoint[]> {
   return mapPoints;
+}
+
+export async function getRoutes(): Promise<TourRoute[]> {
+  return routes;
 }
 
 export async function getFaqs(): Promise<Faq[]> {

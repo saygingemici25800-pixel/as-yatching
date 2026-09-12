@@ -151,3 +151,12 @@ export interface MapPoint {
   labelDy?: number;
   labelAnchor?: "start" | "middle" | "end";
 }
+
+/** Haritadaki tur rotası: duraklar mapPoints slug'ları (liman dahil). */
+export interface TourRoute {
+  slug: string;
+  name: string;
+  /** İlgili ürün (products[].slug); yoksa null */
+  productSlug: string | null;
+  stops: string[];
+}
