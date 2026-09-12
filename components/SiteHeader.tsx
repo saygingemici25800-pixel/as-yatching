@@ -26,7 +26,7 @@ export default async function SiteHeader() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="nav-cream text-cream transition-colors hover:text-gold"
+                  className="nav-shadow text-gold transition-colors hover:text-gold-deep"
                 >
                   <RandomLetterSwap
                     label={item.label}
@@ -71,7 +71,7 @@ export default async function SiteHeader() {
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="nav-cream text-cream hover:text-gold"
+                className="nav-shadow text-gold hover:text-gold-deep"
               >
                 <RandomLetterSwap label={item.label} staggerDuration={0.025} />
               </Link>

@@ -108,9 +108,8 @@
 .vhero__content .eyebrow {
   text-shadow: var(--gold-text-shadow);
 }
-/* Başlık: krem (site geneli turuncu başlık kuralının istisnası), parlama yok */
+/* Başlık: parlama yok, video üstünde okunması için yumuşak lacivert gölge */
 .vhero__content h1 {
-  color: var(--color-surface);
   text-shadow:
     0 1px 2px rgb(0 0 0 / 0.35),
     0 2px 16px color-mix(in srgb, var(--color-deep) 60%, transparent);

@@ -29,7 +29,7 @@ export default function GoogleReviews({
             minimumFractionDigits: 1,
           })}
         </p>
-        <h2 className="mt-2 text-2xl text-ink sm:text-3xl">
+        <h2 className="mt-2 text-2xl sm:text-3xl">
           {info.googleReviewCount} Google yorumunda 5 üzerinden{" "}
           {info.googleRating.toLocaleString("tr-TR", {
             minimumFractionDigits: 1,

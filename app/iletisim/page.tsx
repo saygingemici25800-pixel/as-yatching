@@ -62,7 +62,7 @@ export default async function ContactPage() {
             <ul className="grid gap-4 sm:grid-cols-2">
               <li className="rounded-sm border border-line bg-surface p-5">
                 <PhoneIcon className="size-5 text-accent" />
-                <h2 className="mt-3 text-lg text-sunset-deep">Telefon</h2>
+                <h2 className="mt-3 text-lg">Telefon</h2>
                 <a
                   href={telUrl(info.phone)}
                   className="mt-1 inline-block text-base hover:text-accent"
@@ -73,7 +73,7 @@ export default async function ContactPage() {
 
               <li className="rounded-sm border border-line bg-surface p-5">
                 <WhatsappIcon className="size-5 text-accent" />
-                <h2 className="mt-3 text-lg text-sunset-deep">WhatsApp</h2>
+                <h2 className="mt-3 text-lg">WhatsApp</h2>
                 <a
                   href={whatsappUrl(
                     info.whatsapp,
@@ -90,7 +90,7 @@ export default async function ContactPage() {
 
               <li className="rounded-sm border border-line bg-surface p-5">
                 <ClockIcon className="size-5 text-accent" />
-                <h2 className="mt-3 text-lg text-sunset-deep">Çalışma saati</h2>
+                <h2 className="mt-3 text-lg">Çalışma saati</h2>
                 <p className="mt-1 text-base">{info.workingHours}</p>
                 <p className="mt-1 text-sm text-ink-soft">
                   Gece geç saatte de yazabilirsiniz.
@@ -99,7 +99,7 @@ export default async function ContactPage() {
 
               <li className="rounded-sm border border-line bg-surface p-5">
                 <PinIcon className="size-5 text-accent" />
-                <h2 className="mt-3 text-lg text-sunset-deep">Adres</h2>
+                <h2 className="mt-3 text-lg">Adres</h2>
                 <p className="mt-1 text-sm leading-relaxed text-ink-soft">
                   {info.address}
                 </p>
@@ -108,7 +108,7 @@ export default async function ContactPage() {
 
             {/* ---------- Harita bağlantıları ---------- */}
             <div className="mt-6 rounded-sm border border-line bg-surface p-5">
-              <h2 className="text-lg text-sunset-deep">Nasıl gelinir?</h2>
+              <h2 className="text-lg">Nasıl gelinir?</h2>
               <p className="mt-2 text-sm leading-relaxed text-ink-soft">
                 Fethiye Limanı içindeki beton iskeledeyiz. Yol tarifi için
                 aşağıdaki bağlantıyı açın; telefonunuzun navigasyonu doğrudan
