@@ -416,38 +416,39 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
 
       {/* Aktif koy bilgisi — PhotoStrip/GoogleReviews başlık reçetesi:
           surface metin + lacivert text-shadow + arkada kenarsız radyal karartma.
-          Karartma 4rem dışa taştığı için sarmalayıcı yatayda kırpar
-          (overflow-x: clip — scroll kabı oluşturmaz, sticky'yi etkilemez);
-          aksi hâlde 375px'te sayfa genişliği 423px'e çıkıyordu. */}
-      <div className="overflow-x-clip">
-      <div
-        className="relative isolate mx-auto mt-6 max-w-md text-center text-surface [text-shadow:0_1px_3px_rgb(0_51_87/0.7),0_2px_28px_rgb(0_51_87/0.9)] before:pointer-events-none before:absolute before:-inset-16 before:-z-10 before:rounded-full before:bg-[radial-gradient(closest-side,rgb(0_51_87/0.45),transparent)] sm:mt-8"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={current.slug}
-            initial={{ opacity: 0, y: flat ? 0 : 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: flat ? 0 : -6 }}
-            transition={{ duration: flat ? 0.15 : 0.28, ease: "easeOut" }}
-          >
-            <p className="eyebrow">{current.highlight}</p>
-            <h3 className="mt-2 text-2xl text-surface sm:text-3xl">
-              {current.name}
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed text-surface/90">
-              {current.blurb}
-            </p>
-            <dl className="mt-5 border-t border-surface/25 text-sm">
-              <InfoRow label="Limandan (tahmini)" value={current.distanceFromHarbor} />
-              <InfoRow label="Kalış süresi" value={current.stayDuration} />
-              <InfoRow label="Hangi tur" value={current.tours} />
-            </dl>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+          Sahnenin overflow-hidden'ı DIŞINDA; hiçbir sarmalayıcı kırpmaz
+          (text-shadow parlaması ve kenar harfleri kesilmesin). Karartma
+          px-6 içindeki iç kutuya -2rem ile bağlı: 375px'te kutu 295px,
+          halo 359px → viewport'u aşmaz, yatay kaydırma oluşmaz. */}
+      <div className="mx-auto mt-6 max-w-md px-6 sm:mt-8 sm:px-8">
+        <div
+          className="relative isolate text-center text-surface [text-shadow:0_1px_3px_rgb(0_51_87/0.7),0_2px_28px_rgb(0_51_87/0.9)] before:pointer-events-none before:absolute before:-inset-8 before:-z-10 before:rounded-full before:bg-[radial-gradient(closest-side,rgb(0_51_87/0.45),transparent)]"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={current.slug}
+              initial={{ opacity: 0, y: flat ? 0 : 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: flat ? 0 : -6 }}
+              transition={{ duration: flat ? 0.15 : 0.28, ease: "easeOut" }}
+            >
+              <p className="eyebrow text-balance">{current.highlight}</p>
+              <h3 className="mt-2 text-balance text-2xl text-surface sm:text-3xl">
+                {current.name}
+              </h3>
+              <p className="mt-2 text-balance text-sm leading-relaxed text-surface/90">
+                {current.blurb}
+              </p>
+              <dl className="mt-5 border-t border-surface/25 text-sm">
+                <InfoRow label="Limandan (tahmini)" value={current.distanceFromHarbor} />
+                <InfoRow label="Kalış süresi" value={current.stayDuration} />
+                <InfoRow label="Hangi tur" value={current.tours} />
+              </dl>
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );
@@ -486,8 +487,8 @@ function ChevronIcon({ className }: { className?: string }) {
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-baseline justify-between gap-4 border-b border-surface/25 py-2.5">
-      <dt className="eyebrow">{label}</dt>
-      <dd className="text-right font-medium text-surface">{value}</dd>
+      <dt className="eyebrow min-w-0 text-left">{label}</dt>
+      <dd className="shrink-0 text-right font-medium text-surface">{value}</dd>
     </div>
   );
 }

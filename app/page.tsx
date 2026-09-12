@@ -116,30 +116,6 @@ export default async function HomePage() {
         caption="Kızılada, Akvaryum Koyu, Samanlık Koyu. Rotayı grubun temposuna göre birlikte belirliyoruz."
       />
 
-      {/* ---------- Gerçek kareler (PhotoStrip) ---------- */}
-      <PhotoStrip instagram={info.instagram} />
-
-      {/* ---------- Google yorumları ---------- */}
-      <GoogleReviews reviews={reviews} info={info} />
-
-      {/* ---------- Vaatler ---------- */}
-      <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-20">
-        <ul className="grid gap-6 sm:grid-cols-3">
-          {PROMISES.map((item) => (
-            <li
-              key={item.title}
-              className="rounded-sm border border-line bg-surface p-5"
-            >
-              <CheckIcon className="size-5 text-accent" />
-              <h2 className="mt-3 text-lg">{item.title}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-                {item.body}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </section>
-
       {/* ---------- Öne çıkan turlar ---------- */}
       <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24">
         <div className="flex flex-wrap items-end justify-between gap-3">
@@ -188,6 +164,30 @@ export default async function HomePage() {
           <AvailabilityCalendar blocks={blocks} />
         </div>
       </section>
+
+      {/* ---------- Vaatler ---------- */}
+      <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-20">
+        <ul className="grid gap-6 sm:grid-cols-3">
+          {PROMISES.map((item) => (
+            <li
+              key={item.title}
+              className="rounded-sm border border-line bg-surface p-5"
+            >
+              <CheckIcon className="size-5 text-accent" />
+              <h2 className="mt-3 text-lg">{item.title}</h2>
+              <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+                {item.body}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* ---------- Gerçek kareler (PhotoStrip) ---------- */}
+      <PhotoStrip instagram={info.instagram} />
+
+      {/* ---------- Google yorumları ---------- */}
+      <GoogleReviews reviews={reviews} info={info} />
 
       {/* ---------- Google puanı ---------- */}
       <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24">
