@@ -14,7 +14,8 @@ import "./VideoHero.css";
  *  - Kaydırma ilerledikçe (GSAP ScrollTrigger, scrub) video hafifçe yaklaşır,
  *    karartma artar, metin yukarı süzülüp kaybolur; en sonda sahne kenarlardan
  *    daralıp çerçeveye oturur ve bir sonraki bölüm üstüne akar.
- *  - Video sessiz ve otomatik oynar (tarayıcı kuralı). Deniz sesi ayrı bir
+ *  - Video sessiz ve otomatik oynar (tarayıcı kuralı). Seyir sesi (motor +
+ *    pruva suyu + rüzgar, sentetik) ayrı bir
  *    <audio>; kullanıcı butonla açar. Hero ekrandan çıkınca ses kendiliğinden
  *    kısılır, geri gelince açılır.
  *  - Hareket azaltma tercihi ya da veri tasarrufu açıksa video hiç yüklenmez,
@@ -165,7 +166,7 @@ export default function VideoHero({ children }: { children: ReactNode }) {
             className="vhero__sound"
           >
             <span className="vhero__sound-dot" aria-hidden />
-            {soundOn ? "Deniz sesi açık" : "Deniz sesini aç"}
+            {soundOn ? "Ses açık" : "Sesi aç"}
           </button>
         </div>
 

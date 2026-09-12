@@ -2,6 +2,7 @@ import Link from "next/link";
 import AvailabilityCalendar from "@/components/AvailabilityCalendar";
 import DemoNotice from "@/components/DemoNotice";
 import GoogleRating from "@/components/GoogleRating";
+import PhotoStrip from "@/components/PhotoStrip";
 import ProductCard from "@/components/ProductCard";
 import VideoHero from "@/components/VideoHero";
 import { ParallaxScrolling } from "@/components/ui/parallax-scrolling";
@@ -141,6 +142,9 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* ---------- Instagram kareleri ---------- */}
+      <PhotoStrip instagram={info.instagram} />
 
       {/* ---------- Müsaitlik önizleme ---------- */}
       <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24">

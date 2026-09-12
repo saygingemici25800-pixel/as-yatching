@@ -27,7 +27,7 @@ export const siteInfo: SiteInfo = {
   googleReviewCount: 34,
   googleProfileUrl: "https://www.google.com/maps?cid=4934811779244890993",
   workingHours: "Her gün 24 saat",
-  instagram: null, // TODO
+  instagram: "https://www.instagram.com/as_yachting/",
   highSeasonMonths: [6, 7, 8, 9],
 };
 
@@ -59,9 +59,9 @@ export const boats: Boat[] = [
       // TODO: sigorta ve turizm belgesi bilgisi eklenecek
     ],
     images: [
-      "/placeholder/boat-01.jpg",
-      "/placeholder/boat-02.jpg",
-      "/placeholder/boat-03.jpg",
+      "/foto/tekne-koy.jpg",
+      "/foto/tekne-marina.jpg",
+      "/foto/guverte.jpg",
     ],
     isPlaceholder: true,
   },

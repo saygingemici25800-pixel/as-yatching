@@ -96,8 +96,8 @@
 .vhero__sound {
   position: absolute;
   z-index: 2;
-  right: 1rem;
-  bottom: calc(1rem + var(--vhero-safe-bottom));
+  left: 1rem;
+  top: 1rem;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -119,8 +119,8 @@
 
 @media (min-width: 640px) {
   .vhero__sound {
-    right: 1.5rem;
-    bottom: 1.5rem;
+    left: 1.5rem;
+    top: 1.5rem;
   }
 }
 
