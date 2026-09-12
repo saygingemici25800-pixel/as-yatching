@@ -179,7 +179,7 @@ function BayCard({
         aria-label={active ? bay.name : `${bay.name} kartına geç`}
         className="group block h-full w-full cursor-pointer rounded-2xl text-left"
       >
-        <div className="relative h-full w-full overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_18px_40px_-18px_color-mix(in_srgb,var(--color-deep)_45%,transparent)] transition-shadow duration-300 group-hover:shadow-[0_22px_48px_-18px_color-mix(in_srgb,var(--color-deep)_55%,transparent)]">
+        <div className="relative h-full w-full overflow-hidden rounded-2xl border border-line bg-deep/30 shadow-[0_18px_40px_-18px_color-mix(in_srgb,var(--color-deep)_45%,transparent)] transition-shadow duration-300 group-hover:shadow-[0_22px_48px_-18px_color-mix(in_srgb,var(--color-deep)_55%,transparent)]">
           <Image
             src={bay.image}
             alt={bay.name}

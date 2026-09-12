@@ -20,8 +20,8 @@ import type { AvailabilityBlock } from "@/lib/types";
  *   `monthsAhead`. `onSelect` yoksa salt okunur önizleme.
  * - Orijinaldeki Weekly/Monthly sekmesi, ayar dişlisi, not ve etkinlik
  *   butonları çıkarıldı (bu sitede karşılığı yok); yerine müsaitlik lejantı var.
- * - Renkler marka paletinden: deep cam zemin (bg-deep/60), ink/ink-soft metin,
- *   seçili gün peach zemin + deep metin, bugün noktası peach.
+ * - Renkler marka paletinden: krem cam zemin (bg-surface/90 + blur), deep
+ *   metin, seçili gün peach zemin + deep metin, bugün noktası peach.
  */
 
 export interface GlassCalendarProps
@@ -113,8 +113,8 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
       <div
         ref={ref}
         className={cn(
-          "w-full overflow-hidden rounded-3xl border border-line p-5 shadow-2xl",
-          "bg-deep/60 text-ink backdrop-blur-xl",
+          "w-full overflow-hidden rounded-3xl border border-line p-5 shadow-sm",
+          "bg-surface/90 text-deep backdrop-blur-xl",
           className,
         )}
         {...props}
@@ -139,7 +139,7 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
               onClick={() => setOffset((o) => Math.max(0, o - 1))}
               disabled={offset === 0}
               aria-label="Önceki ay"
-              className="flex size-9 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-ink/10 hover:text-ink disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent"
+              className="flex size-9 items-center justify-center rounded-full text-deep/60 transition-colors hover:bg-deep/10 hover:text-deep disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent"
             >
               <Chevron dir="left" />
             </button>
@@ -148,7 +148,7 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
               onClick={() => setOffset((o) => Math.min(monthsAhead, o + 1))}
               disabled={offset >= monthsAhead}
               aria-label="Sonraki ay"
-              className="flex size-9 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-ink/10 hover:text-ink disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent"
+              className="flex size-9 items-center justify-center rounded-full text-deep/60 transition-colors hover:bg-deep/10 hover:text-deep disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent"
             >
               <Chevron dir="right" />
             </button>
@@ -172,7 +172,7 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
 
               return (
                 <div key={d.iso} className="flex shrink-0 flex-col items-center gap-2">
-                  <span className="text-[0.625rem] font-semibold uppercase tracking-wider text-ink-soft/70">
+                  <span className="text-[0.625rem] font-semibold uppercase tracking-wider text-deep/50">
                     {d.weekday}
                   </span>
                   <button
@@ -186,11 +186,11 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
                     onClick={interactive && !disabled ? () => onSelect!(d.iso) : undefined}
                     className={cn(
                       "relative flex size-9 items-center justify-center rounded-full text-sm font-medium transition-all duration-200",
-                      isSelected && "bg-accent text-deep shadow-lg",
-                      !isSelected && d.isPast && "text-ink/30",
-                      !isSelected && !d.isPast && isBlocked && "text-ink-soft/50 line-through decoration-ink-soft/50",
-                      !isSelected && !d.isPast && !isBlocked && "text-ink",
-                      !isSelected && !disabled && "hover:bg-ink/15",
+                      isSelected && "bg-accent text-deep shadow-sm",
+                      !isSelected && d.isPast && "text-deep/30",
+                      !isSelected && !d.isPast && isBlocked && "text-deep/40 line-through decoration-deep/40",
+                      !isSelected && !d.isPast && !isBlocked && "text-deep",
+                      !isSelected && !disabled && "hover:bg-deep/10",
                       disabled ? "cursor-default" : "cursor-pointer",
                     )}
                   >
@@ -199,7 +199,7 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
                       <span className="absolute bottom-1 size-1 rounded-full bg-accent" aria-hidden />
                     )}
                     {isBlocked && !d.isPast && !isSelected && (
-                      <span className="absolute bottom-1 size-1 rounded-full bg-ink-soft/50" aria-hidden />
+                      <span className="absolute bottom-1 size-1 rounded-full bg-deep/30" aria-hidden />
                     )}
                   </button>
                 </div>
@@ -211,13 +211,13 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
         <div className="mt-6 h-px bg-line" />
 
         {/* Lejant */}
-        <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs text-ink-soft">
+        <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs text-deep/70">
           <li className="flex items-center gap-2">
-            <span className="size-3 rounded-full border border-ink-soft/60" aria-hidden />
+            <span className="size-3 rounded-full border border-deep/40" aria-hidden />
             Müsait
           </li>
           <li className="flex items-center gap-2">
-            <span className="size-3 rounded-full bg-ink-soft/30" aria-hidden />
+            <span className="size-3 rounded-full bg-deep/25" aria-hidden />
             Dolu / bakım
           </li>
           {interactive && (

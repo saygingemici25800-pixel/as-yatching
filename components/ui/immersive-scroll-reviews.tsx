@@ -60,7 +60,7 @@ function ReviewCard({
   const inner = (
     <div className="w-[62vw] rounded-sm border border-line bg-surface p-4 shadow-sm sm:w-[22rem] sm:p-5">
       <div className="flex items-center justify-between gap-3">
-        <span className="flex gap-0.5 text-accent" aria-hidden>
+        <span className="keep-accent flex gap-0.5 text-accent" aria-hidden>
           {Array.from({ length: review.rating }, (_, i) => (
             <StarIcon key={i} className="size-3.5" />
           ))}

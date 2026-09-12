@@ -114,7 +114,7 @@ export default function BookingPanel({
             max={product.maxGuests}
             value={guests}
             onChange={(e) => clampGuests(Number(e.target.value))}
-            className="h-11 w-full rounded-sm border border-line bg-deep/40 text-center text-base text-ink placeholder:text-ink-soft/60 focus:outline-none focus:ring-1 focus:ring-accent [appearance:textfield] focus:border-accent [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            className="h-11 w-full rounded-sm border border-line bg-surface-2 text-center text-base text-deep placeholder:text-deep/50 focus:outline-none focus:ring-1 focus:ring-accent [appearance:textfield] focus:border-accent [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           />
           <button
             type="button"

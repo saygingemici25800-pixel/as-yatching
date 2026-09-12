@@ -67,13 +67,13 @@ export default function ProductCard({
           {duration && (
             <div className="flex items-center gap-1.5">
               <dt className="sr-only">Süre</dt>
-              <ClockIcon className="size-3.5 text-accent" />
+              <ClockIcon className="keep-accent size-3.5 text-accent" />
               <dd>{duration}</dd>
             </div>
           )}
           <div className="flex items-center gap-1.5">
             <dt className="sr-only">Kapasite</dt>
-            <UsersIcon className="size-3.5 text-accent" />
+            <UsersIcon className="keep-accent size-3.5 text-accent" />
             <dd>{guestsLabel(product)}</dd>
           </div>
         </dl>

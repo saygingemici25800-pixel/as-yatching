@@ -19,7 +19,7 @@ export default function GoogleRating({
 
   const inner = (
     <>
-      <span className="flex gap-0.5 text-accent" aria-hidden>
+      <span className="keep-accent flex gap-0.5 text-accent" aria-hidden>
         {Array.from({ length: 5 }, (_, i) => (
           <StarIcon key={i} className={starSize} />
         ))}
