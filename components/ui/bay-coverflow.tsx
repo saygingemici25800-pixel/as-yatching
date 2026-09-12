@@ -314,6 +314,19 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
     [select],
   );
 
+  // Harita rozetinden gelen #koy-<slug> hash'i: ilgili koyu aktif yap
+  useEffect(() => {
+    const apply = () => {
+      const m = /^#koy-([\w-]+)$/.exec(window.location.hash);
+      if (!m) return;
+      const i = bays.filter((b) => b.image !== null).findIndex((b) => b.slug === m[1]);
+      if (i >= 0) select(i);
+    };
+    apply();
+    window.addEventListener("hashchange", apply);
+    return () => window.removeEventListener("hashchange", apply);
+  }, [bays, select]);
+
   if (total === 0) return null;
   const current = items[active];
 

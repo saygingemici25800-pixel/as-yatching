@@ -126,3 +126,28 @@ export interface Bay {
   /** Küçük varyant (uzun kenar 640px webp); image null ise null */
   imageThumb: string | null;
 }
+
+export type MapPointKind = "island" | "bay" | "town" | "harbor";
+export type MapIcon = "food" | "snorkel" | "swim" | "sunset" | "photo";
+
+/**
+ * İllüstratif harita noktası. x/y 800×520 viewBox koordinatı
+ * (components/ui/fethiye-coast.ts → projectLonLat ile OSM koordinatından).
+ */
+export interface MapPoint {
+  slug: string;
+  name: string;
+  kind: MapPointKind;
+  x: number;
+  y: number;
+  /** Rozet ikonu (yalnızca durak koyları/adalar) */
+  icon?: MapIcon;
+  /** Tahmini süre; boşsa `bays` içindeki aynı slug'dan okunur */
+  minutes?: string;
+  /** 1 = her boyutta görünür, 2 = mobilde gizlenir */
+  priority?: 1 | 2;
+  /** Etiket konumu ince ayarı (viewBox px) */
+  labelDx?: number;
+  labelDy?: number;
+  labelAnchor?: "start" | "middle" | "end";
+}

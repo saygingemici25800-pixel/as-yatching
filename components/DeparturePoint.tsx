@@ -1,12 +1,13 @@
-import MapEmbed from "@/components/MapEmbed";
+import IllustratedMap from "@/components/ui/illustrated-map";
 import { ArrowIcon, PinIcon, WhatsappIcon } from "@/components/icons";
 import { directionsUrl, whatsappUrl } from "@/lib/links";
-import type { SiteInfo } from "@/lib/types";
+import type { Bay, MapPoint, SiteInfo } from "@/lib/types";
 
 /**
- * "Nereden kalkıyoruz?" — kalkış noktası kartı + harita.
- * Veri `getSiteInfo().departure` ve `address` üzerinden gelir (sayfa
- * repository'den okur, bu bileşen prop alır).
+ * "Nereden kalkıyoruz?" — kalkış noktası kartı + illüstratif körfez haritası.
+ * Veri `getSiteInfo().departure`, `getMapPoints()` ve `getBays()` üzerinden
+ * gelir (sayfa repository'den okur, bu bileşen prop alır). "Yol tarifi al"
+ * Google Haritalar'a gitmeye devam eder.
  *
  * TODO (işletmeyle teyit): buluşma saati, otopark, ulaşım satırları.
  */
@@ -16,7 +17,15 @@ const DETAILS: { label: string; value: string }[] = [
   { label: "Ulaşım", value: "Fethiye merkezden yürüyerek" }, // TODO: teyit
 ];
 
-export default function DeparturePoint({ info }: { info: SiteInfo }) {
+export default function DeparturePoint({
+  info,
+  points,
+  bays,
+}: {
+  info: SiteInfo;
+  points: MapPoint[];
+  bays: Bay[];
+}) {
   const { departure } = info;
 
   return (
@@ -79,12 +88,12 @@ export default function DeparturePoint({ info }: { info: SiteInfo }) {
           </div>
         </div>
 
-        {/* Sağ: harita */}
-        <MapEmbed
-          lat={departure.lat}
-          lng={departure.lng}
-          label={departure.label}
-          className="aspect-[4/3] min-w-0 lg:aspect-auto lg:h-full lg:min-h-[22rem]"
+        {/* Sağ: illüstratif harita (Fethiye Körfezi + 12 Adalar) */}
+        <IllustratedMap
+          points={points}
+          bays={bays}
+          harborLabel={departure.label}
+          className="min-w-0"
         />
       </div>
     </section>

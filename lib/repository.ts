@@ -4,6 +4,7 @@ import {
   boats,
   faqs,
   googleReviews,
+  mapPoints,
   products,
   siteInfo,
 } from "@/data/seed";
@@ -14,6 +15,7 @@ import type {
   BookingRequest,
   Faq,
   GoogleReview,
+  MapPoint,
   Product,
   SiteInfo,
 } from "./types";
@@ -54,6 +56,10 @@ export async function getProduct(slug: string): Promise<Product | null> {
 
 export async function getBays(): Promise<Bay[]> {
   return bays;
+}
+
+export async function getMapPoints(): Promise<MapPoint[]> {
+  return mapPoints;
 }
 
 export async function getFaqs(): Promise<Faq[]> {

@@ -16,6 +16,12 @@
   --color-sky: #b3edeb; /* açık aqua (kullanılabilir yüzey tonu) */
   --color-gold: #f3d98a; /* parlak kremsi altın — logo, menü, WhatsApp ve ses butonu */
   --color-gold-deep: #d9b45a; /* altın hover / kenarlık */
+  /* İllüstratif harita (components/ui/illustrated-map.tsx) */
+  --color-sea: #cfe9f2;
+  --color-sea-deep: #9fd3e6;
+  --color-land: #f6e8cf;
+  --color-land-edge: #e5cfa5;
+  --color-forest: #b5c48a;
 
   /* Fontlar next/font ile kendi sunucumuzdan servis ediliyor (LCP için).
      --font-caviar ve --font-inter değişkenlerini app/layout.tsx <html>'e basar. */

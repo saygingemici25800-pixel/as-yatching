@@ -3,6 +3,7 @@ import type {
   AvailabilityBlock,
   Bay,
   Boat,
+  MapPoint,
   Faq,
   Product,
   SiteInfo,
@@ -409,4 +410,35 @@ export const bays: Bay[] = [
     image: "/koylar/kelebekler-vadisi.webp",
     imageThumb: "/koylar/kelebekler-vadisi-thumb.webp",
   },
+];
+
+/**
+ * HARİTA NOKTALARI — "Nereden kalkıyoruz?" illüstratif haritası.
+ * x/y: 800×520 viewBox; OSM koordinatlarından projectLonLat ile üretildi
+ * (components/ui/fethiye-coast.ts). Konumlar OSM'den; "TODO: yaklaşık"
+ * notlular elle konuldu. Tahmini süreler `bays[].distanceFromHarbor`dan okunur.
+ */
+export const mapPoints: MapPoint[] = [
+  { slug: "fethiye-limani", name: "Fethiye Limanı", kind: "harbor", x: 547.6, y: 258.7, labelDx: 8, labelDy: -14, labelAnchor: "start" }, // pin: siteInfo.departure (TODO gerçek iskele)
+  { slug: "fethiye", name: "Fethiye", kind: "town", x: 551.4, y: 262.6, labelDx: 10, labelDy: 14, labelAnchor: "start" },
+  { slug: "karagozler", name: "Karagözler", kind: "town", x: 531.6, y: 262.8, priority: 2, labelDx: -6, labelDy: 12, labelAnchor: "end" },
+  { slug: "calis", name: "Çalış", kind: "town", x: 543.5, y: 176.5, labelDx: 10, labelDy: 4, labelAnchor: "start" },
+  { slug: "oludeniz", name: "Ölüdeniz", kind: "bay", x: 566.3, y: 397.6, icon: "sunset", labelDx: 0, labelDy: 26, labelAnchor: "middle" },
+  { slug: "kayakoy", name: "Kayaköy", kind: "town", x: 509.4, y: 345.2, priority: 2, labelDx: 0, labelDy: -8, labelAnchor: "middle" },
+  { slug: "hisaronu", name: "Hisarönü", kind: "town", x: 580.7, y: 356.9, priority: 2, labelDx: 8, labelDy: 4, labelAnchor: "start" },
+  { slug: "gocek", name: "Göcek", kind: "town", x: 290.3, y: 15.6, labelDx: 10, labelDy: 4, labelAnchor: "start" },
+  { slug: "faralya", name: "Faralya", kind: "town", x: 590.0, y: 500.0, priority: 2, labelDx: 8, labelDy: 4, labelAnchor: "start" }, // TODO: yaklaşık konum
+  { slug: "kelebekler-vadisi", name: "Kelebekler Vadisi", kind: "bay", x: 566.0, y: 488.0, icon: "photo", labelDx: -16, labelDy: 4, labelAnchor: "end" }, // TODO: yaklaşık konum (alt kenardan içeri alındı)
+  { slug: "sovalye", name: "Şövalye Adası", kind: "island", x: 531.9, y: 210.8, priority: 2, labelDx: 8, labelDy: -8, labelAnchor: "start" },
+  { slug: "kizilada", name: "Kızılada", kind: "island", x: 449.1, y: 194.3, icon: "snorkel", labelDx: 0, labelDy: -16, labelAnchor: "middle" },
+  { slug: "yassica", name: "Yassıca Adaları", kind: "island", x: 277.4, y: 107.8, icon: "food", labelDx: -16, labelDy: -2, labelAnchor: "end" },
+  { slug: "tersane", name: "Tersane Adası", kind: "island", x: 263.2, y: 175.7, priority: 2, labelDx: 8, labelDy: 4, labelAnchor: "start" },
+  { slug: "domuz", name: "Domuz Adası", kind: "island", x: 223.1, y: 189.6, icon: "swim", labelDx: -16, labelDy: 4, labelAnchor: "end" },
+  { slug: "zeytin", name: "Zeytin Adası", kind: "island", x: 266.9, y: 122.8, priority: 2, labelDx: -8, labelDy: 12, labelAnchor: "end" },
+  { slug: "delikli", name: "Delikli Ada", kind: "island", x: 230.9, y: 157.7, priority: 2, labelDx: -8, labelDy: -6, labelAnchor: "end" }, // TODO: yaklaşık konum (OSM'de bulunamadı)
+  { slug: "katranci", name: "Katrancı Adası", kind: "island", x: 390.5, y: 125.0, priority: 2, labelDx: 8, labelDy: -6, labelAnchor: "start" },
+  { slug: "gocek-adasi", name: "Göcek Adası", kind: "island", x: 289.8, y: 65.3, priority: 2, labelDx: 10, labelDy: 4, labelAnchor: "start" },
+  { slug: "akvaryum-koyu", name: "Akvaryum Koyu", kind: "bay", x: 458.0, y: 413.0, icon: "snorkel", labelDx: 0, labelDy: 28, labelAnchor: "middle" },
+  { slug: "samanlik-koyu", name: "Samanlık Koyu", kind: "bay", x: 508.2, y: 223.4, priority: 2, labelDx: -10, labelDy: 4, labelAnchor: "end" },
+  { slug: "gemiler-adasi", name: "Gemiler Adası", kind: "island", x: 482.9, y: 391.8, priority: 2, labelDx: 8, labelDy: -6, labelAnchor: "start" },
 ];

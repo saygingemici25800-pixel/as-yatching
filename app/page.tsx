@@ -17,12 +17,13 @@ import {
   getFaqs,
   getFeaturedProducts,
   getGoogleReviews,
+  getMapPoints,
   getProducts,
   getSiteInfo,
 } from "@/lib/repository";
 
 export default async function HomePage() {
-  const [info, featured, products, boats, faqs, reviews, bays] =
+  const [info, featured, products, boats, faqs, reviews, bays, mapPoints] =
     await Promise.all([
       getSiteInfo(),
       getFeaturedProducts(),
@@ -31,6 +32,7 @@ export default async function HomePage() {
       getFaqs(),
       getGoogleReviews(),
       getBays(),
+      getMapPoints(),
     ]);
 
   const boat = boats[0];
@@ -80,6 +82,7 @@ export default async function HomePage() {
 
       {/* ---------- Rota / Koylar (hero koşu alanı bitince, akışta) ---------- */}
       <section
+        id="rota"
         aria-labelledby="koylar-baslik"
         className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24"
       >
@@ -168,7 +171,7 @@ export default async function HomePage() {
       />
 
       {/* ---------- Nereden kalkıyoruz? (harita) ---------- */}
-      <DeparturePoint info={info} />
+      <DeparturePoint info={info} points={mapPoints} bays={bays} />
 
       {/* ---------- Sık sorulanlar ---------- */}
       <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24">
