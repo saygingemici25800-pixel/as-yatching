@@ -20,7 +20,7 @@ export default function PhotoStrip({
   return (
     <section aria-label="Tekneden kareler">
       <ImmersiveScrollGallery images={PHOTOS}>
-        <div className="mx-auto max-w-xl rounded-sm border border-line bg-surface/90 px-6 py-8 text-center backdrop-blur-sm sm:px-10 sm:py-10">
+        <div className="mx-auto max-w-xl text-center text-surface [text-shadow:0_1px_3px_rgb(0_51_87/0.7),0_2px_28px_rgb(0_51_87/0.9)] before:pointer-events-none before:absolute before:-inset-16 before:-z-10 before:rounded-full before:bg-[radial-gradient(closest-side,rgb(0_51_87/0.45),transparent)] relative [&_.text-ink-soft]:text-surface/85 [&_h2]:text-surface">
         <p className="eyebrow">Tekneden kareler</p>
         <h2 className="mt-3 text-3xl sm:text-5xl">
           Gerçek tekne, gerçek koylar

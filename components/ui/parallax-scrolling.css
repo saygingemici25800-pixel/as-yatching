@@ -75,19 +75,26 @@
   margin: 0;
 }
 
-/* Okunurluk: diğer bölümlerdeki kartlarla aynı beyaz kutu */
+/* Okunurluk: açık metin + yumuşak lacivert gölge (kutu yok) */
 .parallax__card {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
   max-width: 36rem;
-  padding: 2rem 1.5rem;
-  border: 1px solid var(--color-line);
-  border-radius: 0.125rem;
-  background-color: color-mix(in srgb, var(--color-surface) 90%, transparent);
-  backdrop-filter: blur(4px);
   text-align: center;
+  text-shadow: 0 1px 3px rgb(0 51 87 / 0.7), 0 2px 28px rgb(0 51 87 / 0.9);
+  position: relative;
+}
+
+.parallax__card::before {
+  content: "";
+  position: absolute;
+  inset: -4rem;
+  z-index: -1;
+  border-radius: 999px;
+  background: radial-gradient(closest-side, rgb(0 51 87 / 0.45), transparent);
+  pointer-events: none;
 }
 
 .parallax__title {
@@ -96,7 +103,7 @@
   letter-spacing: 0.01em;
   letter-spacing: -0.01em;
   line-height: 1.1;
-  color: var(--color-ink);
+  color: var(--color-surface);
   /* Sitedeki diğer h2'lerle aynı ölçekte kalır */
   font-size: clamp(1.875rem, 4.2vw, 2.75rem);
   max-width: 20ch;
@@ -113,7 +120,7 @@
   max-width: 34ch;
   font-size: 0.9375rem;
   line-height: 1.6;
-  color: var(--color-ink-soft);
+  color: color-mix(in srgb, var(--color-surface) 85%, transparent);
   margin: 0;
 }
 
