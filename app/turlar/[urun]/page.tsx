@@ -140,7 +140,7 @@ export default async function ProductPage({ params }: PageProps) {
 
         {/* ---------- İçerik + talep paneli ---------- */}
         <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_24rem] lg:gap-12">
-          <div>
+          <div className="min-w-0">
             {/* Açıklama */}
             <section>
               <h2 className="text-2xl sm:text-3xl">Bu turda ne oluyor?</h2>
@@ -259,7 +259,7 @@ export default async function ProductPage({ params }: PageProps) {
           </div>
 
           {/* ---------- Sağ kolon: talep paneli ---------- */}
-          <aside className="lg:sticky lg:top-24 lg:self-start">
+          <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
             <BookingPanel product={product} blocks={blocks} />
             <div className="mt-5 flex justify-center">
               <GoogleRating

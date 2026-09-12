@@ -144,7 +144,7 @@ export default async function ContactPage() {
           </div>
 
           {/* ---------- Form ---------- */}
-          <aside className="lg:sticky lg:top-24 lg:self-start">
+          <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
             <ContactForm whatsapp={info.whatsapp} />
             <p className="mt-4 text-center text-sm text-ink-soft">
               Tarih ve fiyat için{" "}

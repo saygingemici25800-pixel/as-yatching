@@ -143,7 +143,7 @@ export default async function BoatPage() {
 
         {/* ---------- Özellikler ---------- */}
         <div className="mt-14 grid gap-10 lg:grid-cols-[1fr_24rem] lg:gap-12">
-          <div>
+          <div className="min-w-0">
             <section>
               <h2 className="text-2xl sm:text-3xl">Teknik bilgiler</h2>
               <dl className="mt-5 divide-y divide-line overflow-hidden rounded-sm border border-line bg-surface">
@@ -212,7 +212,7 @@ export default async function BoatPage() {
           </div>
 
           {/* ---------- Sağ kolon ---------- */}
-          <aside className="lg:sticky lg:top-24 lg:self-start">
+          <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-sm border border-line bg-surface p-5">
               <p className="eyebrow">Müsaitlik</p>
               <h2 className="mt-2 text-xl">Hangi günler boş?</h2>
