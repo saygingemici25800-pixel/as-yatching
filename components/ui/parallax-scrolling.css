@@ -136,10 +136,11 @@
   inset-inline: 0;
   bottom: 0;
   height: 10%;
+  /* Tam opak canvas yerine yarı saydam: dalga zemini altta görünmeye devam eder */
   background-image: linear-gradient(
     to bottom,
     transparent,
-    var(--color-canvas)
+    color-mix(in srgb, var(--color-canvas) 60%, transparent)
   );
   pointer-events: none;
 }

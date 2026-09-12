@@ -4,7 +4,7 @@
  */
 export default function DemoNotice() {
   return (
-    <div className="border-y border-line bg-surface">
+    <div className="border-y border-line bg-surface/70 backdrop-blur-sm">
       <p className="mx-auto max-w-6xl px-4 py-3 text-xs leading-relaxed text-ink-soft sm:px-6">
         <span className="mr-2 font-medium uppercase tracking-[0.12em] text-accent">
           Demo

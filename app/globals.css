@@ -13,7 +13,7 @@
   --color-accent: #f2c488; /* eyebrow, ikon, ince çizgi, hover, seçili durum, birincil buton (peach) */
   --color-line: color-mix(in srgb, #b3edeb 25%, transparent);
   --color-deep: #1741a1; /* gölge ve karartmalar (text-shadow, radyal halo, veil) */
-  --color-sky: #b3edeb; /* üst çubuk ve mobil bar zemini (açık aqua) */
+  --color-sky: #b3edeb; /* açık aqua (kullanılabilir yüzey tonu) */
   --color-gold: #f3d98a; /* parlak kremsi altın — logo, menü, WhatsApp ve ses butonu */
   --color-gold-deep: #d9b45a; /* altın hover / kenarlık */
 
@@ -96,9 +96,9 @@ h1, h2, h3 {
 */
 @utility text-gold-glow {
   color: var(--color-gold);
-  /* Gölge 0.5: sky (#b3edeb) üstünde 0.35 yetersiz kaldı (375/1280 kontrolü) */
+  /* Dalga zemini üstünde okunsun: 0 1px 2px, 0.5 */
   text-shadow:
-    0 1px 1px rgb(122 26 14 / 0.5),
+    0 1px 2px rgb(122 26 14 / 0.5),
     0 0 12px rgb(243 217 138 / 0.45);
 }
 
