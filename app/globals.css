@@ -13,6 +13,7 @@
   --color-accent: #f2c488; /* eyebrow, ikon, ince çizgi, hover, seçili durum, birincil buton (peach) */
   --color-line: color-mix(in srgb, #b3edeb 25%, transparent);
   --color-deep: #1741a1; /* gölge ve karartmalar (text-shadow, radyal halo, veil) */
+  --color-sky: #b3edeb; /* üst çubuk ve mobil bar zemini (açık aqua) */
 
   /* Fontlar next/font ile kendi sunucumuzdan servis ediliyor (LCP için).
      --font-caviar ve --font-inter değişkenlerini app/layout.tsx <html>'e basar. */
@@ -38,23 +39,25 @@ h1, h2, h3 {
   yalnızca vurgu (eyebrow, ikon, ince çizgi, hover, seçili) ve birincil buton
   (bg-accent text-deep). Peach blok zemin olarak başka yerde kullanılmaz.
 
-  KREM KUTULAR: surface (#fff4e0) zeminli her kutuda (bg-surface ve
-  bg-surface/90 gibi türevleri) metin deep (lacivert) olur; ikincil metin ve
-  eyebrow deep %72; ince çizgi deep %15. Bu kural merkezidir, bileşenlerde
-  text-ink / text-ink-soft sınıfları olduğu gibi kalır. Dekoratif ikon ve
-  yıldızlar `keep-accent` ile peach kalır.
+  AÇIK ZEMİNLER: surface (krem #fff4e0) ve sky (aqua #b3edeb) zeminli her
+  kutuda (bg-surface, bg-surface/90, bg-sky/95 gibi türevleri) metin deep
+  (lacivert) olur; ikincil metin ve eyebrow deep %72; ince çizgi deep %15.
+  Bu kural merkezidir, bileşenlerde text-ink / text-ink-soft sınıfları
+  olduğu gibi kalır. Dekoratif ikon ve yıldızlar `keep-accent` ile peach
+  kalır.
 */
-[class*="bg-surface"] {
+[class*="bg-surface"],
+[class*="bg-sky"] {
   color: var(--color-deep);
   --color-line: color-mix(in srgb, var(--color-deep) 15%, transparent);
 }
-[class*="bg-surface"] .text-ink {
+:is([class*="bg-surface"], [class*="bg-sky"]) .text-ink {
   color: var(--color-deep);
 }
-[class*="bg-surface"] :is(.text-ink-soft, .eyebrow) {
+:is([class*="bg-surface"], [class*="bg-sky"]) :is(.text-ink-soft, .eyebrow) {
   color: color-mix(in srgb, var(--color-deep) 72%, transparent);
 }
-[class*="bg-surface"] .text-accent:not(.keep-accent) {
+:is([class*="bg-surface"], [class*="bg-sky"]) .text-accent:not(.keep-accent) {
   color: var(--color-deep);
 }
 

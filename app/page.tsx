@@ -2,6 +2,7 @@ import Link from "next/link";
 import AvailabilityCalendar from "@/components/AvailabilityCalendar";
 import BayCoverflow from "@/components/ui/bay-coverflow";
 import DemoNotice from "@/components/DemoNotice";
+import DeparturePoint from "@/components/DeparturePoint";
 import GoogleReviews from "@/components/GoogleReviews";
 import PhotoStrip from "@/components/PhotoStrip";
 import ProductCard from "@/components/ProductCard";
@@ -165,6 +166,9 @@ export default async function HomePage() {
         info={info}
         className="relative z-10 -mt-[115vh]"
       />
+
+      {/* ---------- Nereden kalkıyoruz? (harita) ---------- */}
+      <DeparturePoint info={info} />
 
       {/* ---------- Sık sorulanlar ---------- */}
       <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24">

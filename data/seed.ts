@@ -31,6 +31,15 @@ export const siteInfo: SiteInfo = {
   workingHours: "Her gün 24 saat",
   instagram: "https://www.instagram.com/as_yachting/",
   highSeasonMonths: [6, 7, 8, 9],
+  departure: {
+    label: "Fethiye Limanı · beton iskele",
+    // TODO: gerçek iskele pini — şimdilik liman kordonu, yaklaşık.
+    // (Önceki 36.6213/29.1156 değeri Atatürk Cd. üzerine, limandan ~300 m
+    // içeriye düşüyordu.)
+    lat: 36.6242,
+    lng: 29.1128,
+    note: "Beton iskele, liman yürüyüş yolunun üzerinde.",
+  },
 };
 
 export const boats: Boat[] = [

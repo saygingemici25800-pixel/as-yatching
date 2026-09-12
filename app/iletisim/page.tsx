@@ -12,7 +12,6 @@ import {
 } from "@/components/icons";
 import { directionsUrl, telUrl, whatsappUrl } from "@/lib/links";
 import { getSiteInfo } from "@/lib/repository";
-import { BUSINESS_GEO } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "İletişim | Fethiye Tekne Kiralama",
@@ -117,8 +116,8 @@ export default async function ContactPage() {
               <div className="mt-4 flex flex-col gap-3 sm:flex-row">
                 <a
                   href={directionsUrl(
-                    BUSINESS_GEO.latitude,
-                    BUSINESS_GEO.longitude,
+                    info.departure.lat,
+                    info.departure.lng,
                   )}
                   target="_blank"
                   rel="noopener noreferrer"

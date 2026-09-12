@@ -10,7 +10,7 @@ export default async function MobileContactBar() {
   const info = await getSiteInfo();
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-line bg-surface/95 backdrop-blur-sm md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-line bg-sky/95 backdrop-blur-sm md:hidden">
       <div className="grid grid-cols-2 gap-2 p-3">
         <a
           href={telUrl(info.phone)}

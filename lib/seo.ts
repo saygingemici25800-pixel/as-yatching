@@ -62,11 +62,11 @@ export const ALLOW_INDEXING =
 /** Paylaşım görseli — 1200x630 */
 export const OG_IMAGE_PATH = "/og-image.jpg";
 
-/**
- * İşletmenin konumu — hem JSON-LD hem yol tarifi bağlantısı buradan okur,
- * böylece ikisi birbirinden ayrışamaz.
+/*
+ * İşletmenin konumu `siteInfo.departure` alanında (data/seed.ts, repository
+ * üzerinden okunur). JSON-LD geo, harita ve yol tarifi bağlantısı aynı
+ * alandan beslenir; koordinat tek yerde değişir.
  */
-export const BUSINESS_GEO = { latitude: 36.6213, longitude: 29.1156 };
 
 /** Göreli yolu mutlak adrese çevirir (JSON-LD mutlak adres ister) */
 export function absoluteUrl(path: string): string {
@@ -127,8 +127,8 @@ export function localBusinessSchema(info: SiteInfo) {
     },
     geo: {
       "@type": "GeoCoordinates",
-      latitude: BUSINESS_GEO.latitude,
-      longitude: BUSINESS_GEO.longitude,
+      latitude: info.departure.lat,
+      longitude: info.departure.lng,
     },
     openingHoursSpecification: [OPENING_HOURS],
     areaServed: ["Fethiye", "Ölüdeniz", "Göcek"],

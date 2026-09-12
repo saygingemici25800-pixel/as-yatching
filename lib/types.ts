@@ -82,6 +82,13 @@ export interface SiteInfo {
   workingHours: string;
   instagram: string | null;
   highSeasonMonths: number[];
+  /** Kalkış noktası — harita, yol tarifi ve JSON-LD geo tek kaynaktan okur */
+  departure: {
+    label: string;
+    lat: number;
+    lng: number;
+    note?: string;
+  };
 }
 
 export interface Faq {

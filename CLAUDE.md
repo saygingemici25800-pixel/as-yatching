@@ -30,6 +30,7 @@ Metin (ink)        #F4E091  sarı — başlık ve ana metin
 İkincil (ink-soft) #B3EDEB  aqua — açıklamalar
 Vurgu (accent)     #F2C488  peach — eyebrow, ikon, ince çizgi, hover, seçili, birincil buton
 Kenarlık (line)    aqua %25 şeffaf
+Gök (sky)          #B3EDEB  üst çubuk ve mobil bar zemini (açık aqua)
 Derinlik (deep)    #1741A1  gölge, veil ve radyal karartmalar
 ```
 
