@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Wordmark from "@/components/Wordmark";
+import { RandomLetterSwap } from "@/components/ui/random-letter-swap";
 import { PhoneIcon, WhatsappIcon } from "@/components/icons";
 import { telUrl, whatsappUrl } from "@/lib/links";
 import { getSiteInfo } from "@/lib/repository";
@@ -27,7 +28,10 @@ export default async function SiteHeader() {
                   href={item.href}
                   className="text-ink transition-colors hover:text-accent"
                 >
-                  {item.label}
+                  <RandomLetterSwap
+                    label={item.label}
+                    staggerDuration={0.025}
+                  />
                 </Link>
               </li>
             ))}
@@ -58,12 +62,18 @@ export default async function SiteHeader() {
       </div>
 
       {/* Mobil menü: hamburger yok, iki bağlantı zaten sığıyor */}
-      <nav className="border-t border-line md:hidden" aria-label="Ana menü (mobil)">
+      <nav
+        className="border-t border-line md:hidden"
+        aria-label="Ana menü (mobil)"
+      >
         <ul className="mx-auto flex max-w-6xl items-center gap-6 px-4 py-2.5 text-sm">
           {NAV.map((item) => (
             <li key={item.href}>
-              <Link href={item.href} className="text-ink-soft hover:text-accent">
-                {item.label}
+              <Link
+                href={item.href}
+                className="text-ink-soft hover:text-accent"
+              >
+                <RandomLetterSwap label={item.label} staggerDuration={0.025} />
               </Link>
             </li>
           ))}
