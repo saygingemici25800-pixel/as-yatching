@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AvailabilityCalendar from "@/components/AvailabilityCalendar";
+import BayCoverflow from "@/components/ui/bay-coverflow";
 import DemoNotice from "@/components/DemoNotice";
 import GoogleRating from "@/components/GoogleRating";
 import GoogleReviews from "@/components/GoogleReviews";
@@ -11,6 +12,7 @@ import { ArrowIcon, CheckIcon, WhatsappIcon } from "@/components/icons";
 import { whatsappUrl } from "@/lib/links";
 import {
   getAvailabilityBlocks,
+  getBays,
   getBoats,
   getFaqs,
   getFeaturedProducts,
@@ -35,14 +37,16 @@ const PROMISES = [
 ];
 
 export default async function HomePage() {
-  const [info, featured, products, boats, faqs, reviews] = await Promise.all([
-    getSiteInfo(),
-    getFeaturedProducts(),
-    getProducts(),
-    getBoats(),
-    getFaqs(),
-    getGoogleReviews(),
-  ]);
+  const [info, featured, products, boats, faqs, reviews, bays] =
+    await Promise.all([
+      getSiteInfo(),
+      getFeaturedProducts(),
+      getProducts(),
+      getBoats(),
+      getFaqs(),
+      getGoogleReviews(),
+      getBays(),
+    ]);
 
   const boat = boats[0];
   const blocks = boat ? await getAvailabilityBlocks(boat.slug) : [];
@@ -92,7 +96,23 @@ export default async function HomePage() {
       {/* ---------- Gerçek kareler (hero animasyonu biter bitmez) ---------- */}
       <PhotoStrip instagram={info.instagram} />
 
-      {/* ---------- Google yorumları (galerinin hemen ardından) ---------- */}
+      {/* ---------- Koylar (coverflow) ---------- */}
+      <section
+        aria-labelledby="koylar-baslik"
+        className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24"
+      >
+        <div className="text-center">
+          <p className="eyebrow">Rota</p>
+          <h2 id="koylar-baslik" className="mt-2 text-3xl sm:text-4xl">
+            Nereye gidiyoruz?
+          </h2>
+        </div>
+        <div className="mt-8 sm:mt-10">
+          <BayCoverflow bays={bays} />
+        </div>
+      </section>
+
+      {/* ---------- Google yorumları ---------- */}
       <GoogleReviews reviews={reviews} info={info} />
 
       {/* ---------- Parallax ---------- */}

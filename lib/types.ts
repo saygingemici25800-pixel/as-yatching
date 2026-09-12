@@ -96,3 +96,24 @@ export interface GoogleReview {
   when: string; // Google'ın gösterdiği göreli tarih ("3 ay önce")
   text: string; // Kısaltılmışsa "…" ile biter
 }
+
+/**
+ * Ana sayfadaki "Nereye gidiyoruz?" coverflow bölümünün koy kartı.
+ * Süre/mesafe alanları işletmeden gelecek; bilinmeyen değer "—" gösterilir.
+ */
+export interface Bay {
+  slug: string;
+  name: string;
+  /** Tek cümle */
+  blurb: string;
+  /** Limandan tekneyle süre, örn. "35 dk" — bilinmiyorsa "—" */
+  distanceFromHarbor: string;
+  /** Koyda kalış, örn. "1,5 saat" — bilinmiyorsa "—" */
+  stayDuration: string;
+  /** Hangi turların rotasında, örn. "Günübirlik · Mavi tur" — bilinmiyorsa "—" */
+  tours: string;
+  /** Kısa etiket, örn. "Öğle yemeği durağı" — bilinmiyorsa "—" */
+  highlight: string;
+  /** /public altındaki yol */
+  image: string;
+}

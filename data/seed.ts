@@ -1,6 +1,7 @@
 import type {
   GoogleReview,
   AvailabilityBlock,
+  Bay,
   Boat,
   Faq,
   Product,
@@ -299,5 +300,80 @@ export const googleReviews: GoogleReview[] = [
     rating: 5,
     when: "4 yıl önce",
     text: "Serkan Abi ve Ayşe Abla çok tatlı insanlar çok güleryüzlü iki insan ile çok güzel koylara gittik bilgileriyle her geçtiğimiz yerleri anlattılar bize yemekler çok lezzetliydi başka yer aramayın kesinlikle pişman olmazsınız…",
+  },
+];
+
+/**
+ * KOYLAR — ana sayfa "Nereye gidiyoruz?" coverflow'u.
+ *
+ * TODO: Görseller yer tutucu. /public/placeholder/koylar/ altındaki dosyalar
+ * PhotoStrip'in tekne fotoğraflarının kopyası; gerçek koy fotoğrafları gelince
+ * yalnızca o klasör değişir, buradaki yollar aynı kalır.
+ *
+ * TODO: distanceFromHarbor / stayDuration / tours / highlight işletmeden
+ * alınacak. Bilinmeyen her değer "—" olarak gösterilir; UYDURULMAZ.
+ * Dolu olan tours/highlight değerleri yukarıdaki `products[].route`
+ * duraklarından alındı (Günübirlik Özel Kiralama rotası).
+ */
+export const bays: Bay[] = [
+  {
+    slug: "kizilada",
+    name: "Kızılada",
+    blurb: "Limandan çıkınca ilk durak; günübirlik rotanın yüzme molası.",
+    distanceFromHarbor: "—", // TODO: limandan süre
+    stayDuration: "—", // TODO: koyda kalış
+    tours: "Günübirlik özel kiralama", // products[].route → 11:00 Kızılada
+    highlight: "Yüzme molası", // products[].route notu
+    image: "/placeholder/koylar/kizilada.jpg",
+  },
+  {
+    slug: "akvaryum-koyu",
+    name: "Akvaryum Koyu",
+    blurb: "Adını berrak suyundan alan koy; günübirlik rotada öğle molası.",
+    distanceFromHarbor: "—", // TODO: limandan süre
+    stayDuration: "—", // TODO: koyda kalış
+    tours: "Günübirlik özel kiralama", // products[].route → 13:00 Akvaryum Koyu
+    highlight: "Öğle yemeği durağı", // products[].route notu: Öğle molası
+    image: "/placeholder/koylar/akvaryum-koyu.jpg",
+  },
+  {
+    slug: "samanlik-koyu",
+    name: "Samanlık Koyu",
+    blurb: "Korunaklı ve sığ koy; günübirlik rotada şnorkel durağı.",
+    distanceFromHarbor: "—", // TODO: limandan süre
+    stayDuration: "—", // TODO: koyda kalış
+    tours: "Günübirlik özel kiralama", // products[].route → 15:00 Samanlık Koyu
+    highlight: "Şnorkel", // products[].route notu
+    image: "/placeholder/koylar/samanlik-koyu.jpg",
+  },
+  {
+    slug: "oludeniz",
+    name: "Ölüdeniz",
+    blurb: "Fethiye'nin en bilinen koyu; lagün ve uzun plaj.",
+    distanceFromHarbor: "—", // TODO: limandan süre
+    stayDuration: "—", // TODO: koyda kalış
+    tours: "—", // TODO: hangi turların rotasında
+    highlight: "—", // TODO: öne çıkan özellik
+    image: "/placeholder/koylar/oludeniz.jpg",
+  },
+  {
+    slug: "gemiler-adasi",
+    name: "Gemiler Adası",
+    blurb: "Bizans dönemi kalıntılarının bulunduğu ada ve korunaklı demir yeri.",
+    distanceFromHarbor: "—", // TODO: limandan süre
+    stayDuration: "—", // TODO: koyda kalış
+    tours: "—", // TODO: hangi turların rotasında
+    highlight: "—", // TODO: öne çıkan özellik
+    image: "/placeholder/koylar/gemiler-adasi.jpg",
+  },
+  {
+    slug: "kelebekler-vadisi",
+    name: "Kelebekler Vadisi",
+    blurb: "Dik kayalıklar arasında plaj; karadan ulaşımı zor, tekneyle kolay.",
+    distanceFromHarbor: "—", // TODO: limandan süre
+    stayDuration: "—", // TODO: koyda kalış
+    tours: "—", // TODO: hangi turların rotasında
+    highlight: "—", // TODO: öne çıkan özellik
+    image: "/placeholder/koylar/kelebekler-vadisi.jpg",
   },
 ];

@@ -1,5 +1,6 @@
 import {
   availabilityBlocks,
+  bays,
   boats,
   faqs,
   googleReviews,
@@ -8,6 +9,7 @@ import {
 } from "@/data/seed";
 import type {
   AvailabilityBlock,
+  Bay,
   Boat,
   BookingRequest,
   Faq,
@@ -48,6 +50,10 @@ export async function getFeaturedProducts(): Promise<Product[]> {
 
 export async function getProduct(slug: string): Promise<Product | null> {
   return products.find((p) => p.slug === slug) ?? null;
+}
+
+export async function getBays(): Promise<Bay[]> {
+  return bays;
 }
 
 export async function getFaqs(): Promise<Faq[]> {
