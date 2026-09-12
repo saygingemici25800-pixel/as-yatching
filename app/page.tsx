@@ -44,12 +44,12 @@ export default async function HomePage() {
         <p className="eyebrow">Fethiye Limanı · Günübirlik ve konaklamalı</p>
         <h1 className="mt-4 max-w-3xl text-[2.375rem] leading-[1.05] sm:text-5xl lg:text-[4rem]">
           <span className="block">Fethiye&apos;de tekne kiralama</span>
-          <span className="mt-2 block text-white/75">
+          <span className="mt-2 block text-ink/75">
             Tarihi seçin, fiyatı ve müsaitliği görün
           </span>
         </h1>
 
-        <p className="mt-5 max-w-lg text-base leading-relaxed text-white/85">
+        <p className="mt-5 max-w-lg text-base leading-relaxed text-ink-soft">
           Günübirlik özel kiralama, gün batımı turu, sabah kahvaltı turu ve
           konaklamalı mavi tur. Fiyatlar sitede, tarihler takvimde.
         </p>
@@ -57,7 +57,7 @@ export default async function HomePage() {
         <div className="mt-7 flex flex-col gap-3 sm:flex-row">
           <Link
             href="/turlar"
-            className="inline-flex items-center justify-center gap-2 rounded-sm bg-canvas px-6 py-3.5 text-sm font-medium text-ink transition-opacity hover:opacity-90"
+            className="inline-flex items-center justify-center gap-2 rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-deep transition-opacity hover:opacity-90"
           >
             Turları ve fiyatları gör
             <ArrowIcon className="size-4" />
@@ -69,7 +69,7 @@ export default async function HomePage() {
             )}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden items-center justify-center gap-2 rounded-sm border border-white/50 px-6 py-3.5 text-sm font-medium text-white transition-colors hover:border-white md:inline-flex"
+            className="hidden items-center justify-center gap-2 rounded-sm border border-line px-6 py-3.5 text-sm font-medium text-ink transition-colors hover:border-accent md:inline-flex"
           >
             <WhatsappIcon className="size-4" />
             WhatsApp&apos;tan yazın
@@ -138,7 +138,7 @@ export default async function HomePage() {
             </p>
             <Link
               href="/turlar"
-              className="mt-6 inline-flex items-center gap-2 rounded-sm bg-ink px-6 py-3.5 text-sm font-medium text-canvas transition-opacity hover:opacity-90"
+              className="mt-6 inline-flex items-center gap-2 rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-deep transition-opacity hover:opacity-90"
             >
               Tarih seçip talep gönder
               <ArrowIcon className="size-4" />
@@ -216,7 +216,7 @@ export default async function HomePage() {
             <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
               <Link
                 href="/turlar"
-                className="inline-flex items-center justify-center gap-2 rounded-sm bg-ink px-6 py-3.5 text-sm font-medium text-canvas transition-opacity hover:opacity-90"
+                className="inline-flex items-center justify-center gap-2 rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-deep transition-opacity hover:opacity-90"
               >
                 Turlara git
                 <ArrowIcon className="size-4" />

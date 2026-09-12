@@ -49,7 +49,7 @@ export default function ContactForm({ whatsapp }: { whatsapp: string }) {
           name="topic"
           value={topic}
           onChange={(event) => setTopic(event.target.value)}
-          className="mt-2 h-11 w-full rounded-sm border border-line bg-canvas px-3 text-base focus:border-accent"
+          className="mt-2 h-11 w-full rounded-sm border border-line bg-deep/40 px-3 text-base text-ink focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
         >
           {TOPICS.map((item) => (
             <option key={item} value={item}>
@@ -71,13 +71,13 @@ export default function ContactForm({ whatsapp }: { whatsapp: string }) {
           value={message}
           onChange={(event) => setMessage(event.target.value)}
           placeholder="Örnek: 12 Eylül için 6 kişiyiz, gün batımı turu müsait mi?"
-          className="mt-2 w-full rounded-sm border border-line bg-canvas p-3 text-base leading-relaxed focus:border-accent"
+          className="mt-2 w-full rounded-sm border border-line bg-deep/40 p-3 text-base leading-relaxed text-ink placeholder:text-ink-soft/60 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
         />
       </div>
 
       <button
         type="submit"
-        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-sm bg-ink px-6 py-4 text-sm font-medium text-canvas transition-opacity hover:opacity-90"
+        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-sm bg-accent px-6 py-4 text-sm font-medium text-deep transition-opacity hover:opacity-90"
       >
         <WhatsappIcon className="size-4" />
         WhatsApp&apos;ta aç

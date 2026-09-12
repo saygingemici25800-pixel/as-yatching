@@ -64,7 +64,7 @@ const FLING_VELOCITY = 350;
 type BayWithImage = Bay & { image: string };
 
 const ARROW_CLASS =
-  "absolute top-1/2 z-20 inline-flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-surface/60 bg-ink/20 text-surface backdrop-blur-sm transition-colors hover:border-accent focus-visible:border-accent sm:size-11";
+  "absolute top-1/2 z-20 inline-flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-deep/40 text-ink backdrop-blur-sm transition-colors hover:border-accent focus-visible:border-accent sm:size-11";
 
 const lerp = (a: number, b: number, t: number) => a * (1 - t) + b * t;
 const clamp = (v: number, min: number, max: number) =>
@@ -179,7 +179,7 @@ function BayCard({
         aria-label={active ? bay.name : `${bay.name} kartına geç`}
         className="group block h-full w-full cursor-pointer rounded-2xl text-left"
       >
-        <div className="relative h-full w-full overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_18px_40px_-18px_rgb(0_51_87/0.45)] transition-shadow duration-300 group-hover:shadow-[0_22px_48px_-18px_rgb(0_51_87/0.55)]">
+        <div className="relative h-full w-full overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_18px_40px_-18px_color-mix(in_srgb,var(--color-deep)_45%,transparent)] transition-shadow duration-300 group-hover:shadow-[0_22px_48px_-18px_color-mix(in_srgb,var(--color-deep)_55%,transparent)]">
           <Image
             src={bay.image}
             alt={bay.name}
@@ -192,8 +192,8 @@ function BayCard({
             className="object-cover"
           />
           {/* Kart içi ad: yanlardaki kartlar altyazısız kalmasın */}
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/55 to-transparent p-3 pt-10 sm:p-4">
-            <p className="font-display text-base text-surface sm:text-lg">
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-deep/70 to-transparent p-3 pt-10 sm:p-4">
+            <p className="font-display text-base text-ink sm:text-lg">
               {bay.name}
             </p>
           </div>
@@ -369,7 +369,7 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
         {/* Fotoğraf → metin geçişini yumuşatan gradient */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-2/5 bg-gradient-to-b from-transparent to-[rgb(0_51_87/0.35)]"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-2/5 bg-gradient-to-b from-transparent to-deep/35"
         />
 
         {/* Oklar: yuvarlak, ince kenarlık, surface ikon; hover'da altın kenarlık */}
@@ -408,21 +408,21 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
             className={`h-1 rounded-full transition-all duration-300 ${
               i === active
                 ? "w-7 bg-accent"
-                : "w-2.5 bg-surface/45 hover:bg-surface/75"
+                : "w-2.5 bg-ink-soft/40 hover:bg-ink-soft/70"
             }`}
           />
         ))}
       </div>
 
-      {/* Aktif koy bilgisi — PhotoStrip/GoogleReviews başlık reçetesi:
-          surface metin + lacivert text-shadow + arkada kenarsız radyal karartma.
+      {/* Aktif koy bilgisi — parallax/yorum başlık reçetesi:
+          ink metin + deep text-shadow + arkada kenarsız radyal karartma.
           Sahnenin overflow-hidden'ı DIŞINDA; hiçbir sarmalayıcı kırpmaz
           (text-shadow parlaması ve kenar harfleri kesilmesin). Karartma
           px-6 içindeki iç kutuya -2rem ile bağlı: 375px'te kutu 295px,
           halo 359px → viewport'u aşmaz, yatay kaydırma oluşmaz. */}
       <div className="mx-auto mt-6 max-w-md px-6 sm:mt-8 sm:px-8">
         <div
-          className="relative isolate text-center text-surface [text-shadow:0_1px_3px_rgb(0_51_87/0.7),0_2px_28px_rgb(0_51_87/0.9)] before:pointer-events-none before:absolute before:-inset-8 before:-z-10 before:rounded-full before:bg-[radial-gradient(closest-side,rgb(0_51_87/0.45),transparent)]"
+          className="deep-halo text-deep-shadow isolate text-center text-ink [--halo-inset:-2rem]"
           aria-live="polite"
           aria-atomic="true"
         >
@@ -435,13 +435,13 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
               transition={{ duration: flat ? 0.15 : 0.28, ease: "easeOut" }}
             >
               <p className="eyebrow text-balance">{current.highlight}</p>
-              <h3 className="mt-2 text-balance text-2xl text-surface sm:text-3xl">
+              <h3 className="mt-2 text-balance text-2xl text-ink sm:text-3xl">
                 {current.name}
               </h3>
-              <p className="mt-2 text-balance text-sm leading-relaxed text-surface/90">
+              <p className="mt-2 text-balance text-sm leading-relaxed text-ink-soft">
                 {current.blurb}
               </p>
-              <dl className="mt-5 border-t border-surface/25 text-sm">
+              <dl className="mt-5 border-t border-line text-sm">
                 <InfoRow label="Limandan (tahmini)" value={current.distanceFromHarbor} />
                 <InfoRow label="Kalış süresi" value={current.stayDuration} />
                 <InfoRow label="Hangi tur" value={current.tours} />
@@ -486,9 +486,9 @@ function ChevronIcon({ className }: { className?: string }) {
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-baseline justify-between gap-4 border-b border-surface/25 py-2.5">
+    <div className="flex items-baseline justify-between gap-4 border-b border-line py-2.5">
       <dt className="eyebrow min-w-0 text-left">{label}</dt>
-      <dd className="shrink-0 text-right font-medium text-surface">{value}</dd>
+      <dd className="shrink-0 text-right font-medium text-ink">{value}</dd>
     </div>
   );
 }

@@ -56,9 +56,9 @@
   background:
     linear-gradient(
       to top,
-      rgb(0 51 87 / 0.72) 0%,
-      rgb(0 51 87 / 0.25) 45%,
-      rgb(0 51 87 / 0.05) 100%
+      color-mix(in srgb, var(--color-deep) 72%, transparent) 0%,
+      color-mix(in srgb, var(--color-deep) 25%, transparent) 45%,
+      color-mix(in srgb, var(--color-deep) 5%, transparent) 100%
     );
 }
 
@@ -66,7 +66,7 @@
 .vhero__shade {
   position: absolute;
   inset: 0;
-  background-color: rgb(0 51 87 / 0.45);
+  background-color: color-mix(in srgb, var(--color-deep) 45%, transparent);
   opacity: 0;
 }
 
@@ -80,7 +80,7 @@
   max-width: 72rem;
   margin: 0 auto;
   padding: 0 1rem calc(2.5rem + var(--vhero-safe-bottom));
-  color: #fff;
+  color: var(--color-ink);
   will-change: transform, opacity;
 }
 
@@ -91,7 +91,7 @@
 }
 
 .vhero__content .eyebrow {
-  color: #e6cf8d; /* altın, koyu zemin üstünde okunur ton */
+  color: var(--color-accent);
 }
 
 .vhero__sound {
@@ -105,17 +105,17 @@
   padding: 0.5rem 0.875rem;
   font-size: 0.75rem;
   letter-spacing: 0.04em;
-  color: #fff;
-  border: 1px solid rgb(255 255 255 / 0.4);
+  color: var(--color-ink);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 40%, transparent);
   border-radius: 999px;
-  background: rgb(0 51 87 / 0.35);
+  background: color-mix(in srgb, var(--color-deep) 35%, transparent);
   backdrop-filter: blur(6px);
   cursor: pointer;
   transition: border-color 0.2s;
 }
 
 .vhero__sound:hover {
-  border-color: #fff;
+  border-color: var(--color-accent);
 }
 
 @media (min-width: 640px) {
@@ -129,18 +129,18 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background: rgb(255 255 255 / 0.5);
+  background: color-mix(in srgb, var(--color-ink) 50%, transparent);
 }
 
 .vhero__sound[aria-pressed="true"] .vhero__sound-dot {
   background: var(--color-accent);
-  box-shadow: 0 0 0 4px rgb(176 141 63 / 0.3);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 30%, transparent);
   animation: vhero-pulse 1.6s ease-in-out infinite;
 }
 
 @keyframes vhero-pulse {
-  0%, 100% { box-shadow: 0 0 0 3px rgb(176 141 63 / 0.35); }
-  50%      { box-shadow: 0 0 0 7px rgb(176 141 63 / 0); }
+  0%, 100% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 35%, transparent); }
+  50%      { box-shadow: 0 0 0 7px transparent; }
 }
 
 /* Kaydırma ipucu: ince dikey çizgi, aşağı akar */
@@ -152,14 +152,14 @@
   width: 1px;
   height: 2.75rem;
   overflow: hidden;
-  background: rgb(255 255 255 / 0.2);
+  background: color-mix(in srgb, var(--color-ink) 20%, transparent);
 }
 
 .vhero__hint span {
   display: block;
   width: 100%;
   height: 40%;
-  background: #fff;
+  background: var(--color-ink);
   animation: vhero-drop 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 

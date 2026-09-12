@@ -225,7 +225,7 @@ export default async function BoatPage() {
               </div>
               <Link
                 href="/turlar"
-                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-sm bg-ink px-6 py-3.5 text-sm font-medium text-canvas transition-opacity hover:opacity-90"
+                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-deep transition-opacity hover:opacity-90"
               >
                 {products.length} tura göz atın
                 <ArrowIcon className="size-4" />
@@ -246,7 +246,7 @@ export default async function BoatPage() {
             </p>
             <Link
               href="/turlar"
-              className="mt-6 inline-flex items-center gap-2 rounded-sm bg-ink px-6 py-3.5 text-sm font-medium text-canvas transition-opacity hover:opacity-90"
+              className="mt-6 inline-flex items-center gap-2 rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-deep transition-opacity hover:opacity-90"
             >
               Turlar ve fiyatlar
               <ArrowIcon className="size-4" />

@@ -23,18 +23,21 @@ Fethiye'de tek tekneli bir tekne kiralama işletmesi için, **şeffaf fiyatlı**
 ## Görsel sistem
 
 ```
-Zemin        #EDDACC
-Yüzey        #F7EDE3
-Metin        #003357
-İkincil      #3F5F7A
-Vurgu        #B08D3F   (sadece ince çizgi, ikon, küçük etiket — ASLA blok zemin)
-Kenarlık     #D9C2AD
+Zemin (canvas)     #1741A1  lacivert
+Yüzey (surface)    #208DD8  mavi — kartlar, kutular
+Metin (ink)        #F4E091  sarı — başlık ve ana metin
+İkincil (ink-soft) #B3EDEB  aqua — açıklamalar
+Vurgu (accent)     #F2C488  peach — eyebrow, ikon, ince çizgi, hover, seçili, birincil buton
+Kenarlık (line)    aqua %25 şeffaf
+Derinlik (deep)    #1741A1  gölge, veil ve radyal karartmalar
 ```
+
+Palet yalnızca bu beş renk ve şeffaf türevleridir; kodda hex yazılmaz, `@theme` token'ları kullanılır.
 
 - Başlık fontu: Caviar Dreams (app/fonts/CaviarDreams.ttf, tek kesim)
 - Gövde fontu: sans (Inter)
-- Siyah zeminli, altın yazılı blok bölüm **yapılmaz**
-- Logo: açık zeminli altın el yazısı. Wordmark **"As Yachting"** — alt çizgi yok, "Luxury" yok
+- Zemin lacivert; metin sarı/aqua; peach yalnızca vurgu ve birincil buton (`bg-accent text-deep`). Surface üstünde ikincil metin de ink olur (kontrast).
+- Logo: peach wordmark **"As Yachting"** — alt çizgi yok, "Luxury" yok
 - Görseller `/public/placeholder/` altında yer tutucu. Gerçek foto gelince sadece bu klasör değişir
 
 ## Klasör yapısı

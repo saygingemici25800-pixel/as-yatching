@@ -114,7 +114,7 @@ export default function BookingPanel({
             max={product.maxGuests}
             value={guests}
             onChange={(e) => clampGuests(Number(e.target.value))}
-            className="h-11 w-full rounded-sm border border-line bg-canvas text-center text-base [appearance:textfield] focus:border-accent [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            className="h-11 w-full rounded-sm border border-line bg-deep/40 text-center text-base text-ink placeholder:text-ink-soft/60 focus:outline-none focus:ring-1 focus:ring-accent [appearance:textfield] focus:border-accent [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           />
           <button
             type="button"
@@ -158,7 +158,7 @@ export default function BookingPanel({
           type="button"
           onClick={handleSubmit}
           disabled={pending}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-ink px-6 py-4 text-sm font-medium text-canvas transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-accent px-6 py-4 text-sm font-medium text-deep transition-opacity hover:opacity-90 disabled:opacity-60"
         >
           <WhatsappIcon className="size-4" />
           {pending ? "Hazırlanıyor…" : "WhatsApp'tan talep gönder"}

@@ -3,12 +3,15 @@
 /* AS Yachting marka teması — Tailwind v4 */
 
 @theme {
-  --color-canvas: #eddacc;
-  --color-surface: #f7ede3;
-  --color-ink: #003357;
-  --color-ink-soft: #3f5f7a;
-  --color-accent: #b08d3f;
-  --color-line: #d9c2ad;
+  /* Palet (yalnızca bu beş renk + şeffaf türevleri):
+     lacivert #1741a1 · mavi #208dd8 · sarı #f4e091 · aqua #b3edeb · peach #f2c488 */
+  --color-canvas: #1741a1; /* sayfa zemini (lacivert) */
+  --color-surface: #208dd8; /* kartlar, kutular (mavi) */
+  --color-ink: #f4e091; /* başlık ve ana metin (sarı) */
+  --color-ink-soft: #b3edeb; /* ikincil metin, açıklamalar (aqua) */
+  --color-accent: #f2c488; /* eyebrow, ikon, ince çizgi, hover, seçili durum, birincil buton (peach) */
+  --color-line: color-mix(in srgb, #b3edeb 25%, transparent);
+  --color-deep: #1741a1; /* gölge ve karartmalar (text-shadow, radyal halo, veil) */
 
   /* Fontlar next/font ile kendi sunucumuzdan servis ediliyor (LCP için).
      --font-caviar ve --font-inter değişkenlerini app/layout.tsx <html>'e basar. */
@@ -30,10 +33,43 @@ h1, h2, h3 {
 }
 
 /*
-  KURAL: --color-accent zemin rengi olarak kullanılmaz.
-  Sadece ince çizgi, ikon, küçük etiket ve hover durumu.
-  Siyah veya lacivert zeminli altın yazılı blok bölüm YAPILMAZ.
+  KURAL: Zemin lacivert; metin sarı (ink) / aqua (ink-soft); peach (accent)
+  yalnızca vurgu (eyebrow, ikon, ince çizgi, hover, seçili) ve birincil buton
+  (bg-accent text-deep). Peach blok zemin olarak başka yerde kullanılmaz.
+
+  Kontrast: surface (#208dd8) üstünde ink-soft (aqua) okunmuyor; surface
+  zeminli kutularda ikincil metin de ink (sarı) olur. Aşağıdaki kural bunu
+  merkezi olarak uygular, bileşenlerde ayrıca değiştirmek gerekmez.
 */
+.bg-surface .text-ink-soft {
+  color: var(--color-ink);
+}
+
+/*
+  Fotoğraf / dalga üstünde metin okunurluğu — deep tabanlı gölge ve kenarsız
+  radyal karartma (kutu yok). Halo genişliği --halo-inset ile ayarlanır.
+*/
+.text-deep-shadow {
+  text-shadow:
+    0 1px 3px color-mix(in srgb, var(--color-deep) 70%, transparent),
+    0 2px 28px color-mix(in srgb, var(--color-deep) 90%, transparent);
+}
+.deep-halo {
+  position: relative;
+}
+.deep-halo::before {
+  content: "";
+  position: absolute;
+  inset: var(--halo-inset, -4rem);
+  z-index: -1;
+  border-radius: 999px;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--color-deep) 45%, transparent),
+    transparent
+  );
+  pointer-events: none;
+}
 
 .eyebrow {
   font-size: 0.6875rem;
@@ -46,7 +82,7 @@ h1, h2, h3 {
   border-top: 1px solid var(--color-line);
 }
 
-/* Klavye erişilebilirliği — altın sadece ince halka olarak */
+/* Klavye erişilebilirliği — peach ince halka */
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;

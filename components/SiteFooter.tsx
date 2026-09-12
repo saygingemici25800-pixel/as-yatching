@@ -14,7 +14,7 @@ export default async function SiteFooter() {
   const info = await getSiteInfo();
 
   return (
-    <footer className="mt-20 border-t border-line bg-surface">
+    <footer className="mt-20 border-t border-line bg-canvas/95">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-3">
         <div>
           <Wordmark className="text-2xl" />

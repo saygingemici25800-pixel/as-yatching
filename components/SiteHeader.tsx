@@ -53,7 +53,7 @@ export default async function SiteHeader() {
             )}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-sm bg-ink px-3.5 py-2 text-sm text-canvas transition-opacity hover:opacity-90"
+            className="inline-flex items-center gap-2 rounded-sm bg-accent px-3.5 py-2 text-sm text-deep transition-opacity hover:opacity-90"
           >
             <WhatsappIcon className="size-4" />
             WhatsApp

@@ -21,7 +21,7 @@ export default function GoogleReviews({
   return (
     <section aria-label="Google yorumları" className={className}>
       <ImmersiveScrollReviews reviews={reviews}>
-        <div className="mx-auto max-w-xl text-center text-surface [text-shadow:0_1px_3px_rgb(0_51_87/0.7),0_2px_28px_rgb(0_51_87/0.9)] before:pointer-events-none before:absolute before:-inset-16 before:-z-10 before:rounded-full before:bg-[radial-gradient(closest-side,rgb(0_51_87/0.45),transparent)] relative [&_.text-ink-soft]:text-surface/85 [&_h2]:text-surface">
+        <div className="deep-halo text-deep-shadow mx-auto max-w-xl text-center text-ink">
         <p className="eyebrow">Misafirlerimiz</p>
         <p className="mt-3 font-display text-6xl sm:text-7xl">
           {info.googleRating.toLocaleString("tr-TR", {

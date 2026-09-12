@@ -112,7 +112,7 @@ export default async function RootLayout({
           Hero (video) opak olduğu için dalgalar hero bittikten sonra görünür.
           Parlaklık/opaklık burada ayarlanır — mevcut değerler soluk tutuldu.
         */}
-        <WavyBackground fixed brightness={0.7} opacity={0.6} />
+        <WavyBackground fixed brightness={0.9} opacity={0.5} />
         <SiteAudioProvider>
           <div className="relative z-10">
             <SiteHeader />
