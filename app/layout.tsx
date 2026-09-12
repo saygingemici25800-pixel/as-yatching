@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import MobileContactBar from "@/components/MobileContactBar";
+import ScrollLoop from "@/components/ScrollLoop";
 import SiteFooter from "@/components/SiteFooter";
 import SiteAudioProvider from "@/components/SiteAudioProvider";
 import SiteHeader from "@/components/SiteHeader";
@@ -119,6 +120,7 @@ export default async function RootLayout({
             <main id="icerik">{children}</main>
             <SiteFooter />
             <MobileContactBar />
+            <ScrollLoop />
           </div>
         </SiteAudioProvider>
       </body>

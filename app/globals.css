@@ -99,35 +99,28 @@ h1, h2, h3 {
 }
 
 /*
-  Altın metin (logo, menü, hero butonları). Açık zeminde (sky/krem) okunsun
-  diye ince sıcak koyu gölge + hafif parlama. @utility olarak tanımlı:
-  hover:text-gold-deep gibi varyantlar normal sırayla üstüne yazabilir.
+  ALTIN GÖLGE — TEK KAYNAK. Logo, menü, butonlar, hero ve ses butonu aynı
+  değişkeni kullanır. İlk gölge 0.6: krem (#fffbf3) zeminde 0.45 yumuşak kaldı.
 */
-@utility text-gold-glow {
-  color: var(--color-gold);
-  /* Dalga zemini üstünde okunsun: 0 1px 2px, 0.5 */
-  text-shadow:
-    0 1px 2px rgb(122 26 14 / 0.5),
-    0 0 12px rgb(243 217 138 / 0.45);
-}
-/* Logo: parlak altın + krem zeminde okunması için sıcak koyu gölge ve parlama.
-   Unlayered: açık zemin kuralının .text-accent/.text-ink dönüşümlerinden etkilenmez. */
-.wordmark-gold {
-  color: var(--color-gold);
-  letter-spacing: 0.01em;
-  /* İlk gölge 0.6: krem (#fffbf3) zeminde 0.45 yumuşak kaldı */
-  text-shadow:
+:root {
+  --gold-text-shadow:
     0 1px 1px rgb(122 26 14 / 0.6),
     0 0 10px rgb(246 221 143 / 0.55),
     0 0 22px rgb(246 221 143 / 0.3);
+  --gold-box-shadow: 0 0 12px rgb(246 221 143 / 0.45);
 }
-
-/* Beyaz-altın varyant (hero): aynı gölge, daha açık ton */
-@utility text-gold-light-glow {
-  color: var(--color-gold-light);
-  text-shadow:
-    0 1px 2px rgb(122 26 14 / 0.5),
-    0 0 12px rgb(243 217 138 / 0.45);
+/* Altın metin (hover:text-gold-deep gibi varyantlar üstüne yazabilir) */
+@utility gold-glow {
+  color: var(--color-gold);
+  text-shadow: var(--gold-text-shadow);
+}
+/* Altın zeminli kutu (bg-gold butonlar): parlama kutuya */
+@utility gold-glow-box {
+  box-shadow: var(--gold-box-shadow);
+}
+/* Wordmark: yalnızca harf aralığı; renk ve gölge gold-glow'dan */
+.wordmark-gold {
+  letter-spacing: 0.01em;
 }
 
 .eyebrow {

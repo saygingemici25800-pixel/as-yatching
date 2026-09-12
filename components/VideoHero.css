@@ -90,15 +90,13 @@
   }
 }
 
-/* Beyaz-altın metinler + text-gold-glow gölgesi (eyebrow, başlık) */
+/* Beyaz-altın metinler + ortak altın gölge (eyebrow, başlık) */
 .vhero__content .eyebrow {
   color: var(--color-gold-light);
 }
 .vhero__content .eyebrow,
 .vhero__content h1 {
-  text-shadow:
-    0 1px 2px rgb(122 26 14 / 0.5),
-    0 0 12px rgb(243 217 138 / 0.45);
+  text-shadow: var(--gold-text-shadow);
 }
 
 .vhero__sound {
@@ -113,7 +111,7 @@
   font-size: 0.75rem;
   letter-spacing: 0.04em;
   color: var(--color-gold);
-  text-shadow: 0 1px 1px rgb(122 26 14 / 0.35);
+  text-shadow: var(--gold-text-shadow);
   border: 1px solid color-mix(in srgb, var(--color-gold) 60%, transparent);
   border-radius: 999px;
   /* Blur yok (animasyonlu canvas üstünde pahalı); daha koyu düz zemin */

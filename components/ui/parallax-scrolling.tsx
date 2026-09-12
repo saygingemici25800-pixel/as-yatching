@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "@studio-freight/lenis";
+import { setLenis } from "@/lib/lenis-store";
 import "./parallax-scrolling.css";
 
 /**
@@ -77,6 +78,7 @@ export function ParallaxScrolling({
     // Lenis yumuşak kaydırma. GSAP'in ticker'ına bağlanıyor ki iki ayrı
     // requestAnimationFrame döngüsü birbiriyle yarışmasın.
     const lenis = new Lenis();
+    setLenis(lenis); // ScrollLoop (sayfa sonunda başa dönüş) aynı örneği kullanır
     const onScroll = () => ScrollTrigger.update();
     lenis.on("scroll", onScroll);
 
@@ -89,6 +91,7 @@ export function ParallaxScrolling({
       // çağrılmaya devam eder — bileşen kaldırıldıktan sonra bile.
       gsap.ticker.remove(raf);
       gsap.ticker.lagSmoothing(500, 33); // GSAP varsayılanı
+      setLenis(null);
       lenis.off("scroll", onScroll);
       lenis.destroy();
       // Yalnızca bu bileşenin oluşturdukları temizleniyor; sayfadaki başka

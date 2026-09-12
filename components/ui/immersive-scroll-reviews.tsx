@@ -11,13 +11,25 @@ import type { GoogleReview } from "@/lib/types";
  * bloğu belirir. Metin okunabilirliği için scale değil, konum (x/y)
  * animasyonu kullanılır.
  *
- * Bölüm 200vh koşu alanı; sahne sticky (header yüksekliği payı bırakılır).
+ * Kapsayıcı = 100vh (sahne) + `scrollLength`vh; sahne sticky. Keyframe'ler
+ * kaydırma mesafesi cinsinden SABİT (vh): kartlar 0–50vh'de açılır, 62–85vh
+ * arasında solar, puan bloğu 70–88vh'de belirir. scrollLength=88 ile
+ * kapsayıcı animasyonun bittiği yerde biter; varsayılan 100 (eski 200vh).
  */
 
 interface ImmersiveScrollReviewsProps {
   reviews: GoogleReview[];
   children?: ReactNode;
+  /** Kaydırma mesafesi, vh. Kapsayıcı yüksekliği = 100vh + scrollLength vh. */
+  scrollLength?: number;
 }
+
+// Keyframe'ler kaydırma mesafesi cinsinden (vh)
+const OPEN_END_VH = 50;
+const HOLD_END_VH = 62;
+const FADE_END_VH = 85;
+const FADE_IN_VH = 15;
+const TEXT_VH: [number, number] = [70, 88];
 
 // Her kartın son konumu (sahne merkezine göre, vw/vh)
 const TARGETS = [
@@ -42,20 +54,27 @@ function ReviewCard({
   target,
   targetMobile,
   hideOnMobile = false,
+  at,
 }: {
   review: GoogleReview;
   hideOnMobile?: boolean;
   progress: ReturnType<typeof useScroll>["scrollYProgress"];
   target: { x: number; y: number };
   targetMobile: { x: number; y: number };
+  /** vh → progress dönüşümü */
+  at: (vh: number) => number;
 }) {
-  // 0 → 0.5: merkezden hedef konuma açıl; 0.5 → 0.75: hedefte kal; sonra sol
-  const x = useTransform(progress, [0, 0.5], ["0vw", `${target.x}vw`]);
-  const y = useTransform(progress, [0, 0.5], ["0vh", `${target.y}vh`]);
-  const xm = useTransform(progress, [0, 0.5], ["0vw", `${targetMobile.x}vw`]);
-  const ym = useTransform(progress, [0, 0.5], ["0vh", `${targetMobile.y}vh`]);
-  const scale = useTransform(progress, [0, 0.5, 0.85], [0.6, 1, 1.15]);
-  const opacity = useTransform(progress, [0, 0.15, 0.62, 0.85], [0, 1, 1, 0]);
+  // 0 → 50vh: merkezden hedef konuma açıl; 50 → 62vh: hedefte kal; sonra sol
+  const x = useTransform(progress, [0, at(OPEN_END_VH)], ["0vw", `${target.x}vw`]);
+  const y = useTransform(progress, [0, at(OPEN_END_VH)], ["0vh", `${target.y}vh`]);
+  const xm = useTransform(progress, [0, at(OPEN_END_VH)], ["0vw", `${targetMobile.x}vw`]);
+  const ym = useTransform(progress, [0, at(OPEN_END_VH)], ["0vh", `${targetMobile.y}vh`]);
+  const scale = useTransform(progress, [0, at(OPEN_END_VH), at(FADE_END_VH)], [0.6, 1, 1.15]);
+  const opacity = useTransform(
+    progress,
+    [0, at(FADE_IN_VH), at(HOLD_END_VH), at(FADE_END_VH)],
+    [0, 1, 1, 0],
+  );
 
   const inner = (
     <div className="w-[62vw] rounded-sm border border-line bg-surface p-4 shadow-sm sm:w-[22rem] sm:p-5">
@@ -99,6 +118,7 @@ function ReviewCard({
 export default function ImmersiveScrollReviews({
   reviews,
   children,
+  scrollLength = 100,
 }: ImmersiveScrollReviewsProps) {
   const container = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress } = useScroll({
@@ -106,11 +126,17 @@ export default function ImmersiveScrollReviews({
     offset: ["start start", "end end"],
   });
 
-  const opacityText = useTransform(scrollYProgress, [0.7, 0.88], [0, 1]);
-  const scaleText = useTransform(scrollYProgress, [0.7, 0.88], [0.9, 1]);
+  const L = scrollLength;
+  const at = (vh: number) => Math.min(vh / L, 1);
+  const opacityText = useTransform(scrollYProgress, [at(TEXT_VH[0]), at(TEXT_VH[1])], [0, 1]);
+  const scaleText = useTransform(scrollYProgress, [at(TEXT_VH[0]), at(TEXT_VH[1])], [0.9, 1]);
 
   return (
-    <div ref={container} className="relative h-[200vh]">
+    <div
+      ref={container}
+      className="relative"
+      style={{ height: `calc(100vh + ${L}vh)` }}
+    >
       <div className="sticky top-[6.5625rem] h-[calc(100svh-6.5625rem)] overflow-hidden md:top-16 md:h-[calc(100svh-4rem)]">
         {reviews.slice(0, TARGETS.length).map((review, i) => (
           <ReviewCard
@@ -120,6 +146,7 @@ export default function ImmersiveScrollReviews({
             target={TARGETS[i]}
             targetMobile={TARGETS_MOBILE[i]}
             hideOnMobile={i === 4}
+            at={at}
           />
         ))}
 

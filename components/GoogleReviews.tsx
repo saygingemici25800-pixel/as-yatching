@@ -20,7 +20,8 @@ export default function GoogleReviews({
 
   return (
     <section aria-label="Google yorumları" className={className}>
-      <ImmersiveScrollReviews reviews={reviews}>
+      {/* Puan bloğu 88vh'de tamamlanır; kapsayıcı orada biter (boş kuyruk yok) */}
+      <ImmersiveScrollReviews reviews={reviews} scrollLength={88}>
         <div className="deep-halo text-deep-shadow mx-auto max-w-xl text-center text-ink">
         <p className="eyebrow">Misafirlerimiz</p>
         <p className="mt-3 font-display text-6xl sm:text-7xl">

@@ -14,7 +14,7 @@ export default async function MobileContactBar() {
       <div className="grid grid-cols-2 gap-2 p-3">
         <a
           href={telUrl(info.phone)}
-          className="text-gold-glow inline-flex items-center justify-center gap-2 rounded-sm border border-gold px-3 py-3 text-sm font-medium"
+          className="gold-glow inline-flex items-center justify-center gap-2 rounded-sm border border-gold px-3 py-3 text-sm font-medium"
         >
           <PhoneIcon className="size-4" />
           Ara
@@ -26,7 +26,7 @@ export default async function MobileContactBar() {
           )}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 rounded-sm border border-gold-deep bg-gold px-3 py-3 text-sm font-medium text-deep transition-colors hover:bg-gold-deep"
+          className="gold-glow-box inline-flex items-center justify-center gap-2 rounded-sm border border-gold-deep bg-gold px-3 py-3 text-sm font-medium text-deep transition-colors hover:bg-gold-deep"
         >
           <WhatsappIcon className="size-4" />
           WhatsApp

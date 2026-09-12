@@ -31,7 +31,8 @@ export default function DeparturePoint({
   return (
     <section
       aria-labelledby="kalkis-baslik"
-      className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24"
+      // Üst boşluk ≤ 4rem: yorum sahnesi biter bitmez bölüm görünür
+      className="mx-auto max-w-6xl px-4 pt-12 sm:px-6 sm:pt-16"
     >
       <div className="grid gap-6 lg:grid-cols-[minmax(0,26rem)_1fr] lg:gap-8">
         {/* Sol: krem kutu */}

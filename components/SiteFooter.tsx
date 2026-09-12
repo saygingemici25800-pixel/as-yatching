@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ScrollLoopHint from "@/components/ScrollLoopHint";
 import Wordmark from "@/components/Wordmark";
 import {
   ClockIcon,
@@ -109,6 +110,9 @@ export default async function SiteFooter() {
           <p>
             Demo sürüm — fiyatlar ve tekne bilgileri örnektir.
           </p>
+        </div>
+        <div className="mx-auto max-w-6xl px-4 pb-4 text-center sm:px-6">
+          <ScrollLoopHint />
         </div>
       </div>
     </footer>
