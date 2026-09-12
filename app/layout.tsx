@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import MobileContactBar from "@/components/MobileContactBar";
 import SiteFooter from "@/components/SiteFooter";
@@ -16,10 +17,14 @@ import {
 } from "@/lib/seo";
 
 // latin-ext alt kümesi Türkçe karakterleri (ş ğ ı İ ç ö ü) kapsar.
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600"],
-  variable: "--font-cormorant",
+// Başlık fontu: Zodiak (lisanslı, app/fonts/). Şimdilik yalnızca Black kesimi var;
+// diğer ağırlıklar gelince buraya eklenir.
+const zodiak = localFont({
+  src: [
+    { path: "./fonts/Zodiak-Black.otf", weight: "900", style: "normal" },
+    { path: "./fonts/Zodiak-BlackItalic.otf", weight: "900", style: "italic" },
+  ],
+  variable: "--font-zodiak",
   display: "swap",
 });
 
@@ -87,7 +92,7 @@ export default async function RootLayout({
   const info = await getSiteInfo();
 
   return (
-    <html lang="tr" className={`${cormorant.variable} ${inter.variable}`}>
+    <html lang="tr" className={`${zodiak.variable} ${inter.variable}`}>
       <body className="antialiased">
         {/*
           LocalBusiness yapısal verisi — her sayfada bulunur.

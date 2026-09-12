@@ -23,15 +23,15 @@ Fethiye'de tek tekneli bir tekne kiralama işletmesi için, **şeffaf fiyatlı**
 ## Görsel sistem
 
 ```
-Zemin        #F7F4ED
-Yüzey        #FFFFFF
-Metin        #1C2A38
-İkincil      #5A6875
+Zemin        #EDDACC
+Yüzey        #F7EDE3
+Metin        #003357
+İkincil      #3F5F7A
 Vurgu        #B08D3F   (sadece ince çizgi, ikon, küçük etiket — ASLA blok zemin)
-Kenarlık     #E3DDD0
+Kenarlık     #D9C2AD
 ```
 
-- Başlık fontu: serif (Cormorant Garamond)
+- Başlık fontu: Zodiak (lisanslı, app/fonts/ — şimdilik Black kesimi)
 - Gövde fontu: sans (Inter)
 - Siyah zeminli, altın yazılı blok bölüm **yapılmaz**
 - Logo: açık zeminli altın el yazısı. Wordmark **"As Yachting"** — alt çizgi yok, "Luxury" yok

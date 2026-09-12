@@ -3,16 +3,16 @@
 /* AS Yachting marka teması — Tailwind v4 */
 
 @theme {
-  --color-canvas: #f7f4ed;
-  --color-surface: #ffffff;
-  --color-ink: #1c2a38;
-  --color-ink-soft: #5a6875;
+  --color-canvas: #eddacc;
+  --color-surface: #f7ede3;
+  --color-ink: #003357;
+  --color-ink-soft: #3f5f7a;
   --color-accent: #b08d3f;
-  --color-line: #e3ddd0;
+  --color-line: #d9c2ad;
 
   /* Fontlar next/font ile kendi sunucumuzdan servis ediliyor (LCP için).
-     --font-cormorant ve --font-inter değişkenlerini app/layout.tsx <html>'e basar. */
-  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+     --font-zodiak ve --font-inter değişkenlerini app/layout.tsx <html>'e basar. */
+  --font-display: var(--font-zodiak), "Zodiak", Georgia, serif;
   --font-body: var(--font-inter), "Inter", system-ui, sans-serif;
 }
 
@@ -24,7 +24,7 @@ body {
 
 h1, h2, h3 {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 900; /* Zodiak Black — eldeki tek kesim */
   letter-spacing: -0.01em;
 }
 

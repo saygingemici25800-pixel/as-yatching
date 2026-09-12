@@ -56,9 +56,9 @@
   background:
     linear-gradient(
       to top,
-      rgb(28 42 56 / 0.72) 0%,
-      rgb(28 42 56 / 0.25) 45%,
-      rgb(28 42 56 / 0.05) 100%
+      rgb(0 51 87 / 0.72) 0%,
+      rgb(0 51 87 / 0.25) 45%,
+      rgb(0 51 87 / 0.05) 100%
     );
 }
 
@@ -66,7 +66,7 @@
 .vhero__shade {
   position: absolute;
   inset: 0;
-  background-color: rgb(28 42 56 / 0.45);
+  background-color: rgb(0 51 87 / 0.45);
   opacity: 0;
 }
 
@@ -108,7 +108,7 @@
   color: #fff;
   border: 1px solid rgb(255 255 255 / 0.4);
   border-radius: 999px;
-  background: rgb(28 42 56 / 0.35);
+  background: rgb(0 51 87 / 0.35);
   backdrop-filter: blur(6px);
   cursor: pointer;
   transition: border-color 0.2s;
