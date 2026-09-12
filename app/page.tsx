@@ -2,6 +2,7 @@ import Link from "next/link";
 import AvailabilityCalendar from "@/components/AvailabilityCalendar";
 import DemoNotice from "@/components/DemoNotice";
 import GoogleRating from "@/components/GoogleRating";
+import GoogleReviews from "@/components/GoogleReviews";
 import PhotoStrip from "@/components/PhotoStrip";
 import ProductCard from "@/components/ProductCard";
 import VideoHero from "@/components/VideoHero";
@@ -13,6 +14,7 @@ import {
   getBoats,
   getFaqs,
   getFeaturedProducts,
+  getGoogleReviews,
   getProducts,
   getSiteInfo,
 } from "@/lib/repository";
@@ -33,12 +35,13 @@ const PROMISES = [
 ];
 
 export default async function HomePage() {
-  const [info, featured, products, boats, faqs] = await Promise.all([
+  const [info, featured, products, boats, faqs, reviews] = await Promise.all([
     getSiteInfo(),
     getFeaturedProducts(),
     getProducts(),
     getBoats(),
     getFaqs(),
+    getGoogleReviews(),
   ]);
 
   const boat = boats[0];
@@ -89,14 +92,8 @@ export default async function HomePage() {
       {/* ---------- Gerçek kareler (hero animasyonu biter bitmez) ---------- */}
       <PhotoStrip instagram={info.instagram} />
 
-      {/* ---------- Google puanı (hero altı) ---------- */}
-      <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
-        <GoogleRating
-          rating={info.googleRating}
-          reviewCount={info.googleReviewCount}
-          profileUrl={info.googleProfileUrl}
-        />
-      </div>
+      {/* ---------- Google yorumları (galerinin hemen ardından) ---------- */}
+      <GoogleReviews reviews={reviews} info={info} />
 
       {/* ---------- Parallax ---------- */}
       <ParallaxScrolling
@@ -216,7 +213,14 @@ export default async function HomePage() {
                   className="shrink-0 text-accent transition-transform group-open:rotate-45"
                   aria-hidden
                 >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" className="size-4">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    className="size-4"
+                  >
                     <path d="M12 5v14M5 12h14" />
                   </svg>
                 </span>

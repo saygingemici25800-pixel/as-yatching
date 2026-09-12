@@ -1,4 +1,5 @@
 import type {
+  GoogleReview,
   AvailabilityBlock,
   Boat,
   Faq,
@@ -24,7 +25,7 @@ export const siteInfo: SiteInfo = {
   address: "Fethiye Limanı beton iskele, 48300 Fethiye / Muğla",
   mapUrl: "https://maps.google.com/?q=Fethiye+Limanı+beton+iskele",
   googleRating: 5.0,
-  googleReviewCount: 34,
+  googleReviewCount: 33, // Google profili, 2026-09-12
   googleProfileUrl: "https://www.google.com/maps?cid=4934811779244890993",
   workingHours: "Her gün 24 saat",
   instagram: "https://www.instagram.com/as_yachting/",
@@ -261,4 +262,42 @@ export const faqs: Faq[] = [
       "Takvimden istediğiniz tarihi seçip talep gönderiyorsunuz. Size dönüş yapıp detayları netleştiriyoruz.",
   },
   // TODO: iptal ve iade koşulları müşteriden alınacak
+];
+
+/**
+ * GERÇEK Google yorumları — https://www.google.com/maps?cid=4934811779244890993
+ * 2026-09-12'de profilden birebir alındı. Metin değiştirilmez, uydurulmaz.
+ * Uzun yorumlar site için kısaltıldı; kısaltma "…" ile işaretli.
+ */
+export const googleReviews: GoogleReview[] = [
+  {
+    author: "Mehtap Candaş",
+    rating: 5,
+    when: "3 ay önce",
+    text: "Göcek koylarında geçirdiğimiz 5 gün gerçekten unutulmazdı. Baştan sona her detay özenle düşünülmüş, huzurlu ve keyifli bir deneyim yaşadık. Özellikle kaptanlarımızın profesyonelliği, güler yüzü ve misafirperverliği tatili çok daha özel hale getirdi…",
+  },
+  {
+    author: "mustafa ünal",
+    rating: 5,
+    when: "4 yıl önce",
+    text: "Bu teknede müşteri değil, misafirsiniz. Serkan ve Ayşe kaptanlar sanki ailemizden birileri gibiydiler. Yemekler,diğer hizmetler, ödediğimiz ücretin kat be kat üzerindeydi,mükemmeldi…",
+  },
+  {
+    author: "Eda Nilüfer Özer",
+    rating: 5,
+    when: "2 yıl önce",
+    text: "Kaptan Serkan bey ile çıktığımız Göcek tekne tatilinden çok memnun kaldık bizlere çok misafirperver davrandı ve her anımızın tadını çıkartmamız için elinden geleni yaptı…",
+  },
+  {
+    author: "ÖMER ÖZMEN",
+    rating: 5,
+    when: "2 yıl önce",
+    text: "Mükemmel bir tatil tekne tatili kaptan serkan ve yardımcı kaptan çayan güzel bir tatil geçirmeniz için gerçekten ellerinden geleni yapıyor harika bir yelkenli deneyimi",
+  },
+  {
+    author: "Nuray Tınmaz",
+    rating: 5,
+    when: "4 yıl önce",
+    text: "Serkan Abi ve Ayşe Abla çok tatlı insanlar çok güleryüzlü iki insan ile çok güzel koylara gittik bilgileriyle her geçtiğimiz yerleri anlattılar bize yemekler çok lezzetliydi başka yer aramayın kesinlikle pişman olmazsınız…",
+  },
 ];

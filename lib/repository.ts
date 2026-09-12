@@ -2,6 +2,7 @@ import {
   availabilityBlocks,
   boats,
   faqs,
+  googleReviews,
   products,
   siteInfo,
 } from "@/data/seed";
@@ -10,6 +11,7 @@ import type {
   Boat,
   BookingRequest,
   Faq,
+  GoogleReview,
   Product,
   SiteInfo,
 } from "./types";
@@ -50,6 +52,10 @@ export async function getProduct(slug: string): Promise<Product | null> {
 
 export async function getFaqs(): Promise<Faq[]> {
   return faqs;
+}
+
+export async function getGoogleReviews(): Promise<GoogleReview[]> {
+  return googleReviews;
 }
 
 export async function getAvailabilityBlocks(

@@ -88,3 +88,11 @@ export interface Faq {
   question: string;
   answer: string;
 }
+
+/** Google Business Profile'dan birebir alınan gerçek yorum (uydurma değil). */
+export interface GoogleReview {
+  author: string;
+  rating: number;
+  when: string; // Google'ın gösterdiği göreli tarih ("3 ay önce")
+  text: string; // Kısaltılmışsa "…" ile biter
+}

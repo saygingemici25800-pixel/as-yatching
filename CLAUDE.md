@@ -8,7 +8,7 @@ Fethiye'de tek tekneli bir tekne kiralama işletmesi için, **şeffaf fiyatlı**
 ## Mutlak kurallar
 
 1. **Uydurma yok.** Sertifika, ödül, müşteri yorumu, kapasite, sertifika numarası uydurulmaz. Bilinmeyen alan `TODO:` ile işaretlenir ve kullanıcıya sorulur.
-2. **Gerçek olan tek sosyal kanıt:** Google 5.0 puan / 34 yorum. Yorum metinleri elimizde yok, uydurulmayacak.
+2. **Gerçek olan tek sosyal kanıt:** Google 5.0 puan / 33 yorum (2026-09). Yorum metinleri `data/seed.ts` → `googleReviews` içinde profilden birebir alınmıştır; asla uydurulmaz, düzenlenmez (yalnızca "…" ile kısaltılır).
 3. **Fiyatlar demo verisidir.** Arayüzde `ÖRNEK` rozetiyle gösterilir.
 4. **Veri erişimi sadece `lib/repository.ts` üzerinden.** Hiçbir sayfa `data/seed.ts`'i doğrudan import etmez. Bu kural Supabase geçişi içindir, esnetilmez.
 5. **Mobil önce.** 375px'te kırılma olmayacak. Trafiğin çoğu mobil olacak.
