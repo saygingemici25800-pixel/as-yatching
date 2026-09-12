@@ -93,10 +93,7 @@ export default async function HomePage() {
         </div>
       </VideoHero>
 
-      {/* ---------- Gerçek kareler (hero animasyonu biter bitmez) ---------- */}
-      <PhotoStrip instagram={info.instagram} />
-
-      {/* ---------- Koylar (coverflow) ---------- */}
+      {/* ---------- Rota / Koylar (hero koşu alanı bitince, akışta) ---------- */}
       <section
         aria-labelledby="koylar-baslik"
         className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24"
@@ -112,15 +109,18 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ---------- Google yorumları ---------- */}
-      <GoogleReviews reviews={reviews} info={info} />
-
-      {/* ---------- Parallax ---------- */}
+      {/* ---------- Fethiye körfezi (parallax) ---------- */}
       <ParallaxScrolling
         eyebrow="Fethiye körfezi"
         title="Sabah çıkıyoruz, akşam dönüyoruz"
         caption="Kızılada, Akvaryum Koyu, Samanlık Koyu. Rotayı grubun temposuna göre birlikte belirliyoruz."
       />
+
+      {/* ---------- Gerçek kareler (PhotoStrip) ---------- */}
+      <PhotoStrip instagram={info.instagram} />
+
+      {/* ---------- Google yorumları ---------- */}
+      <GoogleReviews reviews={reviews} info={info} />
 
       {/* ---------- Vaatler ---------- */}
       <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-20">

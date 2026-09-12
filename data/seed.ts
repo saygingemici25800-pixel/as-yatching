@@ -313,8 +313,12 @@ export const googleReviews: GoogleReview[] = [
  * `image: null` olan koylar arayüzde GÖSTERİLMEZ (fotoğraf gelince yol
  * yazılır, başka değişiklik gerekmez).
  *
- * TODO: distanceFromHarbor / stayDuration / tours / highlight işletmeden
- * alınacak. Bilinmeyen her değer "—" olarak gösterilir; UYDURULMAZ.
+ * distanceFromHarbor: limandan TAHMİNİ tekne süresi ("~20 dk" biçiminde,
+ * arayüzde etiket "Limandan (tahmini)"). TODO: teyit — değerler kaptanla
+ * teyit edilecek, teyit gelince "~" kalkabilir.
+ *
+ * TODO: stayDuration / tours / highlight işletmeden alınacak. Bilinmeyen
+ * her değer "—" olarak gösterilir; UYDURULMAZ.
  * Dolu olan tours/highlight değerleri yukarıdaki `products[].route`
  * duraklarından alındı (Günübirlik Özel Kiralama rotası).
  */
@@ -334,7 +338,7 @@ export const bays: Bay[] = [
     slug: "kizilada",
     name: "Kızılada",
     blurb: "Limandan çıkınca ilk durak; günübirlik rotanın yüzme molası.",
-    distanceFromHarbor: "—", // TODO: limandan süre
+    distanceFromHarbor: "~20 dk", // TODO: teyit (kaptanla)
     stayDuration: "—", // TODO: koyda kalış
     tours: "Günübirlik özel kiralama", // products[].route → 11:00 Kızılada
     highlight: "Yüzme molası", // products[].route notu
@@ -345,7 +349,7 @@ export const bays: Bay[] = [
     slug: "akvaryum-koyu",
     name: "Akvaryum Koyu",
     blurb: "Adını berrak suyundan alan koy; günübirlik rotada öğle molası.",
-    distanceFromHarbor: "—", // TODO: limandan süre
+    distanceFromHarbor: "~35 dk", // TODO: teyit (kaptanla)
     stayDuration: "—", // TODO: koyda kalış
     tours: "Günübirlik özel kiralama", // products[].route → 13:00 Akvaryum Koyu
     highlight: "Öğle yemeği durağı", // products[].route notu: Öğle molası
@@ -356,7 +360,7 @@ export const bays: Bay[] = [
     slug: "samanlik-koyu",
     name: "Samanlık Koyu",
     blurb: "Korunaklı ve sığ koy; günübirlik rotada şnorkel durağı.",
-    distanceFromHarbor: "—", // TODO: limandan süre
+    distanceFromHarbor: "~40 dk", // TODO: teyit (kaptanla)
     stayDuration: "—", // TODO: koyda kalış
     tours: "Günübirlik özel kiralama", // products[].route → 15:00 Samanlık Koyu
     highlight: "Şnorkel", // products[].route notu
@@ -367,7 +371,7 @@ export const bays: Bay[] = [
     slug: "oludeniz",
     name: "Ölüdeniz",
     blurb: "Fethiye'nin en bilinen koyu; lagün ve uzun plaj.",
-    distanceFromHarbor: "—", // TODO: limandan süre
+    distanceFromHarbor: "~75 dk", // TODO: teyit (kaptanla)
     stayDuration: "—", // TODO: koyda kalış
     tours: "—", // TODO: hangi turların rotasında
     highlight: "—", // TODO: öne çıkan özellik
@@ -378,7 +382,7 @@ export const bays: Bay[] = [
     slug: "gemiler-adasi",
     name: "Gemiler Adası",
     blurb: "Bizans dönemi kalıntılarının bulunduğu ada ve korunaklı demir yeri.",
-    distanceFromHarbor: "—", // TODO: limandan süre
+    distanceFromHarbor: "~60 dk", // TODO: teyit (kaptanla)
     stayDuration: "—", // TODO: koyda kalış
     tours: "—", // TODO: hangi turların rotasında
     highlight: "—", // TODO: öne çıkan özellik
@@ -389,7 +393,7 @@ export const bays: Bay[] = [
     slug: "kelebekler-vadisi",
     name: "Kelebekler Vadisi",
     blurb: "Dik kayalıklar arasında plaj; karadan ulaşımı zor, tekneyle kolay.",
-    distanceFromHarbor: "—", // TODO: limandan süre
+    distanceFromHarbor: "~90 dk", // TODO: teyit (kaptanla)
     stayDuration: "—", // TODO: koyda kalış
     tours: "—", // TODO: hangi turların rotasında
     highlight: "—", // TODO: öne çıkan özellik

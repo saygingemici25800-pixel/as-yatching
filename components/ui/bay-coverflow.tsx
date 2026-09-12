@@ -32,11 +32,11 @@ import type { Bay } from "@/lib/types";
  * sanal wheel/touch scroll (sayfa kaydırmasını yakalıyordu), boştaki otomatik
  * dönüş ve onun rAF döngüsü. Dönüş yalnızca etkileşimde çalışır.
  *
- * Gezinme: yatay sürükleme / swipe (framer-motion drag, eşik ~40px, bırakınca
- * en yakın karta snap), klavye ok tuşları, alttaki gösterge ve kart tıklaması.
- * Ok butonu ve otomatik geçiş yok. `drag="x"` + `dragDirectionLock` +
- * `touch-action: pan-y`: dikey hareket baskınsa sürükleme başlamaz, sayfa
- * kaydırması tarayıcıda kalır.
+ * Gezinme: sağ/sol ok butonları, yatay sürükleme / swipe (framer-motion
+ * drag, eşik ~40px, bırakınca en yakın karta snap), klavye ok tuşları,
+ * alttaki gösterge ve kart tıklaması. Otomatik geçiş yok. `drag="x"` +
+ * `dragDirectionLock` + `touch-action: pan-y`: dikey hareket baskınsa
+ * sürükleme başlamaz, sayfa kaydırması tarayıcıda kalır.
  *
  * Scroll yapısı: normal akışta bir blok. sticky yok, pin yok, Lenis'e
  * bağlanmıyor, sabit viewport yüksekliği yok.
@@ -62,6 +62,9 @@ const DRAG_THRESHOLD = 40;
 const FLING_VELOCITY = 350;
 
 type BayWithImage = Bay & { image: string };
+
+const ARROW_CLASS =
+  "absolute top-1/2 z-20 inline-flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-surface/60 bg-ink/20 text-surface backdrop-blur-sm transition-colors hover:border-accent focus-visible:border-accent sm:size-11";
 
 const lerp = (a: number, b: number, t: number) => a * (1 - t) + b * t;
 const clamp = (v: number, min: number, max: number) =>
@@ -368,6 +371,24 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
           aria-hidden
           className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-2/5 bg-gradient-to-b from-transparent to-[rgb(0_51_87/0.35)]"
         />
+
+        {/* Oklar: yuvarlak, ince kenarlık, surface ikon; hover'da altın kenarlık */}
+        <button
+          type="button"
+          onClick={() => stepBy(-1)}
+          aria-label="Önceki koy"
+          className={ARROW_CLASS + " left-2 sm:left-3"}
+        >
+          <ChevronIcon className="size-4 rotate-180" />
+        </button>
+        <button
+          type="button"
+          onClick={() => stepBy(1)}
+          aria-label="Sonraki koy"
+          className={ARROW_CLASS + " right-2 sm:right-3"}
+        >
+          <ChevronIcon className="size-4" />
+        </button>
       </motion.div>
 
       {/* Gösterge: her koy için ince çizgi, aktif olan altın ve uzun */}
@@ -420,7 +441,7 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
               {current.blurb}
             </p>
             <dl className="mt-5 border-t border-surface/25 text-sm">
-              <InfoRow label="Limandan uzaklık" value={current.distanceFromHarbor} />
+              <InfoRow label="Limandan (tahmini)" value={current.distanceFromHarbor} />
               <InfoRow label="Kalış süresi" value={current.stayDuration} />
               <InfoRow label="Hangi tur" value={current.tours} />
             </dl>
@@ -443,6 +464,23 @@ function usePrefersReducedMotion() {
     return () => mq.removeEventListener("change", sync);
   }, []);
   return reduced;
+}
+
+function ChevronIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <path d="M9 6l6 6-6 6" />
+    </svg>
+  );
 }
 
 function InfoRow({ label, value }: { label: string; value: string }) {
