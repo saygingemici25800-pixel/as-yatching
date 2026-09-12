@@ -16,7 +16,7 @@ export default async function SiteHeader() {
   const info = await getSiteInfo();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-cream">
+    <header className="sticky top-0 z-40 border-b border-line bg-navy">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
         <Wordmark className="text-[1.75rem] sm:text-[2.125rem]" />
 
@@ -53,7 +53,7 @@ export default async function SiteHeader() {
             )}
             target="_blank"
             rel="noopener noreferrer"
-            className="gold-glow-box inline-flex items-center gap-2 rounded-sm border border-gold-deep bg-gold px-3.5 py-2 text-sm text-deep transition-colors hover:bg-gold-deep"
+            className="gold-glow-box inline-flex items-center gap-2 rounded-sm border border-gold-deep bg-gold px-3.5 py-2 text-sm text-navy transition-colors hover:bg-gold-deep"
           >
             <WhatsappIcon className="size-4" />
             WhatsApp

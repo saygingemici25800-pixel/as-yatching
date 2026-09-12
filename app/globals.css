@@ -8,7 +8,8 @@
   --color-canvas: #1741a1; /* sayfa zemini (lacivert) */
   --color-surface: #fff4e0; /* kartlar, kutular, üst çubuk (krem) */
   --color-surface-2: #ffeccd; /* iç içe kutular, input zemini, hover (koyu krem) */
-  --color-cream: #fffbf3; /* üst çubuk ve mobil bar zemini (açık krem, opak) */
+  --color-cream: #fffbf3; /* açık krem (yüzey tonu) */
+  --color-navy: #1741a1; /* üst çubuk ve mobil bar zemini (koyu mavi, opak) */
   --color-ink: #f4e091; /* başlık ve ana metin (sarı) */
   --color-ink-soft: #b3edeb; /* ikincil metin, açıklamalar (aqua) */
   --color-accent: #f2c488; /* eyebrow, ikon, ince çizgi, hover, seçili durum, birincil buton (peach) */
@@ -121,6 +122,13 @@ h1, h2, h3 {
 /* Wordmark: yalnızca harf aralığı; renk ve gölge gold-glow'dan */
 .wordmark-gold {
   letter-spacing: 0.01em;
+}
+/* Navy zeminde (header, mobil bar) sıcak tuğla katmanı yerine nötr siyah gölge */
+[class*="bg-navy"] {
+  --gold-text-shadow:
+    0 1px 1px rgb(0 0 0 / 0.35),
+    0 0 10px rgb(246 221 143 / 0.55),
+    0 0 22px rgb(246 221 143 / 0.3);
 }
 
 .eyebrow {
