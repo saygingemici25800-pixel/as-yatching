@@ -5,6 +5,7 @@ import MobileContactBar from "@/components/MobileContactBar";
 import SiteFooter from "@/components/SiteFooter";
 import SiteAudioProvider from "@/components/SiteAudioProvider";
 import SiteHeader from "@/components/SiteHeader";
+import { WavyBackground } from "@/components/ui/wavy";
 import { getSiteInfo } from "@/lib/repository";
 import {
   ALLOW_INDEXING,
@@ -102,11 +103,19 @@ export default async function RootLayout({
         >
           İçeriğe geç
         </a>
+        {/*
+          Site geneli dalga zemini: viewport'a sabit, içeriğin altında.
+          Hero (video) opak olduğu için dalgalar hero bittikten sonra görünür.
+          Parlaklık/opaklık burada ayarlanır — mevcut değerler soluk tutuldu.
+        */}
+        <WavyBackground fixed brightness={0.55} opacity={0.35} />
         <SiteAudioProvider>
-          <SiteHeader />
-          <main id="icerik">{children}</main>
-          <SiteFooter />
-          <MobileContactBar />
+          <div className="relative z-10">
+            <SiteHeader />
+            <main id="icerik">{children}</main>
+            <SiteFooter />
+            <MobileContactBar />
+          </div>
         </SiteAudioProvider>
       </body>
     </html>
