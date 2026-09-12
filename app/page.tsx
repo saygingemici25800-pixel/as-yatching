@@ -2,7 +2,6 @@ import Link from "next/link";
 import AvailabilityCalendar from "@/components/AvailabilityCalendar";
 import BayCoverflow from "@/components/ui/bay-coverflow";
 import DemoNotice from "@/components/DemoNotice";
-import GoogleRating from "@/components/GoogleRating";
 import GoogleReviews from "@/components/GoogleReviews";
 import PhotoStrip from "@/components/PhotoStrip";
 import ProductCard from "@/components/ProductCard";
@@ -153,38 +152,19 @@ export default async function HomePage() {
       {/* ---------- Gerçek kareler (PhotoStrip) ---------- */}
       <PhotoStrip />
 
-      {/* ---------- Google yorumları ---------- */}
-      <GoogleReviews reviews={reviews} info={info} />
-
-      {/* ---------- Google puanı ---------- */}
-      <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24">
-        <div className="rounded-sm border border-line bg-surface px-5 py-10 text-center sm:px-10 sm:py-14">
-          <p className="eyebrow">Misafirlerimiz</p>
-          <p className="mx-auto mt-4 font-display text-5xl sm:text-6xl">
-            {info.googleRating.toLocaleString("tr-TR", {
-              minimumFractionDigits: 1,
-            })}
-          </p>
-          <h2 className="mt-3 text-2xl sm:text-3xl">
-            {info.googleReviewCount} Google yorumunda 5 üzerinden{" "}
-            {info.googleRating.toLocaleString("tr-TR", {
-              minimumFractionDigits: 1,
-            })}
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-ink-soft">
-            Puanımız Google Business Profile üzerinden doğrulanabilir. Yorum
-            metinleri bu demoda gösterilmiyor.
-          </p>
-          <div className="mt-6 flex justify-center">
-            <GoogleRating
-              rating={info.googleRating}
-              reviewCount={info.googleReviewCount}
-              profileUrl={info.googleProfileUrl}
-              size="sm"
-            />
-          </div>
-        </div>
-      </section>
+      {/* ---------- Google yorumları ----------
+          Galeri koşu alanına 115vh bindirilir: galeri 185vh (100 sahne +
+          85 kaydırma), yorum kapsayıcısının üst kenarı galerinin 70vh
+          noktasına denk gelir. Yorum sahnesi görünmez hâlde (kartlar
+          opaklık 0) galerinin altına yapışır; progress galerinin 70vh
+          noktasında başlar ve kartların 0→1 girişi (ilk 15vh) fotoğrafların
+          son 15vh'lik solmasıyla (70–85vh) çapraz geçiş yapar. Arada boş
+          ekran kalmaz; iki bölümün animasyon keyframe'leri değişmedi. */}
+      <GoogleReviews
+        reviews={reviews}
+        info={info}
+        className="relative z-10 -mt-[115vh]"
+      />
 
       {/* ---------- Sık sorulanlar ---------- */}
       <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24">

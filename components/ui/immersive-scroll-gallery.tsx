@@ -10,8 +10,12 @@ import { motion, useScroll, useTransform } from "framer-motion";
  * uyarlandı: tüm fotoğraflar AYNI hızda büyür (tek scale), lorem metin yerine
  * children basılır, renkler globals.css @theme'den gelir.
  *
- * Bölüm 200vh yüksekliğinde bir koşu alanı; içindeki sahne sticky. Kaydırdıkça
- * fotoğraflar 1x → 4x büyüyüp solar, ortadan başlık belirir.
+ * Kapsayıcı = 100vh (sahne) + `scrollLength`vh (kaydırma mesafesi); sahne
+ * sticky. Animasyon keyframe'leri kaydırma mesafesi cinsinden SABİTTİR
+ * (vh): fotoğraflar 100vh'de 4x'e büyür, 55–85vh arasında solar, başlık
+ * 60–80vh'de belirir. `scrollLength` kısaltılınca animasyon değişmez,
+ * kapsayıcı animasyonun bittiği yerde biter (boş kaydırma alanı kalmaz).
+ * Varsayılan 100 (eski 200vh davranışı); başlıksız kullanımda 85 yeterli.
  */
 
 export interface GalleryImage {
@@ -23,7 +27,14 @@ interface ImmersiveScrollGalleryProps {
   images: GalleryImage[];
   className?: string;
   children?: ReactNode;
+  /** Kaydırma mesafesi, vh. Kapsayıcı yüksekliği = 100vh + scrollLength vh. */
+  scrollLength?: number;
 }
+
+// Keyframe'ler kaydırma mesafesi cinsinden (vh)
+const SCALE_END_VH = 100; // scale 4'e ulaştığı nokta
+const FADE_VH: [number, number] = [55, 85];
+const TEXT_VH: [number, number] = [60, 80];
 
 // 5 fotoğraf için konumlar: ortadaki en büyük, diğerleri etrafında
 const IMAGE_STYLES = [
@@ -38,6 +49,7 @@ export default function ImmersiveScrollGallery({
   images,
   className = "",
   children,
+  scrollLength = 100,
 }: ImmersiveScrollGalleryProps) {
   const container = useRef<HTMLDivElement | null>(null);
 
@@ -46,14 +58,22 @@ export default function ImmersiveScrollGallery({
     offset: ["start start", "end end"],
   });
 
-  // Tek scale: bütün kareler eşit hızda büyür
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 4]);
-  const opacityImage = useTransform(scrollYProgress, [0.55, 0.85], [1, 0]);
-  const opacityText = useTransform(scrollYProgress, [0.6, 0.8], [0, 1]);
-  const scaleText = useTransform(scrollYProgress, [0.6, 0.8], [0.9, 1]);
+  // vh → progress (0–1) dönüşümü; keyframe'ler kaydırma pikseline göre sabit
+  const L = scrollLength;
+  const at = (vh: number) => Math.min(vh / L, 1);
+
+  // Tek scale: bütün kareler eşit hızda büyür (100vh'de 4x)
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1 + 3 * (L / SCALE_END_VH)]);
+  const opacityImage = useTransform(scrollYProgress, [at(FADE_VH[0]), at(FADE_VH[1])], [1, 0]);
+  const opacityText = useTransform(scrollYProgress, [at(TEXT_VH[0]), at(TEXT_VH[1])], [0, 1]);
+  const scaleText = useTransform(scrollYProgress, [at(TEXT_VH[0]), at(TEXT_VH[1])], [0.9, 1]);
 
   return (
-    <div ref={container} className={`relative h-[200vh] ${className}`}>
+    <div
+      ref={container}
+      className={`relative ${className}`}
+      style={{ height: `calc(100vh + ${L}vh)` }}
+    >
       <div className="sticky top-[6.5625rem] h-[calc(100svh-6.5625rem)] overflow-hidden md:top-16 md:h-[calc(100svh-4rem)]">
         {images.slice(0, IMAGE_STYLES.length).map(({ src, alt }, index) => (
           <motion.div

@@ -5,7 +5,8 @@ import ImmersiveScrollGallery from "@/components/ui/immersive-scroll-gallery";
  * sadece /public/foto/ değişir.
  *
  * Başlık bloğu galeri sahnesinin DIŞINDA, normal akışta; sahnede metin
- * katmanı yok (children boş). Galerinin scroll animasyonu değişmedi.
+ * katmanı yok (children boş). Galerinin scroll animasyonu değişmedi;
+ * scrollLength=85 ile kapsayıcı fotoğrafların solduğu yerde biter.
  */
 const PHOTOS = [
   { src: "/foto/tekne-kadeh.jpg", alt: "Güvertede kadeh kaldıran misafirler" },
@@ -28,7 +29,8 @@ export default function PhotoStrip() {
           kendiniz görün.
         </p>
       </div>
-      <ImmersiveScrollGallery images={PHOTOS} />
+      {/* Başlık yok → animasyon 85vh'de biter; kapsayıcı da orada biter */}
+      <ImmersiveScrollGallery images={PHOTOS} scrollLength={85} />
     </section>
   );
 }
