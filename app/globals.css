@@ -11,6 +11,10 @@
   --color-cream: #fffbf3; /* açık krem (yüzey tonu) */
   --color-navy: #1741a1; /* üst çubuk ve mobil bar zemini (koyu mavi, opak) */
   --color-ivory: #fff8ee; /* wordmark (beyazımsı) */
+  --color-wa: #25d366; /* WhatsApp yeşili — tüm WhatsApp butonları */
+  --color-wa-deep: #1ebe5b; /* WhatsApp hover */
+  --color-sunset: #ff7a3d; /* başlıklar (h1/h2/h3) — gün batımı turuncusu */
+  --color-sunset-deep: #e8622b; /* 20px altı başlıklar */
   --color-ink: #f4e091; /* başlık ve ana metin (sarı) */
   --color-ink-soft: #b3edeb; /* ikincil metin, açıklamalar (aqua) */
   --color-accent: #f2c488; /* eyebrow, ikon, ince çizgi, hover, seçili durum, birincil buton (peach) */
@@ -44,6 +48,17 @@ h1, h2, h3 {
   font-weight: 400; /* Caviar Dreams — tek kesim */
   font-style: normal;
   letter-spacing: 0.01em;
+}
+/*
+  Başlık rengi gün batımı turuncusu. base katmanında: utility sınıfları
+  (text-ink, text-surface, text-sunset-deep) ve sahne kuralları (.parallax__title,
+  .vhero__content h1) üstüne yazabilir → fotoğraf/dalga üstündeki krem/ink
+  başlıklar ve hero h1 istisna kalır. 20px altı başlıklar text-sunset-deep.
+*/
+@layer base {
+  h1, h2, h3 {
+    color: var(--color-sunset);
+  }
 }
 
 /*

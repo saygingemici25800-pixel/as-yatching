@@ -158,7 +158,7 @@ export default function BookingPanel({
           type="button"
           onClick={handleSubmit}
           disabled={pending}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-accent px-6 py-4 text-sm font-medium text-deep transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-wa px-6 py-4 text-sm font-medium text-white transition-colors hover:bg-wa-deep disabled:opacity-60"
         >
           <WhatsappIcon className="size-4" />
           {pending ? "Hazırlanıyor…" : "WhatsApp'tan talep gönder"}

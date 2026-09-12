@@ -26,7 +26,7 @@ export default async function MobileContactBar() {
           )}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 rounded-sm bg-cream px-3 py-3 text-sm font-medium text-navy transition-colors hover:bg-surface"
+          className="inline-flex items-center justify-center gap-2 rounded-sm bg-wa px-3 py-3 text-sm font-medium text-white transition-colors hover:bg-wa-deep"
         >
           <WhatsappIcon className="size-4" />
           WhatsApp

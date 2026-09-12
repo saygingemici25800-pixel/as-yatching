@@ -42,9 +42,9 @@ export default async function SiteFooter() {
                 href={whatsappUrl(info.whatsapp)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 hover:text-accent"
+                className="inline-flex items-center gap-2 rounded-sm bg-wa px-3 py-1.5 text-white transition-colors hover:bg-wa-deep"
               >
-                <WhatsappIcon className="size-4 text-accent" />
+                <WhatsappIcon className="size-4" />
                 WhatsApp&apos;tan yazın
               </a>
             </li>

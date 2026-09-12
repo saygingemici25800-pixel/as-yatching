@@ -77,7 +77,7 @@ export default function ContactForm({ whatsapp }: { whatsapp: string }) {
 
       <button
         type="submit"
-        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-sm bg-accent px-6 py-4 text-sm font-medium text-deep transition-opacity hover:opacity-90"
+        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-sm bg-wa px-6 py-4 text-sm font-medium text-white transition-colors hover:bg-wa-deep"
       >
         <WhatsappIcon className="size-4" />
         WhatsApp&apos;ta aç

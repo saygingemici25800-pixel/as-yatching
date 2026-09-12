@@ -201,7 +201,7 @@ export default async function ProductPage({ params }: PageProps) {
 
               <div className="mt-5 grid gap-5 sm:grid-cols-2">
                 <div className="rounded-sm border border-line bg-surface p-5">
-                  <h3 className="text-base font-medium">Dahil</h3>
+                  <h3 className="text-base font-medium text-sunset-deep">Dahil</h3>
                   <ul className="mt-3 space-y-2.5 text-sm">
                     {product.priceIncludes.included.map((item) => (
                       <li key={item} className="flex gap-2.5">
@@ -213,7 +213,7 @@ export default async function ProductPage({ params }: PageProps) {
                 </div>
 
                 <div className="rounded-sm border border-line bg-surface p-5">
-                  <h3 className="text-base font-medium">Dahil değil</h3>
+                  <h3 className="text-base font-medium text-sunset-deep">Dahil değil</h3>
                   <ul className="mt-3 space-y-2.5 text-sm text-ink-soft">
                     {product.priceIncludes.excluded.map((item) => (
                       <li key={item} className="flex gap-2.5">
