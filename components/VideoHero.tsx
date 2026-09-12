@@ -165,7 +165,7 @@ export default function VideoHero({ children }: { children: ReactNode }) {
             className="vhero__sound"
           >
             <span className="vhero__sound-dot" aria-hidden />
-            {soundOn ? "Müzik açık" : "Müziği aç"}
+            {soundOn ? "Ses açık" : "Sesi aç"}
           </button>
         </div>
 
