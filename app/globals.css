@@ -8,13 +8,14 @@
   --color-canvas: #1741a1; /* sayfa zemini (lacivert) */
   --color-surface: #fff4e0; /* kartlar, kutular, üst çubuk (krem) */
   --color-surface-2: #ffeccd; /* iç içe kutular, input zemini, hover (koyu krem) */
+  --color-cream: #fffbf3; /* üst çubuk ve mobil bar zemini (açık krem, opak) */
   --color-ink: #f4e091; /* başlık ve ana metin (sarı) */
   --color-ink-soft: #b3edeb; /* ikincil metin, açıklamalar (aqua) */
   --color-accent: #f2c488; /* eyebrow, ikon, ince çizgi, hover, seçili durum, birincil buton (peach) */
   --color-line: color-mix(in srgb, #b3edeb 25%, transparent);
   --color-deep: #1741a1; /* gölge ve karartmalar (text-shadow, radyal halo, veil) */
   --color-sky: #b3edeb; /* açık aqua (kullanılabilir yüzey tonu) */
-  --color-gold: #f3d98a; /* parlak kremsi altın — logo, menü, WhatsApp ve ses butonu */
+  --color-gold: #f6dd8f; /* parlak kremsi altın — logo, menü, WhatsApp ve ses butonu */
   --color-gold-deep: #d9b45a; /* altın hover / kenarlık */
   --color-gold-light: #f8ecc8; /* beyaz-altın: hero başlık, eyebrow ve ikincil buton */
   /* İllüstratif harita (components/ui/illustrated-map.tsx) */
@@ -56,17 +57,18 @@ h1, h2, h3 {
   kalır.
 */
 [class*="bg-surface"],
-[class*="bg-sky"] {
+[class*="bg-sky"],
+[class*="bg-cream"] {
   color: var(--color-deep);
   --color-line: color-mix(in srgb, var(--color-deep) 15%, transparent);
 }
-:is([class*="bg-surface"], [class*="bg-sky"]) .text-ink {
+:is([class*="bg-surface"], [class*="bg-sky"], [class*="bg-cream"]) .text-ink {
   color: var(--color-deep);
 }
-:is([class*="bg-surface"], [class*="bg-sky"]) :is(.text-ink-soft, .eyebrow) {
+:is([class*="bg-surface"], [class*="bg-sky"], [class*="bg-cream"]) :is(.text-ink-soft, .eyebrow) {
   color: color-mix(in srgb, var(--color-deep) 72%, transparent);
 }
-:is([class*="bg-surface"], [class*="bg-sky"]) .text-accent:not(.keep-accent) {
+:is([class*="bg-surface"], [class*="bg-sky"], [class*="bg-cream"]) .text-accent:not(.keep-accent) {
   color: var(--color-deep);
 }
 
@@ -108,6 +110,18 @@ h1, h2, h3 {
     0 1px 2px rgb(122 26 14 / 0.5),
     0 0 12px rgb(243 217 138 / 0.45);
 }
+/* Logo: parlak altın + krem zeminde okunması için sıcak koyu gölge ve parlama.
+   Unlayered: açık zemin kuralının .text-accent/.text-ink dönüşümlerinden etkilenmez. */
+.wordmark-gold {
+  color: var(--color-gold);
+  letter-spacing: 0.01em;
+  /* İlk gölge 0.6: krem (#fffbf3) zeminde 0.45 yumuşak kaldı */
+  text-shadow:
+    0 1px 1px rgb(122 26 14 / 0.6),
+    0 0 10px rgb(246 221 143 / 0.55),
+    0 0 22px rgb(246 221 143 / 0.3);
+}
+
 /* Beyaz-altın varyant (hero): aynı gölge, daha açık ton */
 @utility text-gold-light-glow {
   color: var(--color-gold-light);

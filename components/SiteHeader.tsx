@@ -16,9 +16,9 @@ export default async function SiteHeader() {
   const info = await getSiteInfo();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-sky">
+    <header className="sticky top-0 z-40 border-b border-line bg-cream">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
-        <Wordmark className="text-2xl sm:text-[1.75rem]" />
+        <Wordmark className="text-[1.75rem] sm:text-[2.125rem]" />
 
         <nav className="hidden md:block" aria-label="Ana menü">
           <ul className="flex items-center gap-6 text-sm lg:gap-8">

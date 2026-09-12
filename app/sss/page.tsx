@@ -50,7 +50,7 @@ export default async function FaqPage() {
         {/* Açılır kapanır bölümler <details> ile — JavaScript gerekmiyor */}
         <div className="mt-8 max-w-3xl divide-y divide-line overflow-hidden rounded-sm border border-line bg-surface">
           {faqs.map((faq) => (
-            <details key={faq.question} className="group px-5 py-4">
+            <details key={faq.question} className="group px-5 py-4 open:bg-surface-2">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-medium marker:hidden">
                 {faq.question}
                 <span
