@@ -83,6 +83,16 @@
   /* Başlık ve alt satır krem (surface): altın-beyaz + parlama çok parlak kaldı */
   color: var(--color-surface);
   will-change: transform, opacity;
+  /* Tam yükseklikli bu katman, çerçevedeki "Sesi aç" butonunun üstünü
+     kapatıyordu (clip-path çerçeveyi ayrı stacking context yapar, butonun
+     z-index'i orada kalır). Katman dokunmayı geçirir; içindeki bağlantı ve
+     butonlar almaya devam eder. */
+  pointer-events: none;
+}
+
+.vhero__content a,
+.vhero__content button {
+  pointer-events: auto;
 }
 
 @media (min-width: 640px) {
