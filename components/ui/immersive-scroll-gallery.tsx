@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, type ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
@@ -78,19 +79,23 @@ export default function ImmersiveScrollGallery({
         {images.slice(0, IMAGE_STYLES.length).map(({ src, alt }, index) => (
           <motion.div
             key={src}
-            style={{ scale, opacity: opacityImage }}
+            // will-change: ölçek animasyonu kompozitörde kalır, katman her
+            // karede yeniden rasterize edilmez (scroll jank ölçümünde
+            // 1 sn'lik GPU görevlerinin kaynağıydı)
+            style={{ scale, opacity: opacityImage, willChange: "transform, opacity" }}
             className="absolute top-0 flex h-full w-full items-center justify-center"
           >
             <div
               className={`relative overflow-hidden rounded-sm ${IMAGE_STYLES[index]}`}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              {/* next/image: kutu ~26vw; 4x ölçek görsel efekt olduğu için
+                  kaynak 640–828px yeterli, ham 1600px jpg yerine */}
+              <Image
                 src={src}
                 alt={alt}
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover"
+                fill
+                sizes="(min-width: 640px) 30vw, 50vw"
+                className="object-cover"
               />
             </div>
           </motion.div>

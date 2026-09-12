@@ -47,7 +47,7 @@ export default async function HomePage() {
         <p className="eyebrow">Fethiye Limanı · Günübirlik ve konaklamalı</p>
         <h1 className="mt-4 max-w-3xl text-[2.375rem] leading-[1.05] sm:text-5xl lg:text-[4rem]">
           <span className="block">Fethiye&apos;de tekne kiralama</span>
-          <span className="mt-2 block text-ink/75">
+          <span className="mt-2 block text-gold-light/80">
             Tarihi seçin, fiyatı ve müsaitliği görün
           </span>
         </h1>
@@ -72,7 +72,7 @@ export default async function HomePage() {
             )}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gold-glow hidden items-center justify-center gap-2 rounded-sm border border-gold px-6 py-3.5 text-sm font-medium transition-colors hover:border-gold-deep md:inline-flex"
+            className="text-gold-light-glow hidden items-center justify-center gap-2 rounded-sm border border-gold-light px-6 py-3.5 text-sm font-medium transition-colors hover:border-gold-deep md:inline-flex"
           >
             <WhatsappIcon className="size-4" />
             WhatsApp&apos;tan yazın

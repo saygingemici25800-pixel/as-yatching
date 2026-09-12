@@ -64,7 +64,7 @@ const FLING_VELOCITY = 350;
 type BayWithImage = Bay & { image: string };
 
 const ARROW_CLASS =
-  "absolute top-1/2 z-20 inline-flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-deep/40 text-ink backdrop-blur-sm transition-colors hover:border-accent focus-visible:border-accent sm:size-11";
+  "absolute top-1/2 z-20 inline-flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-deep/60 text-ink transition-colors hover:border-accent focus-visible:border-accent sm:size-11";
 
 const lerp = (a: number, b: number, t: number) => a * (1 - t) + b * t;
 const clamp = (v: number, min: number, max: number) =>

@@ -14,8 +14,10 @@ import { cn } from "@/lib/utils";
  *
  * `brightness` shader içinde rengi çarpar, `opacity` canvas'ı soluklaştırır.
  * En koyu ton alpha=0 → altındaki zemin rengi (--color-canvas) görünür.
- * Performans: canvas viewport'un yarı çözünürlüğünde çizilir (fbm 10 oktav),
- * sekme gizliyken ve hareket azaltma tercihinde animasyon durur.
+ * Performans: canvas viewport'un 0.4 çözünürlüğünde çizilir (fbm 6 oktav),
+ * ~30 fps ile sınırlı; sekme gizliyken, hareket azaltma tercihinde ve hero
+ * (opak video) viewport'tayken ("as:hero-visible" olayı) durur; sayfa
+ * kayarken dalga zamanı yarı hızda akar. Canvas `contain: strict`.
  *
  * CURSOR TRAIL (kaynak: cursor-trail örneği, three.js'siz uyarlama):
  *  - Viewport'un 1/4 çözünürlüğünde iki framebuffer (ping-pong, RGBA16F;
@@ -39,9 +41,13 @@ const TIME_FACTOR = 0.25;
 const BASE_SWIRL_STRENGTH = 1.2;
 const SWIRL_TIME_MULT = 5.0;
 const NOISE_SWIRL_FACTOR = 0.2;
-const FBM_OCTAVES = 10;
-/** Çizim çözünürlüğü çarpanı (1 = tam). Site geneli için 0.5 yeterli. */
-const RENDER_SCALE = 0.5;
+const FBM_OCTAVES = 6; // 10 → 6: scroll jank ölçümü sonrası
+/** Çizim çözünürlüğü çarpanı (1 = tam). Site geneli için 0.4 yeterli. */
+const RENDER_SCALE = 0.4;
+/** Dalga + trail pass kare sınırı (ms): ~30 fps */
+const FRAME_MIN_MS = 33;
+/** Sayfa kayarken dalga zaman hızı çarpanı (Lenis/scroll aktifken yavaşlar) */
+const SCROLL_TIME_SCALE = 0.5;
 
 /** Trail: dalga rengine karışma oranı (0 = kapalı, 1 = tam). Belli belirsiz için 0.35 */
 const TRAIL_STRENGTH = 0.35;
@@ -582,17 +588,23 @@ export const WavyBackground = ({
       setupTargets();
     };
 
-    const startTime = performance.now();
-    let last = startTime;
+    let last = performance.now();
+    let lastDraw = -Infinity;
     let raf = 0;
     let running = true;
+    let heroVisible = false;
+    let lastScroll = -Infinity;
+    // Dalga zamanı biriktirilir: scroll sırasında yarı hızda akar
+    let waveTime = 0;
 
     const draw = () => {
       resize();
       const now = performance.now();
       const dt = Math.min((now - last) * 0.001, 0.05); // duraklama sonrası sıçrama yok
       last = now;
-      const time = (now - startTime) * 0.001;
+      const scrolling = now - lastScroll < 150;
+      waveTime += dt * (scrolling ? SCROLL_TIME_SCALE : 1);
+      const time = waveTime;
 
       // --- Trail pass (1/4 çözünürlük, ping-pong) ---
       const trailActive = trailEnabled && trailProgram && inputRT && outputRT;
@@ -645,30 +657,46 @@ export const WavyBackground = ({
       }
     };
 
-    const loop = () => {
+    const loop = (now: number) => {
       if (!running) return;
-      draw();
       raf = requestAnimationFrame(loop);
+      // ~30 fps: kare sınırı altındaysa çizme
+      if (now - lastDraw < FRAME_MIN_MS) return;
+      lastDraw = now;
+      draw();
     };
 
-    const onVisibility = () => {
-      running = !document.hidden && !reduced;
+    const syncRunning = () => {
+      const next = !document.hidden && !reduced && !heroVisible;
+      if (next === running) return;
+      running = next;
       cancelAnimationFrame(raf);
       if (running) {
         last = performance.now();
         raf = requestAnimationFrame(loop);
       }
     };
+    const onVisibility = () => syncRunning();
+    const onHeroVisible = (e: Event) => {
+      heroVisible = Boolean((e as CustomEvent<boolean>).detail);
+      syncRunning();
+    };
+    const onScroll = () => {
+      lastScroll = performance.now();
+    };
 
     resize();
-    if (reduced) {
-      draw(); // tek kare, sabit
-    } else {
+    // Isınma: ilk kare (her iki pass) yüklemede çizilir; Metal/ANGLE pipeline
+    // derlemesi ilk scroll'a kalmasın. Hero görünürse sonra duraklar.
+    draw();
+    if (!reduced) {
       raf = requestAnimationFrame(loop);
     }
 
     window.addEventListener("resize", resize);
     document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("as:hero-visible", onHeroVisible);
+    window.addEventListener("scroll", onScroll, { passive: true });
     if (trailEnabled) {
       window.addEventListener("pointermove", onPointerMove, { passive: true });
     }
@@ -678,6 +706,8 @@ export const WavyBackground = ({
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("as:hero-visible", onHeroVisible);
+      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("pointermove", onPointerMove);
       destroyTargets();
       gl.deleteTexture(emptyTexture);
@@ -694,7 +724,7 @@ export const WavyBackground = ({
         ref={canvasRef}
         aria-hidden
         className={cn("pointer-events-none fixed inset-0 z-[1] h-full w-full", className)}
-        style={{ background: "transparent", opacity }}
+        style={{ background: "transparent", opacity, contain: "strict" }}
       />
     );
   }
@@ -705,7 +735,7 @@ export const WavyBackground = ({
         ref={canvasRef}
         aria-hidden
         className="absolute inset-0 h-full w-full"
-        style={{ background: "transparent", opacity }}
+        style={{ background: "transparent", opacity, contain: "strict" }}
       />
       <div className="relative z-10 flex h-full w-full items-center justify-center">
         {children}

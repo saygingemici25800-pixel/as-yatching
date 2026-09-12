@@ -55,7 +55,8 @@ export default function VideoHero({ children }: { children: ReactNode }) {
           trigger: rootRef.current,
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.6,
+          scrub: 0.3,
+          fastScrollEnd: true,
         },
       });
 
@@ -81,17 +82,23 @@ export default function VideoHero({ children }: { children: ReactNode }) {
     return () => ctx.revert();
   }, [motionOk]);
 
-  // Hero görünürken layout'taki ses rozeti gizlenir
+  // Hero görünürken layout'taki ses rozeti gizlenir; dalga zemini de
+  // (components/ui/wavy.tsx) aynı sinyalle duraklar — hero video opak,
+  // altındaki canvas boşuna çizmesin.
   useEffect(() => {
     if (!rootRef.current) return;
+    const emit = (visible: boolean) => {
+      setHeroVisible(visible);
+      window.dispatchEvent(new CustomEvent("as:hero-visible", { detail: visible }));
+    };
     const io = new IntersectionObserver(
-      ([entry]) => setHeroVisible(entry.isIntersecting),
-      { threshold: 0.15 },
+      ([entry]) => emit(entry.isIntersecting),
+      { threshold: 0 },
     );
     io.observe(rootRef.current);
     return () => {
       io.disconnect();
-      setHeroVisible(false);
+      emit(false);
     };
   }, [setHeroVisible]);
 

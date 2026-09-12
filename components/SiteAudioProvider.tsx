@@ -127,7 +127,7 @@ export default function SiteAudioProvider({
           type="button"
           onClick={toggle}
           aria-pressed
-          className="fixed bottom-[5.5rem] left-4 z-40 inline-flex items-center gap-2 rounded-full border border-line bg-surface/90 px-3 py-1.5 text-xs text-ink shadow-sm backdrop-blur-sm transition-colors hover:border-accent md:bottom-6 md:left-6"
+          className="fixed bottom-[5.5rem] left-4 z-40 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1.5 text-xs text-ink shadow-sm transition-colors hover:border-accent md:bottom-6 md:left-6"
         >
           <span
             className="size-2 rounded-full bg-accent shadow-[0_0_0_3px_rgb(176_141_63_/_0.3)]"

@@ -114,7 +114,7 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
         ref={ref}
         className={cn(
           "w-full overflow-hidden rounded-3xl border border-line p-5 shadow-sm",
-          "bg-surface/90 text-deep backdrop-blur-xl",
+          "bg-surface text-deep",
           className,
         )}
         {...props}

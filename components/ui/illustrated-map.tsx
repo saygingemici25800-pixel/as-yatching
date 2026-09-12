@@ -434,7 +434,7 @@ export default function IllustratedMap({
       </svg>
 
       {/* Krem liman etiketi — sağ üstte (sağ alt pusula ve güney rozetleri için boş kalır) */}
-      <span className="pointer-events-none absolute right-3 top-3 z-10 rounded-sm border border-line bg-surface/95 px-2.5 py-1 text-[0.6875rem] font-medium tracking-wide text-deep backdrop-blur-sm">
+      <span className="pointer-events-none absolute right-3 top-3 z-10 rounded-sm border border-line bg-surface px-2.5 py-1 text-[0.6875rem] font-medium tracking-wide text-deep">
         {harborLabel}
       </span>
     </div>

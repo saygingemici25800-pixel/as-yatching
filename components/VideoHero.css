@@ -80,7 +80,7 @@
   max-width: 72rem;
   margin: 0 auto;
   padding: 0 1rem calc(2.5rem + var(--vhero-safe-bottom));
-  color: var(--color-ink);
+  color: var(--color-gold-light);
   will-change: transform, opacity;
 }
 
@@ -90,8 +90,15 @@
   }
 }
 
+/* Beyaz-altın metinler + text-gold-glow gölgesi (eyebrow, başlık) */
 .vhero__content .eyebrow {
-  color: var(--color-accent);
+  color: var(--color-gold-light);
+}
+.vhero__content .eyebrow,
+.vhero__content h1 {
+  text-shadow:
+    0 1px 2px rgb(122 26 14 / 0.5),
+    0 0 12px rgb(243 217 138 / 0.45);
 }
 
 .vhero__sound {
@@ -109,8 +116,8 @@
   text-shadow: 0 1px 1px rgb(122 26 14 / 0.35);
   border: 1px solid color-mix(in srgb, var(--color-gold) 60%, transparent);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--color-deep) 35%, transparent);
-  backdrop-filter: blur(6px);
+  /* Blur yok (animasyonlu canvas üstünde pahalı); daha koyu düz zemin */
+  background: color-mix(in srgb, var(--color-deep) 60%, transparent);
   cursor: pointer;
   transition: border-color 0.2s;
 }

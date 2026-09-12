@@ -79,14 +79,14 @@ function ReviewCard({
   return (
     <>
       <motion.div
-        style={{ x, y, scale, opacity }}
+        style={{ x, y, scale, opacity, willChange: "transform, opacity" }}
         className="absolute inset-0 hidden items-center justify-center sm:flex"
       >
         {inner}
       </motion.div>
       {!hideOnMobile && (
         <motion.div
-          style={{ x: xm, y: ym, scale, opacity }}
+          style={{ x: xm, y: ym, scale, opacity, willChange: "transform, opacity" }}
           className="absolute inset-0 flex items-center justify-center sm:hidden"
         >
           {inner}
