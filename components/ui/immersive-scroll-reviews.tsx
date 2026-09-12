@@ -111,7 +111,7 @@ export default function ImmersiveScrollReviews({
 
   return (
     <div ref={container} className="relative h-[200vh]">
-      <div className="sticky top-[6.5625rem] h-[calc(100svh-6.5625rem)] overflow-hidden bg-canvas md:top-16 md:h-[calc(100svh-4rem)]">
+      <div className="sticky top-[6.5625rem] h-[calc(100svh-6.5625rem)] overflow-hidden md:top-16 md:h-[calc(100svh-4rem)]">
         {reviews.slice(0, TARGETS.length).map((review, i) => (
           <ReviewCard
             key={review.author + review.when}

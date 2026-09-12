@@ -342,7 +342,7 @@ export const WavyBackground = ({
       <canvas
         ref={canvasRef}
         aria-hidden
-        className={cn("pointer-events-none fixed inset-0 z-0 h-full w-full", className)}
+        className={cn("pointer-events-none fixed inset-0 z-[1] h-full w-full", className)}
         style={{ background: "transparent", opacity }}
       />
     );

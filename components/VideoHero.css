@@ -10,7 +10,8 @@
   --vhero-safe-bottom: 4.5rem; /* MobileContactBar */
   /* Kaydırma koşu alanı: sahne 100svh, geri kalan 75svh animasyon payı */
   height: 175svh;
-  background-color: var(--color-canvas);
+  /* Zemin şeffaf: çerçeve daralınca kenarlardan site geneli dalga görünür */
+  background-color: transparent;
 }
 
 @media (min-width: 768px) {

@@ -54,7 +54,7 @@ export default function ImmersiveScrollGallery({
 
   return (
     <div ref={container} className={`relative h-[200vh] ${className}`}>
-      <div className="sticky top-[6.5625rem] h-[calc(100svh-6.5625rem)] overflow-hidden bg-canvas md:top-16 md:h-[calc(100svh-4rem)]">
+      <div className="sticky top-[6.5625rem] h-[calc(100svh-6.5625rem)] overflow-hidden md:top-16 md:h-[calc(100svh-4rem)]">
         {images.slice(0, IMAGE_STYLES.length).map(({ src, alt }, index) => (
           <motion.div
             key={src}

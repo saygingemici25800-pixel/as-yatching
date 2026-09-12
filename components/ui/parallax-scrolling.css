@@ -7,7 +7,8 @@
 
 .parallax {
   position: relative;
-  background-color: var(--color-canvas);
+  /* Zemin şeffaf: site geneli dalga (components/ui/wavy.tsx) altından görünür */
+  background-color: transparent;
   /* Hero ile arada nefes payı — diğer bölümlerin pt-16 / sm:pt-24 ritmi */
   margin-top: 0;
 }
