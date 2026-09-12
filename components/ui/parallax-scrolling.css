@@ -9,7 +9,7 @@
   position: relative;
   background-color: var(--color-canvas);
   /* Hero ile arada nefes payı — diğer bölümlerin pt-16 / sm:pt-24 ritmi */
-  margin-top: 4rem;
+  margin-top: 0;
 }
 
 .parallax__header {

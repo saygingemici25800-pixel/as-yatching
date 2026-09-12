@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import AvailabilityCalendar from "@/components/AvailabilityCalendar";
 import DemoNotice from "@/components/DemoNotice";
 import GoogleRating from "@/components/GoogleRating";
 import ProductCard from "@/components/ProductCard";
+import VideoHero from "@/components/VideoHero";
 import { ParallaxScrolling } from "@/components/ui/parallax-scrolling";
 import { ArrowIcon, CheckIcon, WhatsappIcon } from "@/components/icons";
 import { whatsappUrl } from "@/lib/links";
@@ -42,72 +42,57 @@ export default async function HomePage() {
 
   const boat = boats[0];
   const blocks = boat ? await getAvailabilityBlocks(boat.slug) : [];
-  const heroImage = boat?.images[0] ?? "/placeholder/boat-01.jpg";
 
   return (
     <>
       <DemoNotice />
 
-      {/* ---------- Hero ---------- */}
-      <section className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 sm:pt-14">
-        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
-          <div>
-            <p className="eyebrow">Fethiye Limanı · Günübirlik ve konaklamalı</p>
-            <h1 className="mt-4 text-[2.125rem] leading-[1.1] sm:text-5xl lg:text-[3.5rem]">
-              <span className="block">Fethiye&apos;de tekne kiralama</span>
-              <span className="mt-2 block text-ink-soft">
-                Tarihi seçin, fiyatı ve müsaitliği görün
-              </span>
-            </h1>
+      {/* ---------- Hero (video) ---------- */}
+      <VideoHero>
+        <p className="eyebrow">Fethiye Limanı · Günübirlik ve konaklamalı</p>
+        <h1 className="mt-4 max-w-3xl text-[2.375rem] leading-[1.05] sm:text-5xl lg:text-[4rem]">
+          <span className="block">Fethiye&apos;de tekne kiralama</span>
+          <span className="mt-2 block text-white/75">
+            Tarihi seçin, fiyatı ve müsaitliği görün
+          </span>
+        </h1>
 
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-ink-soft">
-              Günübirlik özel kiralama, gün batımı turu, sabah kahvaltı turu ve
-              konaklamalı mavi tur. Fiyatlar sitede, tarihler takvimde.
-            </p>
+        <p className="mt-5 max-w-lg text-base leading-relaxed text-white/85">
+          Günübirlik özel kiralama, gün batımı turu, sabah kahvaltı turu ve
+          konaklamalı mavi tur. Fiyatlar sitede, tarihler takvimde.
+        </p>
 
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/turlar"
-                className="inline-flex items-center justify-center gap-2 rounded-sm bg-ink px-6 py-3.5 text-sm font-medium text-canvas transition-opacity hover:opacity-90"
-              >
-                Turları ve fiyatları gör
-                <ArrowIcon className="size-4" />
-              </Link>
-              <a
-                href={whatsappUrl(
-                  info.whatsapp,
-                  "Merhaba, tekne kiralama hakkında bilgi almak istiyorum.",
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-sm border border-line bg-surface px-6 py-3.5 text-sm font-medium text-ink transition-colors hover:border-accent"
-              >
-                <WhatsappIcon className="size-4 text-accent" />
-                WhatsApp&apos;tan yazın
-              </a>
-            </div>
-
-            <div className="mt-7">
-              <GoogleRating
-                rating={info.googleRating}
-                reviewCount={info.googleReviewCount}
-                profileUrl={info.googleProfileUrl}
-              />
-            </div>
-          </div>
-
-          <div className="relative aspect-[4/3] overflow-hidden rounded-sm border border-line lg:aspect-[5/4]">
-            <Image
-              src={heroImage}
-              alt="Fethiye Limanı'nda kiralanan tekne"
-              fill
-              sizes="(min-width: 1024px) 560px, 100vw"
-              priority
-              className="object-cover"
-            />
-          </div>
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+          <Link
+            href="/turlar"
+            className="inline-flex items-center justify-center gap-2 rounded-sm bg-canvas px-6 py-3.5 text-sm font-medium text-ink transition-opacity hover:opacity-90"
+          >
+            Turları ve fiyatları gör
+            <ArrowIcon className="size-4" />
+          </Link>
+          <a
+            href={whatsappUrl(
+              info.whatsapp,
+              "Merhaba, tekne kiralama hakkında bilgi almak istiyorum.",
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden items-center justify-center gap-2 rounded-sm border border-white/50 px-6 py-3.5 text-sm font-medium text-white transition-colors hover:border-white md:inline-flex"
+          >
+            <WhatsappIcon className="size-4" />
+            WhatsApp&apos;tan yazın
+          </a>
         </div>
-      </section>
+      </VideoHero>
+
+      {/* ---------- Google puanı (hero altı) ---------- */}
+      <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6">
+        <GoogleRating
+          rating={info.googleRating}
+          reviewCount={info.googleReviewCount}
+          profileUrl={info.googleProfileUrl}
+        />
+      </div>
 
       {/* ---------- Parallax ---------- */}
       <ParallaxScrolling

@@ -1,0 +1,188 @@
+/*
+  Video hero — renkler globals.css @theme değişkenlerinden.
+  Üst çubuk (SiteHeader) 4rem yüksekliğinde ve sticky; sahne onun altına yapışır.
+*/
+
+.vhero {
+  position: relative;
+  /* SiteHeader yüksekliği: mobilde ikinci nav satırı var */
+  --vhero-top: 6.5625rem;
+  --vhero-safe-bottom: 4.5rem; /* MobileContactBar */
+  /* Kaydırma koşu alanı: sahne 100svh, geri kalan 75svh animasyon payı */
+  height: 175svh;
+  background-color: var(--color-canvas);
+}
+
+@media (min-width: 768px) {
+  .vhero {
+    --vhero-top: 4rem;
+    --vhero-safe-bottom: 0rem;
+  }
+}
+
+.vhero__stage {
+  position: sticky;
+  top: var(--vhero-top);
+  height: calc(100svh - var(--vhero-top));
+  min-height: 32rem;
+  overflow: hidden;
+}
+
+.vhero__frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  clip-path: inset(0 0 0 0 round 0px);
+  background-color: var(--color-ink);
+}
+
+.vhero__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Dikey video: yat sağda, deniz solda — merkezden biraz sağa bak */
+  object-position: 62% 50%;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* Metin okunurluğu için sabit, hafif alt karartma */
+.vhero__veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to top,
+      rgb(28 42 56 / 0.72) 0%,
+      rgb(28 42 56 / 0.25) 45%,
+      rgb(28 42 56 / 0.05) 100%
+    );
+}
+
+/* Kaydırdıkça artan karartma (GSAP opacity 0 → 1) */
+.vhero__shade {
+  position: absolute;
+  inset: 0;
+  background-color: rgb(28 42 56 / 0.45);
+  opacity: 0;
+}
+
+.vhero__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1rem calc(2.5rem + var(--vhero-safe-bottom));
+  color: #fff;
+  will-change: transform, opacity;
+}
+
+@media (min-width: 640px) {
+  .vhero__content {
+    padding: 0 1.5rem calc(3.5rem + var(--vhero-safe-bottom));
+  }
+}
+
+.vhero__content .eyebrow {
+  color: #e6cf8d; /* altın, koyu zemin üstünde okunur ton */
+}
+
+.vhero__sound {
+  position: absolute;
+  z-index: 2;
+  right: 1rem;
+  bottom: calc(1rem + var(--vhero-safe-bottom));
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  border: 1px solid rgb(255 255 255 / 0.4);
+  border-radius: 999px;
+  background: rgb(28 42 56 / 0.35);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.vhero__sound:hover {
+  border-color: #fff;
+}
+
+@media (min-width: 640px) {
+  .vhero__sound {
+    right: 1.5rem;
+    bottom: 1.5rem;
+  }
+}
+
+.vhero__sound-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.5);
+}
+
+.vhero__sound[aria-pressed="true"] .vhero__sound-dot {
+  background: var(--color-accent);
+  box-shadow: 0 0 0 4px rgb(176 141 63 / 0.3);
+  animation: vhero-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes vhero-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgb(176 141 63 / 0.35); }
+  50%      { box-shadow: 0 0 0 7px rgb(176 141 63 / 0); }
+}
+
+/* Kaydırma ipucu: ince dikey çizgi, aşağı akar */
+.vhero__hint {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 1.25rem;
+  width: 1px;
+  height: 2.75rem;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.2);
+}
+
+.vhero__hint span {
+  display: block;
+  width: 100%;
+  height: 40%;
+  background: #fff;
+  animation: vhero-drop 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes vhero-drop {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(260%); }
+}
+
+@media (max-width: 639px) {
+  .vhero__hint {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vhero {
+    height: auto;
+  }
+  .vhero__stage {
+    position: relative;
+    top: 0;
+  }
+  .vhero__hint,
+  .vhero__sound-dot {
+    animation: none;
+  }
+}
