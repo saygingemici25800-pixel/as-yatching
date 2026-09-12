@@ -16,6 +16,12 @@ import { cn } from "@/lib/utils";
  * En koyu ton alpha=0 → altındaki zemin rengi (--color-canvas) görünür.
  * Performans: canvas viewport'un yarı çözünürlüğünde çizilir (fbm 10 oktav),
  * sekme gizliyken ve hareket azaltma tercihinde animasyon durur.
+ *
+ * Cursor etkileşimi: fare gezerken o noktada dalgalar su gibi halkalanır
+ * (uMouse + uMouseStrength). Konum her karede hedefe lerp'lenir, güç hareket
+ * kesilince ~1,5 sn'de söner. Yalnızca fare (pointerType "mouse"); dokunmatik
+ * cihazlarda ve hareket azaltma tercihinde tamamen kapalı. Ayrı döngü yok,
+ * mevcut render döngüsü kullanılır; pointermove yalnızca ref yazar.
  */
 
 // ---------------------------------------------------------------- CONFIG
@@ -67,6 +73,10 @@ out vec4 outColor;
 uniform vec2 uResolution;
 uniform float uTime;
 uniform float uBrightness;
+/** Cursor, 0–1 normalize (y aşağıdan yukarı) */
+uniform vec2 uMouse;
+/** 0 = etki yok, 1 = tam halka */
+uniform float uMouseStrength;
 
 #define NUM_COLORS 20
 
@@ -143,6 +153,14 @@ void main() {
                         * (1.0 - smoothstep(0.0, 1.0, r));
   angle += swirlStrength * sin(uTime + r * float(${SWIRL_TIME_MULT}));
   uv = vec2(cos(angle), sin(angle)) * r;
+
+  // Cursor'a uzaklığa göre yerel dalga çukuru: su gibi halkalanır, uzakta söner
+  vec2 m = (uMouse * 2.0 - 1.0);
+  m.x *= uResolution.x / uResolution.y;
+  m *= float(${ZOOM_FACTOR});
+  float d = length(uv - m);
+  float ripple = uMouseStrength * exp(-d * 6.0) * sin(d * 30.0 - uTime * 6.0);
+  uv += normalize(uv - m + 1e-4) * ripple * 0.08;
 
   float n = fbm(uv);
   n += float(${NOISE_SWIRL_FACTOR}) * sin(t + n * 3.0);
@@ -276,9 +294,47 @@ export const WavyBackground = ({
     const uResolutionLoc = gl.getUniformLocation(program, "uResolution");
     const uTimeLoc = gl.getUniformLocation(program, "uTime");
     const uBrightnessLoc = gl.getUniformLocation(program, "uBrightness");
+    const uMouseLoc = gl.getUniformLocation(program, "uMouse");
+    const uMouseStrengthLoc = gl.getUniformLocation(program, "uMouseStrength");
     gl.uniform1f(uBrightnessLoc, brightness);
+    gl.uniform2f(uMouseLoc, 0.5, 0.5);
+    gl.uniform1f(uMouseStrengthLoc, 0);
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Dokunmatik / kaba işaretçi: cursor etkileşimi hiç kurulmaz
+    const coarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+    const mouseEnabled = !reduced && !coarse;
+
+    // Cursor durumu — state değil ref benzeri yerel değişkenler (re-render yok)
+    const mouse = {
+      targetX: 0.5,
+      targetY: 0.5,
+      x: 0.5,
+      y: 0.5,
+      strength: 0,
+      lastMove: -Infinity,
+    };
+    const MOUSE_LERP = 0.08;
+    const MOVING_WINDOW_MS = 120;
+    const STRENGTH_DECAY = 0.97; // kare başına; ~1,5 sn'de sıfıra yaklaşır
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
+      mouse.targetX = e.clientX / window.innerWidth;
+      mouse.targetY = 1 - e.clientY / window.innerHeight; // y aşağıdan yukarı
+      mouse.lastMove = performance.now();
+    };
+
+    const updateMouse = (now: number) => {
+      mouse.x += (mouse.targetX - mouse.x) * MOUSE_LERP;
+      mouse.y += (mouse.targetY - mouse.y) * MOUSE_LERP;
+      if (now - mouse.lastMove < MOVING_WINDOW_MS) {
+        mouse.strength += (1 - mouse.strength) * 0.15;
+      } else {
+        mouse.strength *= STRENGTH_DECAY;
+        if (mouse.strength < 0.001) mouse.strength = 0;
+      }
+    };
 
     const resize = () => {
       const w = Math.max(1, Math.floor(window.innerWidth * RENDER_SCALE));
@@ -296,11 +352,15 @@ export const WavyBackground = ({
 
     const draw = () => {
       resize();
+      const now = performance.now();
+      if (mouseEnabled) updateMouse(now);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.useProgram(program);
       gl.bindVertexArray(vao);
       gl.uniform2f(uResolutionLoc, canvas.width, canvas.height);
-      gl.uniform1f(uTimeLoc, (performance.now() - startTime) * 0.001);
+      gl.uniform1f(uTimeLoc, (now - startTime) * 0.001);
+      gl.uniform2f(uMouseLoc, mouse.x, mouse.y);
+      gl.uniform1f(uMouseStrengthLoc, mouse.strength);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
     };
 
@@ -325,12 +385,16 @@ export const WavyBackground = ({
 
     window.addEventListener("resize", resize);
     document.addEventListener("visibilitychange", onVisibility);
+    if (mouseEnabled) {
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
+    }
 
     return () => {
       running = false;
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("pointermove", onPointerMove);
       gl.deleteProgram(program);
       gl.deleteBuffer(vbo);
       gl.deleteVertexArray(vao);
