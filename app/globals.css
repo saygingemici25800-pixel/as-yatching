@@ -114,6 +114,14 @@ h1, h2, h3 {
   --gold-box-shadow: 0 0 12px rgb(246 221 143 / 0.45);
 }
 /* Altın metin (hover:text-gold-deep gibi varyantlar üstüne yazabilir) */
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @utility gold-glow {
   color: var(--color-gold);
   text-shadow: var(--gold-text-shadow);

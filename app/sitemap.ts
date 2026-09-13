@@ -20,6 +20,7 @@ const STATIC: {
   { href: "/", changeFrequency: "weekly", priority: 1 },
   { href: "/turlar", changeFrequency: "weekly", priority: 0.9 },
   { href: "/tekne", changeFrequency: "monthly", priority: 0.7 },
+  { href: "/hakkimizda", changeFrequency: "monthly", priority: 0.6 },
   { href: "/iletisim", changeFrequency: "yearly", priority: 0.6 },
   { href: "/sss", changeFrequency: "monthly", priority: 0.6 },
 ];

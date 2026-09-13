@@ -189,3 +189,26 @@ export type Seed<T> = T extends string
     : T extends object
       ? { [K in keyof T]: Seed<T[K]> }
       : T;
+
+/**
+ * Hakkımızda / Kaptan sayfası. Tüm alanlar işletmeden gelecek;
+ * bilinmeyen değer TODO/null/boş dizi olarak durur, arayüzde
+ * "Bilgi bekleniyor" gösterilir. UYDURULMAZ.
+ */
+export interface AboutInfo {
+  /** TODO: kaptanın adı */
+  captainName: string;
+  /** TODO: ilk yıl (örn. 2008) — deneyim süresi buradan hesaplanır */
+  experienceSince: number | null;
+  /** TODO: ehliyet / belgeler (ör. Yat Kaptanı) — boşsa "Bilgi bekleniyor" */
+  licenses: string[];
+  /** TODO: konuşulan diller — boşsa "Bilgi bekleniyor" */
+  languages: string[];
+  /** TODO: kaptanın / işletmenin hikâyesi (birkaç paragraf) */
+  story: string;
+  /** TODO: mürettebat notu (kaç kişi, kim) */
+  crewNote: string;
+  /** /public altındaki yol; yer tutucu iken /placeholder/kaptan.jpg */
+  image: string;
+  isPlaceholder: boolean;
+}

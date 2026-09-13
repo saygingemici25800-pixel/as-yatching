@@ -1,5 +1,6 @@
 import { l } from "@/lib/localize";
 import type {
+  AboutInfo,
   GoogleReview,
   AvailabilityBlock,
   Bay,
@@ -61,6 +62,22 @@ export const siteInfo: Seed<SiteInfo> = {
       "Бетонный причал находится на набережной порта.",
     ),
   },
+};
+
+/**
+ * HAKKIMIZDA / KAPTAN — tamamı işletmeden alınacak (Bölüm 10, soru 11).
+ * Hiçbir alan uydurulmadı; boş/TODO değerler arayüzde "Bilgi bekleniyor".
+ * Google yorumlarında geçen isimler buraya TAŞINMAZ; teyit gelince yazılır.
+ */
+export const about: Seed<AboutInfo> = {
+  captainName: l("TODO: Kaptan adı", "TODO: Captain's name", "TODO: Имя капитана"),
+  experienceSince: null, // TODO: kaç yıldır / hangi yıldan beri
+  licenses: [], // TODO: ehliyet ve belgeler
+  languages: [], // TODO: konuşulan diller
+  story: "", // TODO: kaptanın / işletmenin hikâyesi
+  crewNote: "", // TODO: mürettebat
+  image: "/placeholder/kaptan.jpg",
+  isPlaceholder: true,
 };
 
 export const boats: Seed<Boat>[] = [

@@ -1,5 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import {
+  about,
   availabilityBlocks,
   bays,
   boats,
@@ -12,6 +13,7 @@ import {
 } from "@/data/seed";
 import { localize } from "./localize";
 import type {
+  AboutInfo,
   AvailabilityBlock,
   Bay,
   Boat,
@@ -48,6 +50,10 @@ async function currentLocale(): Promise<Locale> {
 
 export async function getSiteInfo(): Promise<SiteInfo> {
   return localize<SiteInfo>(siteInfo, await currentLocale());
+}
+
+export async function getAbout(): Promise<AboutInfo> {
+  return localize<AboutInfo>(about, await currentLocale());
 }
 
 export async function getBoats(): Promise<Boat[]> {

@@ -9,9 +9,13 @@ import { telUrl, whatsappUrl } from "@/lib/links";
 import { getSiteInfo } from "@/lib/repository";
 
 /** Menü en fazla 6 öğe; hediye çeki ve misafir bilgisi footer'da */
-const NAV: { href: StaticPathname; key: "tours" | "boat" | "faq" | "contact" }[] = [
+const NAV: {
+  href: StaticPathname;
+  key: "tours" | "boat" | "about" | "faq" | "contact";
+}[] = [
   { href: "/turlar", key: "tours" },
   { href: "/tekne", key: "boat" },
+  { href: "/hakkimizda", key: "about" },
   { href: "/sss", key: "faq" },
   { href: "/iletisim", key: "contact" },
 ];
@@ -67,15 +71,16 @@ export default async function SiteHeader() {
         </div>
       </div>
 
-      {/* Mobil menü: hamburger yok, bağlantılar tek satıra sığıyor; dil seçici sağda */}
+      {/* Mobil menü: hamburger yok; bağlantı satırı yatay kayar (375px'te
+          hepsi sığmıyor), dil seçici sağda sabit */}
       <nav
         className="border-t border-cream/20 md:hidden"
         aria-label={t("mobileMenu")}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5 text-sm">
-          <ul className="flex items-center gap-5">
+          <ul className="scrollbar-hide -my-1 flex min-w-0 flex-1 items-center gap-5 overflow-x-auto whitespace-nowrap py-1">
             {NAV.map((item) => (
-              <li key={item.href}>
+              <li key={item.href} className="shrink-0">
                 <Link
                   href={item.href}
                   className="nav-shadow text-gold hover:text-gold-deep"

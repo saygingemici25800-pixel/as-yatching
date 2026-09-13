@@ -16,6 +16,7 @@ import { getSiteInfo } from "@/lib/repository";
 const LINKS: { href: StaticPathname; key: string; ns: "nav" | "common" | "footer" }[] = [
   { href: "/turlar", key: "toursAndPrices", ns: "common" },
   { href: "/tekne", key: "boat", ns: "nav" },
+  { href: "/hakkimizda", key: "about", ns: "nav" },
   { href: "/sss", key: "faqLong", ns: "footer" },
   { href: "/iletisim", key: "contact", ns: "nav" },
 ];
