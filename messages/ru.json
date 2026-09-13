@@ -97,7 +97,9 @@
     "title": "{rating} из 5 по {count} отзывам в Google",
     "note": "Отзывы приведены дословно из Google Business Profile на языке оригинала; все отзывы можно прочитать там.",
     "badge": "{count} отзывов в Google",
-    "srText": "{rating} из 5 по {count} отзывам в Google."
+    "srText": "{rating} из 5 по {count} отзывам в Google.",
+    "profileCardText": "Рейтинг и число отзывов — из Google Business Profile; мы не пишем отзывы на сайте, все их можно прочитать в Google.",
+    "profileCardCta": "Открыть профиль в Google"
   },
   "departure": {
     "eyebrow": "Место отправления",

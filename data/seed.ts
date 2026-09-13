@@ -565,6 +565,10 @@ export const faqs: Seed<Faq>[] = [
  * ÇEVRİLMEZ (her dilde orijinal Türkçe metin gösterilir).
  * Uzun yorumlar site için kısaltıldı; kısaltma "…" ile işaretli.
  * Yalnızca Google'ın göreli tarih etiketi ("3 ay önce") çevrilir.
+ *
+ * Dizi BOŞ bırakılabilir: yorumlar bölümü o zaman yalnızca 5.0/33 rozetini
+ * ve Google profiline giden kartı gösterir (components/GoogleReviews.tsx).
+ * Yeni yorum eklenecekse yalnızca profilden birebir kopyalanır.
  */
 export const googleReviews: Seed<GoogleReview>[] = [
   {

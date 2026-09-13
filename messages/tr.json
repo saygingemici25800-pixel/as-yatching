@@ -97,7 +97,9 @@
     "title": "{count} Google yorumunda 5 üzerinden {rating}",
     "note": "Yorumlar Google Business Profile'dan birebir alındı; tamamını orada okuyabilirsiniz.",
     "badge": "{count} Google yorumu",
-    "srText": "Google üzerinde {count} değerlendirmede {rating} üzerinden 5 puan."
+    "srText": "Google üzerinde {count} değerlendirmede {rating} üzerinden 5 puan.",
+    "profileCardText": "Puan ve yorum sayısı Google Business Profile'dan; yorumları sitede uydurmuyoruz, tamamını Google'da okuyabilirsiniz.",
+    "profileCardCta": "Google profilini açın"
   },
   "departure": {
     "eyebrow": "Kalkış noktası",

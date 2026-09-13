@@ -97,7 +97,9 @@
     "title": "{rating} out of 5 across {count} Google reviews",
     "note": "Reviews are quoted verbatim from Google Business Profile, in their original language; you can read them all there.",
     "badge": "{count} Google reviews",
-    "srText": "{rating} out of 5 across {count} reviews on Google."
+    "srText": "{rating} out of 5 across {count} reviews on Google.",
+    "profileCardText": "The rating and review count come from Google Business Profile; we don't write reviews on the site, you can read them all on Google.",
+    "profileCardCta": "Open the Google profile"
   },
   "departure": {
     "eyebrow": "Departure point",
