@@ -173,3 +173,57 @@ h1, h2, h3 {
     padding-bottom: 4.5rem;
   }
 }
+
+/* ==========================================================================
+   SEYİR DEFTERİ — mantar pano ve polaroid kartlar
+   --------------------------------------------------------------------------
+   Pano dokusu: kahve-krem katmanlı radial gradient + ince SVG gürültü
+   (data URI, ~0,3 KB — ayrı istek yok). Kartlar deterministik açıyla eğik;
+   hover/odakta düzleşip öne gelir. Hareket azaltma tercihinde eğim yok.
+   ========================================================================== */
+.logbook-board {
+  background-color: #b98c50;
+  background-image:
+    radial-gradient(circle at 18% 22%, rgb(255 255 255 / 0.16), transparent 42%),
+    radial-gradient(circle at 78% 12%, rgb(90 58 24 / 0.22), transparent 46%),
+    radial-gradient(circle at 62% 84%, rgb(120 78 34 / 0.26), transparent 52%),
+    radial-gradient(circle at 30% 68%, rgb(255 226 178 / 0.14), transparent 44%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.38'/%3E%3C/svg%3E");
+  background-blend-mode: normal, normal, normal, normal, multiply;
+  box-shadow: inset 0 0 60px rgb(74 45 16 / 0.45);
+}
+
+.logbook-card {
+  transform: rotate(var(--tilt, 0deg));
+  transition:
+    transform 0.28s ease,
+    z-index 0s;
+}
+
+/* Kartlar hafif üst üste binsin (grid boşluğunu kısmen yer) */
+.logbook-card:nth-child(even) {
+  margin-top: 0.75rem;
+}
+
+.logbook-card:hover,
+.logbook-card:focus-within {
+  transform: rotate(0deg) translateY(-4px) scale(1.03);
+  z-index: 20;
+}
+
+/* El yazısı (Caveat) — yalnızca pano içinde */
+.logbook-hand {
+  font-family: var(--font-hand), "Caveat", cursive;
+  letter-spacing: 0.01em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logbook-card {
+    transform: none;
+    transition: none;
+  }
+  .logbook-card:hover,
+  .logbook-card:focus-within {
+    transform: none;
+  }
+}

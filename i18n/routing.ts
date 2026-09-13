@@ -43,6 +43,13 @@ export const routing = defineRouting({
       en: "/guest-info",
       ru: "/dlya-gostey",
     },
+    // Seyir Defteri yükleme — yalnızca kaptanın verdiği bağlantıyla
+    // ulaşılır; menüde, footer'da ve sitemap'te YOK, her zaman noindex.
+    "/seyir-defteri/yukle": {
+      tr: "/seyir-defteri/yukle",
+      en: "/logbook/upload",
+      ru: "/zhurnal/zagruzka",
+    },
   },
 });
 

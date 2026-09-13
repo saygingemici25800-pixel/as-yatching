@@ -5,6 +5,7 @@ import BayCoverflow from "@/components/ui/bay-coverflow";
 import DemoNotice from "@/components/DemoNotice";
 import DeparturePoint from "@/components/DeparturePoint";
 import GoogleReviews from "@/components/GoogleReviews";
+import Logbook from "@/components/Logbook";
 import PhotoStrip from "@/components/PhotoStrip";
 import ProductCard from "@/components/ProductCard";
 import VideoHero from "@/components/VideoHero";
@@ -17,6 +18,7 @@ import {
   getBays,
   getBoats,
   getFaqs,
+  getApprovedLogbookEntries,
   getFeaturedProducts,
   getGoogleReviews,
   getMapPoints,
@@ -29,6 +31,13 @@ import type { Locale } from "@/lib/types";
 
 type PageProps = { params: Promise<{ locale: string }> };
 
+/**
+ * Seyir Defteri panosu onaylı kayıtlardan besleniyor; 60 saniyede bir
+ * yenilenir. Onay/ret anında `revalidatePath("/")` çağrıldığı için kaptan
+ * onayladığında pano beklemeden güncellenir.
+ */
+export const revalidate = 60;
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   return { alternates: localizedAlternates("/", locale as Locale) };
@@ -38,21 +47,36 @@ export default async function HomePage({ params }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [info, featured, products, boats, faqs, reviews, bays, mapPoints, routes, t, th, tw] =
-    await Promise.all([
-      getSiteInfo(),
-      getFeaturedProducts(),
-      getProducts(),
-      getBoats(),
-      getFaqs(),
-      getGoogleReviews(),
-      getBays(),
-      getMapPoints(),
-      getRoutes(),
-      getTranslations("home"),
-      getTranslations("hero"),
-      getTranslations("whatsapp"),
-    ]);
+  const [
+    info,
+    featured,
+    products,
+    boats,
+    faqs,
+    reviews,
+    bays,
+    mapPoints,
+    routes,
+    logbookEntries,
+    t,
+    th,
+    tw,
+  ] = await Promise.all([
+    getSiteInfo(),
+    getFeaturedProducts(),
+    getProducts(),
+    getBoats(),
+    getFaqs(),
+    getGoogleReviews(),
+    getBays(),
+    getMapPoints(),
+    getRoutes(),
+    // Supabase yoksa boş dizi döner; pano "ilk anıyı sen bırak" gösterir
+    getApprovedLogbookEntries(),
+    getTranslations("home"),
+    getTranslations("hero"),
+    getTranslations("whatsapp"),
+  ]);
 
   const boat = boats[0];
   const blocks = boat ? await getAvailabilityBlocks(boat.slug) : [];
@@ -178,6 +202,12 @@ export default async function HomePage({ params }: PageProps) {
         info={info}
         className="relative z-10 -mt-[115vh]"
       />
+
+      {/* ---------- Seyir Defteri (misafir panosu) ----------
+          GoogleReviews'ın hemen altında, DeparturePoint'ten önce. Yorum
+          sahnesi -115vh ile galeriye bindiriliyor; pano normal akışta,
+          mevcut scroll kurgusuna dokunulmadı. */}
+      <Logbook entries={logbookEntries} />
 
       {/* ---------- Nereden kalkıyoruz? (harita) ---------- */}
       <DeparturePoint info={info} points={mapPoints} bays={bays} routes={routes} />

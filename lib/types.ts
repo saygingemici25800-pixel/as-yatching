@@ -293,3 +293,35 @@ export interface GuestInfo {
   /** TODO: iptal ve iade koşulları */
   cancellation: string;
 }
+
+/* ------------------------------------------------------------------
+ * SEYİR DEFTERİ — misafir fotoğraf panosu
+ * ------------------------------------------------------------------ */
+export type LogbookStatus = "pending" | "approved" | "rejected";
+
+/** Panoda gösterilen onaylı kayıt (sayfaların gördüğü tip) */
+export interface LogbookEntry {
+  id: string;
+  /** İmzalı (7 gün) veya public URL — Storage yolu sayfaya sızmaz */
+  photoUrl: string;
+  /** ≤140 karakter, düz metin (HTML olarak render EDİLMEZ) */
+  note: string;
+  /** ≤40 karakter; boşsa arayüz "Misafirimiz" gösterir */
+  name: string;
+  /** ISO tarih: 2026-09-13 */
+  tripDate: string;
+  createdAt: string;
+}
+
+/** Yeni kayıt girdisi — fotoğraf sunucuda yeniden encode edilmiş webp */
+export interface LogbookSubmission {
+  photo: Buffer;
+  note: string;
+  name: string;
+  tripDate: string;
+  ipHash: string;
+}
+
+export type LogbookSubmitResult =
+  | { ok: true }
+  | { ok: false; error: string };

@@ -1,4 +1,13 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { sendApprovalEmail } from "./logbook-mail";
+import {
+  createEntry,
+  decideEntry,
+  fetchApprovedEntries,
+  hashIp,
+  type CreateEntryInput,
+  type DecisionResult,
+} from "./logbook-server";
 import {
   about,
   availabilityBlocks,
@@ -26,6 +35,9 @@ import type {
   GoogleReview,
   GuestInfo,
   Locale,
+  LogbookEntry,
+  LogbookStatus,
+  LogbookSubmitResult,
   MapPoint,
   Product,
   RouteGuide,
@@ -202,4 +214,72 @@ export async function createBookingRequest(
     ok: true,
     whatsappUrl: `https://wa.me/${info.whatsapp}?text=${encodeURIComponent(message)}`,
   };
+}
+
+/* ==================================================================
+ * SEYİR DEFTERİ
+ * ------------------------------------------------------------------
+ * Supabase'e yalnızca `lib/logbook-server.ts` dokunur; sayfalar ve API
+ * route'ları buradan geçer (CLAUDE.md kural 4).
+ *
+ * Supabase yapılandırılmamışsa: okuma boş dizi, yazma "yapılandırılmadı"
+ * hatası döner. Site hiçbir durumda kırılmaz.
+ * ================================================================== */
+
+/** Panoda gösterilecek onaylı kayıtlar (en yeni önce, imzalı URL'lerle) */
+export async function getApprovedLogbookEntries(
+  limit?: number,
+): Promise<LogbookEntry[]> {
+  return fetchApprovedEntries(limit);
+}
+
+export interface LogbookRequest {
+  bytes: Buffer;
+  mime: string;
+  note: string;
+  name: string;
+  tripDate: string;
+  /** Ham IP — burada özete çevrilir, asla saklanmaz */
+  ip: string;
+}
+
+/**
+ * Yeni kayıt: doğrula, EXIF'siz webp olarak depola, `pending` yaz ve
+ * kaptana onay e-postası gönder. E-posta gönderilemese bile kayıt durur;
+ * kaptan sonradan onaylayabilir.
+ *
+ * Hata metinleri çağıran tarafa anahtar olarak döner (çeviri sayfada).
+ */
+export async function createLogbookEntry(
+  request: LogbookRequest,
+): Promise<LogbookSubmitResult> {
+  const input: CreateEntryInput = {
+    bytes: request.bytes,
+    mime: request.mime,
+    note: request.note,
+    name: request.name,
+    tripDate: request.tripDate,
+    ipHash: hashIp(request.ip),
+  };
+
+  const result = await createEntry(input);
+  if (!result.ok) return { ok: false, error: result.reason };
+
+  await sendApprovalEmail({
+    token: result.token,
+    name: result.entry.name,
+    note: result.entry.note,
+    tripDate: result.entry.tripDate,
+    photo: result.photo,
+  });
+
+  return { ok: true };
+}
+
+/** E-postadaki onay/ret bağlantısının işlediği yer */
+export async function setLogbookStatus(
+  token: string,
+  status: Extract<LogbookStatus, "approved" | "rejected">,
+): Promise<DecisionResult> {
+  return decideEntry(token, status);
 }

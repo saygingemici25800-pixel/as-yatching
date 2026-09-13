@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Caveat, Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
@@ -39,6 +39,15 @@ const caviar = localFont({
 const inter = Inter({
   subsets: ["latin", "latin-ext", "cyrillic"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+// El yazısı — yalnızca Seyir Defteri panosundaki not ve tarihlerde
+// (components/Logbook.tsx → .logbook-hand). Kiril alt kümesi RU için.
+const caveat = Caveat({
+  subsets: ["latin", "latin-ext", "cyrillic"],
+  weight: ["400", "600"],
+  variable: "--font-hand",
   display: "swap",
 });
 
@@ -122,7 +131,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   const showDraft = locale !== routing.defaultLocale && !ALLOW_INDEXING;
 
   return (
-    <html lang={locale} className={`${caviar.variable} ${inter.variable}`}>
+    <html lang={locale} className={`${caviar.variable} ${inter.variable} ${caveat.variable}`}>
       <body className="antialiased">
         {/*
           LocalBusiness yapısal verisi — her sayfada bulunur.
