@@ -24,6 +24,7 @@ const STATIC: {
   { href: "/hakkimizda", changeFrequency: "monthly", priority: 0.6 },
   { href: "/iletisim", changeFrequency: "yearly", priority: 0.6 },
   { href: "/sss", changeFrequency: "monthly", priority: 0.6 },
+  { href: "/hediye-ceki", changeFrequency: "monthly", priority: 0.5 },
 ];
 
 function entries(

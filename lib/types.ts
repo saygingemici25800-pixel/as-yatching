@@ -240,3 +240,22 @@ export interface RouteGuide {
   image: string | null;
   imageThumb: string | null;
 }
+
+/**
+ * HEDİYE ÇEKİ — /hediye-ceki. Satın alma yok; talep WhatsApp'a gider.
+ * Tutarlar demo (isSamplePrice: true → ÖRNEK rozeti). Geçerlilik süresi ve
+ * teslim biçimi işletmeden gelecek (null/TODO → "Bilgi bekleniyor").
+ */
+export interface GiftVoucherInfo {
+  /** Hazır tutarlar (TL) — demo */
+  amounts: number[];
+  currency: "TRY";
+  /** Serbest tutar alt/üst sınırı (TL) — demo */
+  minAmount: number;
+  maxAmount: number;
+  isSamplePrice: boolean;
+  /** TODO: geçerlilik süresi (ay) — bilinmiyorsa null */
+  validityMonths: number | null;
+  /** TODO: teslim biçimi (PDF / WhatsApp / basılı) — bilinmiyorsa "" */
+  deliveryNote: string;
+}

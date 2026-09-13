@@ -5,6 +5,7 @@ import {
   bays,
   boats,
   faqs,
+  giftVoucher,
   googleReviews,
   mapPoints,
   products,
@@ -20,6 +21,7 @@ import type {
   Boat,
   BookingRequest,
   Faq,
+  GiftVoucherInfo,
   GoogleReview,
   Locale,
   MapPoint,
@@ -56,6 +58,10 @@ export async function getSiteInfo(): Promise<SiteInfo> {
 
 export async function getAbout(): Promise<AboutInfo> {
   return localize<AboutInfo>(about, await currentLocale());
+}
+
+export async function getGiftVoucher(): Promise<GiftVoucherInfo> {
+  return localize<GiftVoucherInfo>(giftVoucher, await currentLocale());
 }
 
 export async function getBoats(): Promise<Boat[]> {

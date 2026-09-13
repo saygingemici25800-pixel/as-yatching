@@ -1,6 +1,7 @@
 import { l } from "@/lib/localize";
 import type {
   AboutInfo,
+  GiftVoucherInfo,
   GoogleReview,
   AvailabilityBlock,
   Bay,
@@ -79,6 +80,20 @@ export const about: Seed<AboutInfo> = {
   crewNote: "", // TODO: mürettebat
   image: "/placeholder/kaptan.jpg",
   isPlaceholder: true,
+};
+
+/**
+ * HEDİYE ÇEKİ — tutarlar ÖRNEK (isSamplePrice). Geçerlilik ve teslim
+ * biçimi işletmeden alınacak; uydurulmadı.
+ */
+export const giftVoucher: Seed<GiftVoucherInfo> = {
+  amounts: [5000, 10000, 20000], // TODO: gerçek tutarlar
+  currency: "TRY",
+  minAmount: 1000, // TODO
+  maxAmount: 50000, // TODO
+  isSamplePrice: true,
+  validityMonths: null, // TODO: geçerlilik süresi
+  deliveryNote: "", // TODO: PDF / WhatsApp / basılı
 };
 
 export const boats: Seed<Boat>[] = [
