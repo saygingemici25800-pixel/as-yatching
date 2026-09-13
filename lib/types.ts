@@ -212,3 +212,31 @@ export interface AboutInfo {
   image: string;
   isPlaceholder: boolean;
 }
+
+/**
+ * ROTA / KOY REHBERİ — /rotalar ve /rotalar/[koy] sayfaları.
+ * (`TourRoute` haritadaki tur çizgileridir; bu tip koy rehber sayfasıdır.)
+ * Süreler TAHMİNİ ("~" + TODO teyit); bilinmeyen alan "—" ya da boş dizi.
+ */
+export interface RouteGuide {
+  slug: string;
+  name: string;
+  /** Tek cümle özet */
+  summary: string;
+  /** Kısa paragraflar; yalnızca bilinen coğrafi bilgi, vaat yok */
+  body: string[];
+  /** Limandan tahmini tekne süresi, örn. "~75 dk" — bilinmiyorsa "—" */
+  distanceFromHarbor: string;
+  /** Koyda kalış — TODO, bilinmiyorsa "—" */
+  stayDuration: string;
+  /** Öne çıkanlar (yüzme, şnorkel…) — yalnızca ürün rotalarından bilinenler */
+  highlights: string[];
+  /** Bu koyu kapsayan turlar (products[].slug); TODO teyit */
+  tourSlugs: string[];
+  /** Bölgedeki harita noktaları (mapPoints[].slug) — alt liste için */
+  mapPointSlugs: string[];
+  /** Ana sayfa coverflow'daki koy (bays[].slug); yoksa null */
+  baySlug: string | null;
+  image: string | null;
+  imageThumb: string | null;
+}

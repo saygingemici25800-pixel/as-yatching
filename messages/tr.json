@@ -362,5 +362,29 @@
     "moreReviews": "Tüm yorumları Google'da okuyun",
     "ctaTitle": "Bir tarih mi düşünüyorsunuz?",
     "ctaText": "Turları ve fiyatları görün, takvimden tarihi seçin; talebi WhatsApp'tan gönderin. {hours} ulaşabilirsiniz."
+  },
+  "routes": {
+    "metaTitle": "Rotalar ve Koylar | Fethiye Tekne Kiralama",
+    "metaDescription": "Fethiye'den tekneyle gidilen koylar: Ölüdeniz, Göcek 12 Adalar, Kelebekler Vadisi, Kızılada, Akvaryum Koyu. Limandan tahmini süreler ve hangi turda.",
+    "breadcrumb": "Rotalar",
+    "eyebrow": "Rotalar",
+    "title": "Koylar ve rotalar",
+    "intro": "Fethiye Limanı'ndan tekneyle gidilen koylar. Süreler tahminidir; hangi koyun hangi turda olduğu her koyun sayfasında yazılı. Rotayı grubun temposuna göre birlikte belirliyoruz.",
+    "mapLink": "Haritada görün",
+    "guideMetaTitle": "{name} | Rotalar | Fethiye Tekne Kiralama",
+    "guideMetaDescription": "{summary} Limandan tahmini {distance}.",
+    "fromHarbour": "Limandan (tahmini)",
+    "stay": "Kalış süresi",
+    "highlights": "Öne çıkanlar",
+    "nearby": "Bölgedeki noktalar",
+    "toursTitle": "Hangi turda?",
+    "toursText": "Bu koyu kapsayan turlar. Rota hava koşullarına ve grubun temposuna göre değişebilir; kesin plan rezervasyon sırasında netleşir.",
+    "toursPending": "Bu koyun hangi turda olduğu işletmeyle teyit edilecek.",
+    "otherBays": "Diğer koylar",
+    "noImage": "Fotoğraf bekleniyor",
+    "estimateNote": "Süreler tahminidir; kaptanla teyit edilecek.",
+    "ctaTitle": "Bu koya gitmek ister misiniz?",
+    "ctaText": "Turlardan birini seçin, takvimden tarihi belirleyin; talebi WhatsApp'tan gönderin. {hours} ulaşabilirsiniz.",
+    "detail": "Koyu inceleyin"
   }
 }

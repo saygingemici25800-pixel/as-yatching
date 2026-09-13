@@ -362,5 +362,29 @@
     "moreReviews": "Read all reviews on Google",
     "ctaTitle": "Have a date in mind?",
     "ctaText": "See the tours and prices, pick a date on the calendar and send the request on WhatsApp. You can reach us {hours}."
+  },
+  "routes": {
+    "metaTitle": "Routes and Bays | Boat Hire in Fethiye",
+    "metaDescription": "Bays reached by boat from Fethiye: Ölüdeniz, Göcek 12 Islands, Butterfly Valley, Kızılada, Aquarium Bay. Estimated times from the harbour and which tour goes there.",
+    "breadcrumb": "Routes",
+    "eyebrow": "Routes",
+    "title": "Bays and routes",
+    "intro": "Bays reached by boat from Fethiye Harbour. Times are estimates; which bay is on which tour is written on each bay's page. We set the route together, at the group's pace.",
+    "mapLink": "See on the map",
+    "guideMetaTitle": "{name} | Routes | Boat Hire in Fethiye",
+    "guideMetaDescription": "{summary} About {distance} from the harbour.",
+    "fromHarbour": "From the harbour (approx.)",
+    "stay": "Time at the stop",
+    "highlights": "Highlights",
+    "nearby": "Points in the area",
+    "toursTitle": "Which tour?",
+    "toursText": "Tours that include this bay. The route may change with the weather and the group's pace; the exact plan is confirmed when booking.",
+    "toursPending": "Which tour includes this bay will be confirmed with the business.",
+    "otherBays": "Other bays",
+    "noImage": "Photo pending",
+    "estimateNote": "Times are estimates; to be confirmed with the captain.",
+    "ctaTitle": "Want to go to this bay?",
+    "ctaText": "Pick one of the tours, choose a date on the calendar and send the request on WhatsApp. You can reach us {hours}.",
+    "detail": "Explore the bay"
   }
 }

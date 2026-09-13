@@ -9,6 +9,7 @@ import type {
   TourRoute,
   Faq,
   Product,
+  RouteGuide,
   Seed,
   SiteInfo,
 } from "@/lib/types";
@@ -699,5 +700,162 @@ export const routes: Seed<TourRoute>[] = [
     name: l("Mavi tur", "Blue cruise", "Голубой круиз"),
     productSlug: "mavi-tur",
     stops: ["fethiye-limani", "yassica", "oludeniz", "kelebekler-vadisi"], // TODO: teyit (Göcek yönü 12 Adalar → Ölüdeniz → Kelebekler)
+  },
+];
+
+/**
+ * ROTA / KOY REHBERLERİ — /rotalar ve /rotalar/[koy].
+ * Metinler yalnızca bilinen coğrafi bilgi; "en güzel", "eşsiz" gibi vaat
+ * yok. Süreler TAHMİNİ (bays[].distanceFromHarbor ile aynı; TODO: kaptanla
+ * teyit). Kalış süresi ve tur eşleşmeleri işletmeyle teyit edilecek.
+ * Fotoğrafı olmayan koylar (Kızılada, Göcek 12 Adalar) görselsiz gösterilir.
+ */
+export const routeGuides: Seed<RouteGuide>[] = [
+  {
+    slug: "oludeniz",
+    name: l("Ölüdeniz", "Ölüdeniz", "Олюдениз"),
+    summary: l(
+      "Fethiye'nin en bilinen koyu: lagün, Kumburnu ve uzun plaj.",
+      "Fethiye's best-known bay: the lagoon, Kumburnu and the long beach.",
+      "Самая известная бухта Фетхие: лагуна, Кумбурну и длинный пляж.",
+    ),
+    body: [
+      l(
+        "Ölüdeniz, Fethiye'nin güneyinde, Babadağ'ın eteğinde yer alır. Kumburnu dilinin ayırdığı lagün tabiat parkıdır; tekneler lagüne girmez, koyun açık tarafında demirler.",
+        "Ölüdeniz lies south of Fethiye at the foot of Babadağ. The lagoon, separated by the Kumburnu spit, is a nature park; boats do not enter the lagoon and anchor on the open side of the bay.",
+        "Олюдениз находится к югу от Фетхие, у подножия горы Бабадаг. Лагуна, отделённая косой Кумбурну, — природный парк; яхты в лагуну не заходят и становятся на якорь с открытой стороны бухты.",
+      ),
+      l(
+        "Gün batımı turunun görseli buradan; Babadağ'dan kalkan yamaç paraşütleri koyun üzerinde iner.",
+        "The sunset cruise photo is from here; paragliders launching from Babadağ land over the bay.",
+        "Фото тура на закате сделано здесь; парапланы, стартующие с Бабадага, приземляются над бухтой.",
+      ),
+    ],
+    distanceFromHarbor: l("~75 dk", "~75 min", "~75 мин"), // TODO: teyit (kaptanla)
+    stayDuration: "—", // TODO: koyda kalış
+    highlights: [
+      l("Gün batımı", "Sunset", "Закат"),
+      l("Yüzme", "Swimming", "Купание"),
+    ],
+    tourSlugs: ["mavi-tur"], // TODO: teyit (mavi tur 3. gün "Ölüdeniz yönü")
+    mapPointSlugs: ["oludeniz", "kayakoy", "hisaronu"],
+    baySlug: "oludeniz",
+    image: "/koylar/oludeniz.webp",
+    imageThumb: "/koylar/oludeniz-thumb.webp",
+  },
+  {
+    slug: "gocek-12-adalar",
+    name: l("Göcek 12 Adalar", "Göcek 12 Islands", "12 островов Гёчека"),
+    summary: l(
+      "Fethiye Körfezi'nin batısında, Göcek önündeki ada topluluğu.",
+      "The group of islands off Göcek, in the west of the Gulf of Fethiye.",
+      "Группа островов напротив Гёчека, в западной части залива Фетхие.",
+    ),
+    body: [
+      l(
+        "Yassıca, Tersane, Domuz, Zeytin, Göcek Adası ve Katrancı bu topluluğun bilinen adalarından. Adalar arası mesafe kısa; korunaklı koylar rüzgârlı günlerde de demir atmaya elverişli.",
+        "Yassıca, Tersane, Domuz, Zeytin, Göcek Island and Katrancı are among the well-known islands of the group. Distances between islands are short; the sheltered bays allow anchoring even on windy days.",
+        "Яссыджа, Терсане, Домуз, Зейтин, остров Гёчек и Катранджи — известные острова этой группы. Расстояния между островами короткие; защищённые бухты позволяют вставать на якорь даже в ветреные дни.",
+      ),
+      l(
+        "Mavi turun ikinci günü bu bölgede geçiyor. Hangi adalarda durulacağı hava ve grubun temposuna göre birlikte belirleniyor.",
+        "The second day of the blue cruise is spent in this area. Which islands we stop at is decided together, according to the weather and the group's pace.",
+        "Второй день голубого круиза проходит в этом районе. На каких островах останавливаться, решаем вместе, с учётом погоды и темпа группы.",
+      ),
+    ],
+    distanceFromHarbor: "—", // TODO: limandan tahmini süre (Yassıca'ya)
+    stayDuration: "—", // TODO
+    highlights: [
+      l("Yemek molası", "Meal stop", "Остановка на обед"),
+      l("Yüzme", "Swimming", "Купание"),
+    ], // routes[] harita rozetlerinden (yassica: food, domuz: swim)
+    tourSlugs: ["mavi-tur", "gunubirlik-ozel-kiralama"], // TODO: teyit (günübirlik rota Yassıca'ya uzanıyor mu?)
+    mapPointSlugs: ["yassica", "tersane", "domuz", "zeytin", "delikli", "katranci", "gocek-adasi", "gocek"],
+    baySlug: null,
+    image: null, // TODO: 12 Adalar fotoğrafı gelince /koylar/gocek-12-adalar.webp
+    imageThumb: null,
+  },
+  {
+    slug: "kelebekler-vadisi",
+    name: l("Kelebekler Vadisi", "Butterfly Valley", "Долина бабочек"),
+    summary: l(
+      "Dik kayalıklar arasında plaj; karadan ulaşımı zor, tekneyle kolay.",
+      "A beach between steep cliffs; hard to reach by land, easy by boat.",
+      "Пляж между отвесными скалами; по суше добраться трудно, на яхте легко.",
+    ),
+    body: [
+      l(
+        "Ölüdeniz'in güneyinde, Faralya köyünün altında kalan vadi. Adını yaz aylarında görülen kelebeklerden alır; vadi tabiat alanı olarak korunuyor.",
+        "The valley lies south of Ölüdeniz, below the village of Faralya. It is named after the butterflies seen in the summer months; the valley is a protected natural area.",
+        "Долина расположена к югу от Олюдениза, под деревней Фаралья. Названа в честь бабочек, которых видно в летние месяцы; долина — охраняемая природная территория.",
+      ),
+      l(
+        "Plaja tekneyle yanaşılır. Kalış süresi ve iniş düzeni işletmeyle netleştirilecek.",
+        "The beach is reached by boat. Time ashore and the landing arrangement will be confirmed with the business.",
+        "К пляжу подходят на яхте. Время стоянки и порядок высадки будут уточнены с владельцем.",
+      ),
+    ],
+    distanceFromHarbor: l("~90 dk", "~90 min", "~90 мин"), // TODO: teyit (kaptanla)
+    stayDuration: "—", // TODO
+    highlights: [l("Fotoğraf durağı", "Photo stop", "Фотоостановка")],
+    tourSlugs: ["mavi-tur"], // TODO: teyit
+    mapPointSlugs: ["kelebekler-vadisi", "faralya"],
+    baySlug: "kelebekler-vadisi",
+    image: "/koylar/kelebekler-vadisi.webp",
+    imageThumb: "/koylar/kelebekler-vadisi-thumb.webp",
+  },
+  {
+    slug: "kizilada",
+    name: l("Kızılada", "Kızılada", "Кызылада"),
+    summary: l(
+      "Limandan çıkınca ilk durak; günübirlik rotanın yüzme molası.",
+      "The first stop after leaving the harbour; the swimming break on the day-charter route.",
+      "Первая остановка после выхода из порта; место для купания на дневном маршруте.",
+    ),
+    body: [
+      l(
+        "Fethiye Körfezi'nin ağzındaki ada; üzerindeki deniz feneri limandan görülür. Günübirlik özel kiralamanın saat 11:00 durağı ve gün batımı turunun rotasında.",
+        "The island at the mouth of the Gulf of Fethiye; its lighthouse is visible from the harbour. It is the 11:00 stop of the private day charter and on the sunset cruise route.",
+        "Остров у входа в залив Фетхие; его маяк виден из порта. Остановка в 11:00 на частной дневной аренде и на маршруте тура на закате.",
+      ),
+    ],
+    distanceFromHarbor: l("~20 dk", "~20 min", "~20 мин"), // TODO: teyit (kaptanla)
+    stayDuration: "—", // TODO
+    highlights: [
+      l("Yüzme molası", "Swimming stop", "Остановка для купания"),
+      l("Şnorkel", "Snorkelling", "Снорклинг"),
+    ], // products[].route notu + harita rozeti
+    tourSlugs: ["gunubirlik-ozel-kiralama", "gun-batimi-turu"], // routes[] (TODO teyit)
+    mapPointSlugs: ["kizilada", "sovalye"],
+    baySlug: "kizilada",
+    image: null, // TODO: Kızılada fotoğrafı gelince /koylar/kizilada.webp
+    imageThumb: null,
+  },
+  {
+    slug: "akvaryum-koyu",
+    name: l("Akvaryum Koyu", "Aquarium Bay", "Бухта Аквариум"),
+    summary: l(
+      "Adını berrak suyundan alan koy; günübirlik rotada öğle molası.",
+      "A bay named after its crystal-clear water; the lunch stop on the day-charter route.",
+      "Бухта, названная за прозрачную воду; обеденная остановка на дневном маршруте.",
+    ),
+    body: [
+      l(
+        "Fethiye Körfezi'nin güney kıyısında, korunaklı bir koy. Günübirlik özel kiralamanın 13:00 öğle molası burada; tekne demirdeyken yüzme ve şnorkel için uygun.",
+        "A sheltered bay on the southern shore of the Gulf of Fethiye. The private day charter's 13:00 lunch stop is here; while at anchor it is suitable for swimming and snorkelling.",
+        "Защищённая бухта на южном берегу залива Фетхие. Здесь обеденная остановка частной дневной аренды в 13:00; на якоре удобно купаться и заниматься снорклингом.",
+      ),
+    ],
+    distanceFromHarbor: l("~35 dk", "~35 min", "~35 мин"), // TODO: teyit (kaptanla)
+    stayDuration: "—", // TODO
+    highlights: [
+      l("Öğle yemeği durağı", "Lunch stop", "Обеденная остановка"),
+      l("Şnorkel", "Snorkelling", "Снорклинг"),
+    ],
+    tourSlugs: ["gunubirlik-ozel-kiralama"], // products[].route
+    mapPointSlugs: ["akvaryum-koyu", "gemiler-adasi"],
+    baySlug: "akvaryum-koyu",
+    image: "/koylar/akvaryum-koyu.webp",
+    imageThumb: "/koylar/akvaryum-koyu-thumb.webp",
   },
 ];

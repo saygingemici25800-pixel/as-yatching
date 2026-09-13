@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getPathname } from "@/i18n/navigation";
 import { routing, type StaticPathname } from "@/i18n/routing";
-import { getProductSlugs } from "@/lib/repository";
+import { getProductSlugs, getRouteGuideSlugs } from "@/lib/repository";
 import { SITE_URL } from "@/lib/seo";
 
 type Href = Parameters<typeof getPathname>[0]["href"];
@@ -19,6 +19,7 @@ const STATIC: {
 }[] = [
   { href: "/", changeFrequency: "weekly", priority: 1 },
   { href: "/turlar", changeFrequency: "weekly", priority: 0.9 },
+  { href: "/rotalar", changeFrequency: "monthly", priority: 0.7 },
   { href: "/tekne", changeFrequency: "monthly", priority: 0.7 },
   { href: "/hakkimizda", changeFrequency: "monthly", priority: 0.6 },
   { href: "/iletisim", changeFrequency: "yearly", priority: 0.6 },
@@ -63,5 +64,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ),
   );
 
-  return [...staticRoutes, ...productRoutes];
+  const guideSlugs = await getRouteGuideSlugs();
+  const guideRoutes = guideSlugs.flatMap((koy) =>
+    entries(
+      { pathname: "/rotalar/[koy]", params: { koy } },
+      lastModified,
+      "monthly",
+      0.6,
+    ),
+  );
+
+  return [...staticRoutes, ...productRoutes, ...guideRoutes];
 }

@@ -8,6 +8,7 @@ import {
   googleReviews,
   mapPoints,
   products,
+  routeGuides,
   routes,
   siteInfo,
 } from "@/data/seed";
@@ -23,6 +24,7 @@ import type {
   Locale,
   MapPoint,
   Product,
+  RouteGuide,
   SiteInfo,
   TourRoute,
 } from "./types";
@@ -102,6 +104,20 @@ export async function getMapPoints(): Promise<MapPoint[]> {
 export async function getRoutes(): Promise<TourRoute[]> {
   const locale = await currentLocale();
   return routes.map((r) => localize<TourRoute>(r, locale));
+}
+
+export async function getRouteGuides(): Promise<RouteGuide[]> {
+  const locale = await currentLocale();
+  return routeGuides.map((g) => localize<RouteGuide>(g, locale));
+}
+
+export async function getRouteGuide(slug: string): Promise<RouteGuide | null> {
+  const guide = routeGuides.find((g) => g.slug === slug);
+  return guide ? localize<RouteGuide>(guide, await currentLocale()) : null;
+}
+
+export async function getRouteGuideSlugs(): Promise<string[]> {
+  return routeGuides.map((g) => g.slug as string);
 }
 
 export async function getFaqs(): Promise<Faq[]> {

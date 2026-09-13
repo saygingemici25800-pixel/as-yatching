@@ -11,9 +11,10 @@ import { getSiteInfo } from "@/lib/repository";
 /** Menü en fazla 6 öğe; hediye çeki ve misafir bilgisi footer'da */
 const NAV: {
   href: StaticPathname;
-  key: "tours" | "boat" | "about" | "faq" | "contact";
+  key: "tours" | "routes" | "boat" | "about" | "faq" | "contact";
 }[] = [
   { href: "/turlar", key: "tours" },
+  { href: "/rotalar", key: "routes" },
   { href: "/tekne", key: "boat" },
   { href: "/hakkimizda", key: "about" },
   { href: "/sss", key: "faq" },
