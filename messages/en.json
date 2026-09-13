@@ -420,5 +420,33 @@
     "step3Text": "Payment and delivery are agreed on WhatsApp. The recipient picks a date on the calendar and sends a request.",
     "whatsappMessage": "Hello, I would like to buy a gift voucher for {amount}.",
     "toursTitle": "Tours the voucher can be used on"
+  },
+  "guest": {
+    "metaTitle": "Guest Information | Boat Hire in Fethiye",
+    "metaDescription": "What to know before the tour: meeting point, what to bring, coming with children, food and drink, weather and cancellation terms.",
+    "breadcrumb": "Guest info",
+    "eyebrow": "Guest info",
+    "title": "Before the tour",
+    "intro": "The meeting point, what to bring and how things work on board. Anything not yet confirmed is marked “Information pending” and will be filled in as we receive it from the business.",
+    "meetingTitle": "Meeting point",
+    "meetingAddress": "Address",
+    "meetingArrival": "Meeting arrangement",
+    "meetingParking": "Parking",
+    "meetingTransport": "Getting there",
+    "bringTitle": "What to bring",
+    "bringText": "General suggestions, not tour-specific requirements.",
+    "providedTitle": "On board",
+    "providedNote": "Whether towels etc. are provided will be confirmed with the business.",
+    "childrenTitle": "Children and older guests",
+    "elderlyLabel": "Older guests and reduced mobility",
+    "foodTitle": "Food and drink",
+    "foodNote": "The policy on bringing your own food, drink and alcohol will be confirmed with the business.",
+    "policyTitle": "Weather and cancellation",
+    "weatherLabel": "If the weather is bad",
+    "cancellationLabel": "Cancellation and refunds",
+    "cancellationPending": "Cancellation and refund terms will be written here once received from the business. For now only the weather rule applies.",
+    "faqLink": "Frequently asked questions",
+    "ctaTitle": "Another question?",
+    "ctaText": "You can write to us {hours}. We usually reply within a few minutes."
   }
 }

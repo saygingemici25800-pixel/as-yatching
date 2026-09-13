@@ -420,5 +420,33 @@
     "step3Text": "Ödeme ve teslim WhatsApp'ta konuşulur. Çeki alan kişi tarihi takvimden seçip talep gönderir.",
     "whatsappMessage": "Merhaba, {amount} tutarında hediye çeki almak istiyorum.",
     "toursTitle": "Çekle alınabilecek turlar"
+  },
+  "guest": {
+    "metaTitle": "Misafir Bilgisi | Fethiye Tekne Kiralama",
+    "metaDescription": "Tura gelmeden önce bilmeniz gerekenler: buluşma noktası, ne getirmeli, çocuklarla katılım, yemek-içecek, hava ve iptal koşulları.",
+    "breadcrumb": "Misafir bilgisi",
+    "eyebrow": "Misafir bilgisi",
+    "title": "Tura gelmeden önce",
+    "intro": "Buluşma noktası, yanınıza almanız gerekenler ve teknedeki düzen. Henüz netleşmemiş konular “Bilgi bekleniyor” olarak işaretli; işletmeden alındıkça dolacak.",
+    "meetingTitle": "Buluşma noktası",
+    "meetingAddress": "Adres",
+    "meetingArrival": "Buluşma düzeni",
+    "meetingParking": "Otopark",
+    "meetingTransport": "Ulaşım",
+    "bringTitle": "Ne getirmeli?",
+    "bringText": "Genel öneriler; tura özel bir gereklilik değil.",
+    "providedTitle": "Teknede bulunanlar",
+    "providedNote": "Havlu vb. sağlanıp sağlanmadığı işletmeyle teyit edilecek.",
+    "childrenTitle": "Çocuk ve yaşlı misafirler",
+    "elderlyLabel": "Yaşlı ve hareket kısıtlı misafirler",
+    "foodTitle": "Yemek ve içecek",
+    "foodNote": "Dışarıdan yiyecek-içecek ve alkol politikası işletmeyle teyit edilecek.",
+    "policyTitle": "Hava ve iptal koşulları",
+    "weatherLabel": "Hava kötü olursa",
+    "cancellationLabel": "İptal ve iade",
+    "cancellationPending": "İptal ve iade koşulları işletmeden alındığında buraya yazılacak. Şimdilik yalnızca hava kuralı geçerli.",
+    "faqLink": "Sık sorulan sorular",
+    "ctaTitle": "Başka sorunuz mu var?",
+    "ctaText": "{hours} yazabilirsiniz. Genelde birkaç dakika içinde dönüş yapıyoruz."
   }
 }

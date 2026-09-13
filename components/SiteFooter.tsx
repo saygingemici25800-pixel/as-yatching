@@ -22,6 +22,7 @@ const LINKS: { href: StaticPathname; key: string; ns: "nav" | "common" | "footer
   { href: "/iletisim", key: "contact", ns: "nav" },
   // Menü 6 öğeyle sınırlı; hediye çeki ve misafir bilgisi yalnızca footer'da
   { href: "/hediye-ceki", key: "giftVoucher", ns: "nav" },
+  { href: "/misafir-bilgisi", key: "guestInfo", ns: "nav" },
 ];
 
 export default async function SiteFooter() {

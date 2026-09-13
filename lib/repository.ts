@@ -7,6 +7,7 @@ import {
   faqs,
   giftVoucher,
   googleReviews,
+  guestInfo,
   mapPoints,
   products,
   routeGuides,
@@ -23,6 +24,7 @@ import type {
   Faq,
   GiftVoucherInfo,
   GoogleReview,
+  GuestInfo,
   Locale,
   MapPoint,
   Product,
@@ -62,6 +64,10 @@ export async function getAbout(): Promise<AboutInfo> {
 
 export async function getGiftVoucher(): Promise<GiftVoucherInfo> {
   return localize<GiftVoucherInfo>(giftVoucher, await currentLocale());
+}
+
+export async function getGuestInfo(): Promise<GuestInfo> {
+  return localize<GuestInfo>(guestInfo, await currentLocale());
 }
 
 export async function getBoats(): Promise<Boat[]> {

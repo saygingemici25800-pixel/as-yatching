@@ -259,3 +259,37 @@ export interface GiftVoucherInfo {
   /** TODO: teslim biçimi (PDF / WhatsApp / basılı) — bilinmiyorsa "" */
   deliveryNote: string;
 }
+
+/**
+ * MİSAFİR BİLGİSİ — /misafir-bilgisi. Yalnızca seed'de zaten bilinen
+ * gerçekler (adres, can yeleği, fiyata dahil kalemler, hava kuralı) ve
+ * genel öneriler. Bilinmeyen politika alanları "" (TODO) → "Bilgi bekleniyor".
+ */
+export interface GuestInfo {
+  meeting: {
+    /** TODO: iskeleye varış / buluşma düzeni */
+    arrival: string;
+    /** TODO: otopark */
+    parking: string;
+    /** TODO: ulaşım (merkezden, otelden) */
+    transport: string;
+  };
+  /** Yanınızda getirmeniz önerilenler (genel öneri, işletme vaadi değil) */
+  bring: string[];
+  /** Teknede bulunanlar — boats[].amenities ve fiyata dahil kalemlerle tutarlı */
+  provided: string[];
+  /** TODO: havlu vb. sağlanıyor mu */
+  providedNote: string;
+  /** Çocuklar — faqs ile tutarlı */
+  children: string[];
+  /** TODO: yaşlı / hareket kısıtlı misafirler için biniş koşulları */
+  elderly: string;
+  /** Yemek-içecek — products[].priceIncludes ile tutarlı */
+  food: string[];
+  /** TODO: alkol / dışarıdan yiyecek politikası */
+  foodNote: string;
+  /** Hava kuralı — faqs ile aynı cümle */
+  weather: string;
+  /** TODO: iptal ve iade koşulları */
+  cancellation: string;
+}

@@ -3,6 +3,7 @@ import type {
   AboutInfo,
   GiftVoucherInfo,
   GoogleReview,
+  GuestInfo,
   AvailabilityBlock,
   Bay,
   Boat,
@@ -94,6 +95,73 @@ export const giftVoucher: Seed<GiftVoucherInfo> = {
   isSamplePrice: true,
   validityMonths: null, // TODO: geçerlilik süresi
   deliveryNote: "", // TODO: PDF / WhatsApp / basılı
+};
+
+/**
+ * MİSAFİR BİLGİSİ — bilinen gerçekler + genel öneriler. İptal/iade, otopark,
+ * yaşlı misafir koşulları, havlu ve alkol politikası işletmeden gelecek
+ * (boş → "Bilgi bekleniyor"). Hava kuralı SSS ile aynı; başka vaat yok.
+ */
+export const guestInfo: Seed<GuestInfo> = {
+  meeting: {
+    arrival: "", // TODO: buluşma düzeni (kaç dk önce, kiminle)
+    parking: "", // TODO: otopark
+    transport: "", // TODO: ulaşım
+  },
+  bring: [
+    l("Mayo ve yedek kıyafet", "Swimwear and a change of clothes", "Купальник и сменная одежда"),
+    l("Havlu", "Towel", "Полотенце"),
+    l("Güneş kremi, şapka, güneş gözlüğü", "Sunscreen, hat, sunglasses", "Солнцезащитный крем, головной убор, солнцезащитные очки"),
+    l("Kaymayan terlik veya sandalet", "Non-slip flip-flops or sandals", "Нескользящие шлёпанцы или сандалии"),
+    l("İlaçlarınız (deniz tutması dahil)", "Your medication (including for seasickness)", "Ваши лекарства (в том числе от укачивания)"),
+  ],
+  provided: [
+    l("Can yeleği (tüm misafirler için)", "Life jackets (for every guest)", "Спасательные жилеты (для всех гостей)"),
+    l("Şnorkel ekipmanı", "Snorkelling gear", "Снаряжение для снорклинга"),
+    l("Buzlu su", "Iced water", "Вода со льдом"),
+    l("Gölgelik alan ve güneşlenme minderleri", "Shaded area and sunbathing cushions", "Тент и матрасы для загара"),
+    l("Duş ve tuvalet", "Shower and toilet", "Душ и туалет"),
+  ],
+  providedNote: "", // TODO: havlu sağlanıyor mu?
+  children: [
+    l("Çocuk boy can yeleğimiz mevcut.", "We have child-size life jackets.", "У нас есть детские спасательные жилеты."),
+    l(
+      "Küçük çocuklarla geliyorsanız rezervasyon sırasında belirtin; rotayı buna göre planlayalım.",
+      "If you are coming with small children, let us know when booking so we can plan the route accordingly.",
+      "Если вы едете с маленькими детьми, сообщите при бронировании, и мы спланируем маршрут с учётом этого.",
+    ),
+    l(
+      "Yüzme bilmeyen misafirler için yüzme molalarında mürettebat sizinle ilgileniyor.",
+      "For guests who can't swim, the crew looks after you during swimming stops.",
+      "Для гостей, не умеющих плавать: во время остановок для купания экипаж присматривает за вами.",
+    ),
+  ],
+  elderly: "", // TODO: yaşlı / hareket kısıtlı misafirler için biniş koşulları
+  food: [
+    l("Buzlu su fiyata dahil.", "Iced water is included in the price.", "Вода со льдом включена в цену."),
+    l(
+      "Öğle yemeği talep üzerine eklenir; içecekler fiyata dahil değildir.",
+      "Lunch is added on request; drinks are not included in the price.",
+      "Обед добавляется по запросу; напитки в цену не входят.",
+    ),
+    l(
+      "Sabah kahvaltı turunda serpme kahvaltı fiyata dahil; alkollü içecekler ayrı.",
+      "On the morning breakfast cruise a Turkish spread breakfast is included; alcoholic drinks are extra.",
+      "В утреннем туре с завтраком турецкий завтрак включён; алкогольные напитки оплачиваются отдельно.",
+    ),
+    l(
+      "Mavi turda yemekler ve içecekler fiyata dahil değildir.",
+      "On the blue cruise, meals and drinks are not included.",
+      "В голубом круизе питание и напитки в цену не входят.",
+    ),
+  ],
+  foodNote: "", // TODO: dışarıdan yiyecek/içecek ve alkol politikası
+  weather: l(
+    "Hava koşulları güvenli değilse tur yapılmaz. Bu durumda tarihi ücretsiz olarak değiştiriyoruz.",
+    "If conditions are not safe, the tour does not go ahead. In that case we change the date free of charge.",
+    "Если условия небезопасны, тур не проводится. В этом случае мы бесплатно переносим дату.",
+  ),
+  cancellation: "", // TODO: iptal ve iade koşulları (Bölüm 10, C4)
 };
 
 export const boats: Seed<Boat>[] = [
