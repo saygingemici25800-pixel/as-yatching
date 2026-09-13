@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 /**
  * Wordmark: "As Yachting" — alt çizgi yok, "Luxury" yok.
@@ -6,11 +7,13 @@ import Link from "next/link";
  * O zamana kadar marka tipografisiyle yazılmış metin wordmark kullanılıyor.
  */
 export default function Wordmark({ className = "" }: { className?: string }) {
+  const t = useTranslations("nav");
+
   return (
     <Link
       href="/"
       className={`wordmark font-display leading-none ${className}`}
-      aria-label="As Yachting — ana sayfa"
+      aria-label={t("wordmarkLabel")}
     >
       As Yachting
     </Link>

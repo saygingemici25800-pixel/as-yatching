@@ -1,3 +1,4 @@
+import { l } from "@/lib/localize";
 import type {
   GoogleReview,
   AvailabilityBlock,
@@ -7,6 +8,7 @@ import type {
   TourRoute,
   Faq,
   Product,
+  Seed,
   SiteInfo,
 } from "@/lib/types";
 
@@ -18,57 +20,82 @@ import type {
  * Arayüzde fiyatlar `ÖRNEK` rozetiyle gösterilir (isSamplePrice: true).
  *
  * GERÇEK OLAN VERİLER: telefon, adres, çalışma saati, Google puanı.
+ *
+ * ÇOKLU DİL: metin alanları `l(tr, en, ru)` ile yazılır; repository aktif
+ * dile göre çözer. EN ve RU metinleri MAKİNE ÇEVİRİSİDİR — yayından önce
+ * ana dili konuşan biri kontrol edecek (TODO: RU/EN çeviri kontrolü).
+ * Google yorumları çevrilmez; profilden birebir, orijinal dilde kalır.
  */
 
-export const siteInfo: SiteInfo = {
+export const siteInfo: Seed<SiteInfo> = {
   brandName: "As Yachting",
   legalName: null, // TODO: ticari unvan
   phone: "+90 544 450 70 13",
   whatsapp: "905444507013",
-  address: "Fethiye Limanı beton iskele, 48300 Fethiye / Muğla",
+  address: l(
+    "Fethiye Limanı beton iskele, 48300 Fethiye / Muğla",
+    "Fethiye Harbour concrete pier, 48300 Fethiye / Muğla",
+    "Бетонный причал порта Фетхие, 48300 Фетхие / Мугла",
+  ),
   mapUrl: "https://maps.google.com/?q=Fethiye+Limanı+beton+iskele",
   googleRating: 5.0,
   googleReviewCount: 33, // Google profili, 2026-09-12
   googleProfileUrl: "https://www.google.com/maps?cid=4934811779244890993",
-  workingHours: "Her gün 24 saat",
+  workingHours: l("Her gün 24 saat", "Every day, 24 hours", "Ежедневно, 24 часа"),
   instagram: "https://www.instagram.com/as_yachting/",
   highSeasonMonths: [6, 7, 8, 9],
   departure: {
-    label: "Fethiye Limanı · beton iskele",
+    label: l(
+      "Fethiye Limanı · beton iskele",
+      "Fethiye Harbour · concrete pier",
+      "Порт Фетхие · бетонный причал",
+    ),
     // TODO: gerçek iskele pini — şimdilik liman kordonu, yaklaşık.
     // (Önceki 36.6213/29.1156 değeri Atatürk Cd. üzerine, limandan ~300 m
     // içeriye düşüyordu.)
     lat: 36.6242,
     lng: 29.1128,
-    note: "Beton iskele, liman yürüyüş yolunun üzerinde.",
+    note: l(
+      "Beton iskele, liman yürüyüş yolunun üzerinde.",
+      "The concrete pier is on the harbour promenade.",
+      "Бетонный причал находится на набережной порта.",
+    ),
   },
 };
 
-export const boats: Boat[] = [
+export const boats: Seed<Boat>[] = [
   {
     slug: "as-yachting-1",
-    name: "TODO: Tekne adı",
-    type: "TODO: gulet / motoryat / sürat teknesi",
+    name: l("TODO: Tekne adı", "TODO: Boat name", "TODO: Название яхты"),
+    type: l(
+      "TODO: gulet / motoryat / sürat teknesi",
+      "TODO: gulet / motor yacht / speedboat",
+      "TODO: гулет / моторная яхта / катер",
+    ),
     lengthMeters: 0, // TODO
     maxGuests: 12, // TODO
     cabins: null, // TODO
     crew: 2, // TODO
     yearBuilt: null, // TODO
-    homePort: "Fethiye Limanı",
+    homePort: l("Fethiye Limanı", "Fethiye Harbour", "Порт Фетхие"),
     amenities: [
-      "Gölgelik alan",
-      "Güneşlenme minderleri",
-      "Duş",
-      "Tuvalet",
-      "Müzik sistemi",
-      "Şnorkel ekipmanı",
-      "Yüzme merdiveni",
+      l("Gölgelik alan", "Shaded area", "Тент от солнца"),
+      l("Güneşlenme minderleri", "Sunbathing cushions", "Матрасы для загара"),
+      l("Duş", "Shower", "Душ"),
+      l("Tuvalet", "Toilet", "Туалет"),
+      l("Müzik sistemi", "Sound system", "Музыкальная система"),
+      l("Şnorkel ekipmanı", "Snorkelling gear", "Снаряжение для снорклинга"),
+      l("Yüzme merdiveni", "Swim ladder", "Трап для купания"),
     ],
     safety: [
-      "Can yeleği (tüm misafirler için)",
-      "Çocuk boy can yeleği",
-      "İlk yardım çantası",
-      "Yangın söndürücü",
+      l(
+        "Can yeleği (tüm misafirler için)",
+        "Life jackets (for every guest)",
+        "Спасательные жилеты (для всех гостей)",
+      ),
+      l("Çocuk boy can yeleği", "Child-size life jackets", "Детские спасательные жилеты"),
+      l("İlk yardım çantası", "First-aid kit", "Аптечка первой помощи"),
+      l("Yangın söndürücü", "Fire extinguisher", "Огнетушитель"),
       // TODO: sigorta ve turizm belgesi bilgisi eklenecek
     ],
     images: [
@@ -82,28 +109,42 @@ export const boats: Boat[] = [
 
 const standardIncludes = {
   included: [
-    "Kaptan ve mürettebat",
-    "Yakıt",
-    "Liman ve koy giriş ücretleri",
-    "Şnorkel ekipmanı",
-    "Buzlu su",
-    "Sigorta",
+    l("Kaptan ve mürettebat", "Captain and crew", "Капитан и экипаж"),
+    l("Yakıt", "Fuel", "Топливо"),
+    l(
+      "Liman ve koy giriş ücretleri",
+      "Harbour and bay entrance fees",
+      "Портовые сборы и плата за вход в бухты",
+    ),
+    l("Şnorkel ekipmanı", "Snorkelling gear", "Снаряжение для снорклинга"),
+    l("Buzlu su", "Iced water", "Вода со льдом"),
+    l("Sigorta", "Insurance", "Страховка"),
   ],
   excluded: [
-    "Öğle yemeği (talep üzerine eklenir)",
-    "İçecekler",
-    "Ekstra su sporları",
+    l(
+      "Öğle yemeği (talep üzerine eklenir)",
+      "Lunch (added on request)",
+      "Обед (добавляется по запросу)",
+    ),
+    l("İçecekler", "Drinks", "Напитки"),
+    l("Ekstra su sporları", "Extra water sports", "Дополнительные водные развлечения"),
   ],
 };
 
-export const products: Product[] = [
+export const products: Seed<Product>[] = [
   {
     slug: "gunubirlik-ozel-kiralama",
-    name: "Günübirlik Özel Kiralama",
-    shortDescription:
+    name: l("Günübirlik Özel Kiralama", "Private Day Charter", "Частная аренда на день"),
+    shortDescription: l(
       "Tekne bir gün boyunca yalnızca size ait. Rotayı birlikte belirliyoruz.",
-    description:
+      "The boat is yours alone for a whole day. We plan the route together.",
+      "Яхта на целый день только для вас. Маршрут выбираем вместе.",
+    ),
+    description: l(
       "Sabah Fethiye Limanı'ndan kalkıp gün boyunca körfezin koylarını geziyoruz. Başka grup yok, sabit program yok. Nerede ne kadar kalacağınıza siz karar veriyorsunuz.",
+      "We leave Fethiye Harbour in the morning and spend the day exploring the bays of the gulf. No other groups, no fixed programme. You decide where to stop and for how long.",
+      "Утром выходим из порта Фетхие и весь день ходим по бухтам залива. Без других групп и жёсткой программы. Где и сколько стоять, решаете вы.",
+    ),
     boatSlug: "as-yachting-1",
     pricingType: "per_day",
     basePrice: 18000, // TODO: gerçek fiyat
@@ -114,11 +155,31 @@ export const products: Product[] = [
     durationDays: null,
     highSeasonMultiplier: 1.25,
     route: [
-      { time: "10:00", name: "Fethiye Limanı'ndan hareket", note: null },
-      { time: "11:00", name: "Kızılada", note: "Yüzme molası" },
-      { time: "13:00", name: "Akvaryum Koyu", note: "Öğle molası" },
-      { time: "15:00", name: "Samanlık Koyu", note: "Şnorkel" },
-      { time: "18:00", name: "Limana dönüş", note: null },
+      {
+        time: "10:00",
+        name: l("Fethiye Limanı'ndan hareket", "Departure from Fethiye Harbour", "Выход из порта Фетхие"),
+        note: null,
+      },
+      {
+        time: "11:00",
+        name: l("Kızılada", "Kızılada", "Кызылада"),
+        note: l("Yüzme molası", "Swimming stop", "Остановка для купания"),
+      },
+      {
+        time: "13:00",
+        name: l("Akvaryum Koyu", "Aquarium Bay", "Бухта Аквариум"),
+        note: l("Öğle molası", "Lunch stop", "Обеденная остановка"),
+      },
+      {
+        time: "15:00",
+        name: l("Samanlık Koyu", "Samanlık Bay", "Бухта Саманлык"),
+        note: l("Şnorkel", "Snorkelling", "Снорклинг"),
+      },
+      {
+        time: "18:00",
+        name: l("Limana dönüş", "Return to harbour", "Возвращение в порт"),
+        note: null,
+      },
     ],
     priceIncludes: standardIncludes,
     images: ["/foto/tekne-kadeh.jpg"],
@@ -127,11 +188,17 @@ export const products: Product[] = [
   },
   {
     slug: "gun-batimi-turu",
-    name: "Gün Batımı Turu",
-    shortDescription:
+    name: l("Gün Batımı Turu", "Sunset Cruise", "Тур на закате"),
+    shortDescription: l(
       "Üç saatlik kısa kaçamak. Akşamüstü kalkış, körfezde gün batımı.",
-    description:
+      "A short three-hour escape. Late-afternoon departure, sunset in the gulf.",
+      "Короткая трёхчасовая прогулка. Выход ближе к вечеру, закат в заливе.",
+    ),
+    description: l(
       "Günün en sakin saatinde körfeze açılıyoruz. Kalabalık dağılmış, deniz durulmuş oluyor. Çift ya da küçük gruplar için ideal.",
+      "We head out into the gulf at the calmest hour of the day. The crowds have gone and the sea has settled. Ideal for couples or small groups.",
+      "Выходим в залив в самый спокойный час дня. Толпы уже разошлись, море успокоилось. Идеально для пар и небольших компаний.",
+    ),
     boatSlug: "as-yachting-1",
     pricingType: "per_hour",
     basePrice: 2500, // TODO
@@ -142,9 +209,21 @@ export const products: Product[] = [
     durationDays: null,
     highSeasonMultiplier: 1.15,
     route: [
-      { time: "17:30", name: "Limandan hareket", note: null },
-      { time: "18:15", name: "Körfez turu", note: "Yüzme molası" },
-      { time: "20:30", name: "Limana dönüş", note: null },
+      {
+        time: "17:30",
+        name: l("Limandan hareket", "Departure from the harbour", "Выход из порта"),
+        note: null,
+      },
+      {
+        time: "18:15",
+        name: l("Körfez turu", "Gulf cruise", "Прогулка по заливу"),
+        note: l("Yüzme molası", "Swimming stop", "Остановка для купания"),
+      },
+      {
+        time: "20:30",
+        name: l("Limana dönüş", "Return to harbour", "Возвращение в порт"),
+        note: null,
+      },
     ],
     priceIncludes: standardIncludes,
     images: ["/koylar/oludeniz-gunbatimi.webp"], // Ölüdeniz gün batımı, Kumburnu
@@ -153,11 +232,17 @@ export const products: Product[] = [
   },
   {
     slug: "sabah-kahvalti-turu",
-    name: "Sabah Kahvaltı Turu",
-    shortDescription:
+    name: l("Sabah Kahvaltı Turu", "Morning Breakfast Cruise", "Утренний тур с завтраком"),
+    shortDescription: l(
       "Erken kalkış, sakin deniz, teknede kahvaltı. Kişi başı fiyat.",
-    description:
+      "Early departure, calm sea, breakfast on board. Priced per person.",
+      "Ранний выход, спокойное море, завтрак на борту. Цена за человека.",
+    ),
+    description: l(
       "Sabah yedide kalkıyoruz. Koylar boş, su cam gibi. Kahvaltı teknede hazırlanıyor. Günü erken bitirip kalan zamanınız size kalıyor.",
+      "We leave at seven in the morning. The bays are empty and the water is like glass. Breakfast is prepared on board. We finish early, and the rest of the day is yours.",
+      "Выходим в семь утра. Бухты пусты, вода как стекло. Завтрак готовится на борту. Заканчиваем рано, остаток дня в вашем распоряжении.",
+    ),
     boatSlug: "as-yachting-1",
     pricingType: "per_person",
     basePrice: 1200, // TODO
@@ -168,13 +253,31 @@ export const products: Product[] = [
     durationDays: null,
     highSeasonMultiplier: 1.1,
     route: [
-      { time: "07:00", name: "Limandan hareket", note: null },
-      { time: "08:00", name: "Sakin koy", note: "Kahvaltı" },
-      { time: "11:00", name: "Limana dönüş", note: null },
+      {
+        time: "07:00",
+        name: l("Limandan hareket", "Departure from the harbour", "Выход из порта"),
+        note: null,
+      },
+      {
+        time: "08:00",
+        name: l("Sakin koy", "Quiet bay", "Тихая бухта"),
+        note: l("Kahvaltı", "Breakfast", "Завтрак"),
+      },
+      {
+        time: "11:00",
+        name: l("Limana dönüş", "Return to harbour", "Возвращение в порт"),
+        note: null,
+      },
     ],
     priceIncludes: {
-      included: [...standardIncludes.included, "Serpme kahvaltı"],
-      excluded: ["Alkollü içecekler", "Ekstra su sporları"],
+      included: [
+        ...standardIncludes.included,
+        l("Serpme kahvaltı", "Turkish spread breakfast", "Турецкий завтрак"),
+      ],
+      excluded: [
+        l("Alkollü içecekler", "Alcoholic drinks", "Алкогольные напитки"),
+        l("Ekstra su sporları", "Extra water sports", "Дополнительные водные развлечения"),
+      ],
     },
     images: ["/foto/cift-ogle-yemegi.jpg"],
     featured: false,
@@ -182,11 +285,17 @@ export const products: Product[] = [
   },
   {
     slug: "evlilik-teklifi",
-    name: "Evlilik Teklifi Kurgusu",
-    shortDescription:
+    name: l("Evlilik Teklifi Kurgusu", "Marriage Proposal Setup", "Организация предложения руки и сердца"),
+    shortDescription: l(
       "Süsleme, müzik ve zamanlama bizde. Siz sadece soruyu sorun.",
-    description:
+      "Decoration, music and timing are on us. You just ask the question.",
+      "Украшение, музыка и тайминг на нас. Вам остаётся только задать вопрос.",
+    ),
+    description: l(
       "Tekne sizin için hazırlanıyor: çiçek düzeni, müzik, doğru koy ve doğru saat. İsterseniz fotoğrafçı ekleniyor. Her adımı önceden konuşup planlıyoruz.",
+      "The boat is prepared for you: flower arrangement, music, the right bay and the right hour. A photographer can be added if you wish. We talk through and plan every step in advance.",
+      "Яхту готовим для вас: цветы, музыка, правильная бухта и правильный час. По желанию добавим фотографа. Каждый шаг обсуждаем и планируем заранее.",
+    ),
     boatSlug: "as-yachting-1",
     pricingType: "per_day",
     basePrice: 24000, // TODO
@@ -197,11 +306,27 @@ export const products: Product[] = [
     durationDays: null,
     highSeasonMultiplier: 1.2,
     route: [
-      { time: null, name: "Saat ve rota size göre planlanır", note: null },
+      {
+        time: null,
+        name: l(
+          "Saat ve rota size göre planlanır",
+          "Time and route are planned around you",
+          "Время и маршрут планируются под вас",
+        ),
+        note: null,
+      },
     ],
     priceIncludes: {
-      included: [...standardIncludes.included, "Çiçek düzeni", "Müzik sistemi"],
-      excluded: ["Fotoğrafçı (ek paket)", "Pasta ve ikram", "Havai fişek"],
+      included: [
+        ...standardIncludes.included,
+        l("Çiçek düzeni", "Flower arrangement", "Цветочное оформление"),
+        l("Müzik sistemi", "Sound system", "Музыкальная система"),
+      ],
+      excluded: [
+        l("Fotoğrafçı (ek paket)", "Photographer (add-on)", "Фотограф (дополнительно)"),
+        l("Pasta ve ikram", "Cake and refreshments", "Торт и угощения"),
+        l("Havai fişek", "Fireworks", "Фейерверк"),
+      ],
     },
     images: ["/foto/gunbatimi-cift.jpg"],
     featured: true,
@@ -209,11 +334,17 @@ export const products: Product[] = [
   },
   {
     slug: "mavi-tur",
-    name: "Mavi Tur (Konaklamalı)",
-    shortDescription:
+    name: l("Mavi Tur (Konaklamalı)", "Blue Cruise (Overnight)", "Голубой круиз (с ночёвкой)"),
+    shortDescription: l(
       "Birkaç gün denizde. Fethiye'den çıkıp körfezin koylarında konaklama.",
-    description:
+      "A few days at sea. Leaving Fethiye and sleeping in the bays of the gulf.",
+      "Несколько дней в море. Выход из Фетхие и ночёвки в бухтах залива.",
+    ),
+    description: l(
       "Gündüz yüzme ve koy gezisi, gece koyda demirleyip teknede uyuma. Rota hava durumuna ve grubun temposuna göre birlikte belirleniyor.",
+      "Swimming and bay-hopping by day, anchoring in a bay and sleeping on board at night. The route is decided together, according to the weather and the group's pace.",
+      "Днём купание и прогулки по бухтам, ночью стоянка на якоре и сон на борту. Маршрут выбираем вместе, с учётом погоды и темпа группы.",
+    ),
     boatSlug: "as-yachting-1",
     pricingType: "per_day",
     basePrice: 32000, // TODO
@@ -224,13 +355,33 @@ export const products: Product[] = [
     durationDays: 3,
     highSeasonMultiplier: 1.3,
     route: [
-      { time: null, name: "1. gün — Fethiye körfezi koyları", note: null },
-      { time: null, name: "2. gün — Göcek 12 Adalar", note: null },
-      { time: null, name: "3. gün — Ölüdeniz yönü ve dönüş", note: null },
+      {
+        time: null,
+        name: l("1. gün — Fethiye körfezi koyları", "Day 1 — Bays of the Gulf of Fethiye", "День 1 — бухты залива Фетхие"),
+        note: null,
+      },
+      {
+        time: null,
+        name: l("2. gün — Göcek 12 Adalar", "Day 2 — Göcek 12 Islands", "День 2 — 12 островов Гёчека"),
+        note: null,
+      },
+      {
+        time: null,
+        name: l("3. gün — Ölüdeniz yönü ve dönüş", "Day 3 — Towards Ölüdeniz and return", "День 3 — в сторону Олюдениза и возвращение"),
+        note: null,
+      },
     ],
     priceIncludes: {
-      included: [...standardIncludes.included, "Konaklama", "Yatak takımı"],
-      excluded: ["Yemekler", "İçecekler", "Ekstra su sporları"],
+      included: [
+        ...standardIncludes.included,
+        l("Konaklama", "Accommodation on board", "Проживание на борту"),
+        l("Yatak takımı", "Bed linen", "Постельное бельё"),
+      ],
+      excluded: [
+        l("Yemekler", "Meals", "Питание"),
+        l("İçecekler", "Drinks", "Напитки"),
+        l("Ekstra su sporları", "Extra water sports", "Дополнительные водные развлечения"),
+      ],
     },
     images: ["/foto/aile-koy.jpg"],
     featured: false,
@@ -247,69 +398,102 @@ export const availabilityBlocks: AvailabilityBlock[] = [
   { date: "2026-09-12", boatSlug: "as-yachting-1", reason: "booked" },
 ];
 
-export const faqs: Faq[] = [
+export const faqs: Seed<Faq>[] = [
   {
-    question: "Fiyata neler dahil?",
-    answer:
+    question: l("Fiyata neler dahil?", "What is included in the price?", "Что входит в цену?"),
+    answer: l(
       "Kaptan, yakıt, liman ve koy ücretleri, sigorta ve şnorkel ekipmanı dahildir. Yemek ve içecekler ayrıdır; talep ederseniz ekleyebiliyoruz. Her turun sayfasında dahil olan ve olmayan kalemler ayrı ayrı yazılıdır.",
+      "Captain, fuel, harbour and bay fees, insurance and snorkelling gear are included. Food and drinks are extra; we can add them on request. Each tour page lists what is and isn't included.",
+      "Капитан, топливо, портовые сборы и плата за бухты, страховка и снаряжение для снорклинга включены. Еда и напитки оплачиваются отдельно; по запросу можем добавить. На странице каждого тура отдельно указано, что входит в цену, а что нет.",
+    ),
   },
   {
-    question: "Yüzme bilmiyorum, katılabilir miyim?",
-    answer:
+    question: l(
+      "Yüzme bilmiyorum, katılabilir miyim?",
+      "I can't swim, can I still join?",
+      "Я не умею плавать, могу ли я поехать?",
+    ),
+    answer: l(
       "Katılabilirsiniz. Teknede her misafir için can yeleği bulunuyor ve yüzme molalarında mürettebat sizinle ilgileniyor.",
+      "Yes. There is a life jacket for every guest on board, and the crew looks after you during swimming stops.",
+      "Да. На борту есть спасательный жилет для каждого гостя, а во время остановок для купания экипаж присматривает за вами.",
+    ),
   },
   {
-    question: "Çocuklarla gelebilir miyiz?",
-    answer:
+    question: l(
+      "Çocuklarla gelebilir miyiz?",
+      "Can we bring children?",
+      "Можно ли с детьми?",
+    ),
+    answer: l(
       "Evet. Çocuk boy can yeleğimiz mevcut. Küçük çocuklarla geliyorsanız rezervasyon sırasında belirtin, rotayı buna göre planlayalım.",
+      "Yes. We have child-size life jackets. If you are coming with small children, let us know when booking so we can plan the route accordingly.",
+      "Да. У нас есть детские спасательные жилеты. Если вы едете с маленькими детьми, сообщите при бронировании, и мы спланируем маршрут с учётом этого.",
+    ),
   },
   {
-    question: "Hava kötü olursa ne oluyor?",
-    answer:
+    question: l(
+      "Hava kötü olursa ne oluyor?",
+      "What happens if the weather is bad?",
+      "Что будет, если погода испортится?",
+    ),
+    answer: l(
       "Hava koşulları güvenli değilse tur yapılmaz. Bu durumda tarihi ücretsiz olarak değiştiriyoruz.",
+      "If conditions are not safe, the tour does not go ahead. In that case we change the date free of charge.",
+      "Если условия небезопасны, тур не проводится. В этом случае мы бесплатно переносим дату.",
+    ),
   },
   {
-    question: "Rezervasyon nasıl yapılıyor?",
-    answer:
+    question: l(
+      "Rezervasyon nasıl yapılıyor?",
+      "How do I book?",
+      "Как забронировать?",
+    ),
+    answer: l(
       "Takvimden istediğiniz tarihi seçip talep gönderiyorsunuz. Size dönüş yapıp detayları netleştiriyoruz.",
+      "Pick a date on the calendar and send a request. We get back to you and confirm the details.",
+      "Выберите дату в календаре и отправьте запрос. Мы свяжемся с вами и уточним детали.",
+    ),
   },
   // TODO: iptal ve iade koşulları müşteriden alınacak
 ];
 
 /**
  * GERÇEK Google yorumları — https://www.google.com/maps?cid=4934811779244890993
- * 2026-09-12'de profilden birebir alındı. Metin değiştirilmez, uydurulmaz.
+ * 2026-09-12'de profilden birebir alındı. Metin değiştirilmez, uydurulmaz,
+ * ÇEVRİLMEZ (her dilde orijinal Türkçe metin gösterilir).
  * Uzun yorumlar site için kısaltıldı; kısaltma "…" ile işaretli.
+ * Yalnızca Google'ın göreli tarih etiketi ("3 ay önce") çevrilir.
  */
-export const googleReviews: GoogleReview[] = [
+export const googleReviews: Seed<GoogleReview>[] = [
   {
     author: "Mehtap Candaş",
     rating: 5,
-    when: "3 ay önce",
+    when: l("3 ay önce", "3 months ago", "3 месяца назад"),
     text: "Göcek koylarında geçirdiğimiz 5 gün gerçekten unutulmazdı. Baştan sona her detay özenle düşünülmüş, huzurlu ve keyifli bir deneyim yaşadık. Özellikle kaptanlarımızın profesyonelliği, güler yüzü ve misafirperverliği tatili çok daha özel hale getirdi…",
   },
   {
     author: "mustafa ünal",
     rating: 5,
-    when: "4 yıl önce",
+    when: l("4 yıl önce", "4 years ago", "4 года назад"),
     text: "Bu teknede müşteri değil, misafirsiniz. Serkan ve Ayşe kaptanlar sanki ailemizden birileri gibiydiler. Yemekler,diğer hizmetler, ödediğimiz ücretin kat be kat üzerindeydi,mükemmeldi…",
   },
   {
     author: "Eda Nilüfer Özer",
     rating: 5,
-    when: "2 yıl önce",
+    when: l("2 yıl önce", "2 years ago", "2 года назад"),
     text: "Kaptan Serkan bey ile çıktığımız Göcek tekne tatilinden çok memnun kaldık bizlere çok misafirperver davrandı ve her anımızın tadını çıkartmamız için elinden geleni yaptı…",
   },
   {
     author: "ÖMER ÖZMEN",
     rating: 5,
-    when: "2 yıl önce",
+    when: l("2 yıl önce", "2 years ago", "2 года назад"),
     text: "Mükemmel bir tatil tekne tatili kaptan serkan ve yardımcı kaptan çayan güzel bir tatil geçirmeniz için gerçekten ellerinden geleni yapıyor harika bir yelkenli deneyimi",
   },
   {
     author: "Nuray Tınmaz",
     rating: 5,
-    when: "4 yıl önce",
+    when: l("4 yıl önce", "4 years ago", "4 года назад"),
     text: "Serkan Abi ve Ayşe Abla çok tatlı insanlar çok güleryüzlü iki insan ile çok güzel koylara gittik bilgileriyle her geçtiğimiz yerleri anlattılar bize yemekler çok lezzetliydi başka yer aramayın kesinlikle pişman olmazsınız…",
   },
 ];
@@ -333,56 +517,78 @@ export const googleReviews: GoogleReview[] = [
  * Dolu olan tours/highlight değerleri yukarıdaki `products[].route`
  * duraklarından alındı (Günübirlik Özel Kiralama rotası).
  */
-export const bays: Bay[] = [
+const DAY_CHARTER = l("Günübirlik özel kiralama", "Private day charter", "Частная аренда на день");
+
+export const bays: Seed<Bay>[] = [
   {
     slug: "fethiye-limani",
-    name: "Fethiye Limanı",
-    blurb: "Kalkış noktamız: Fethiye Limanı beton iskele. Bütün turlar buradan başlar.",
-    distanceFromHarbor: "Kalkış noktası",
+    name: l("Fethiye Limanı", "Fethiye Harbour", "Порт Фетхие"),
+    blurb: l(
+      "Kalkış noktamız: Fethiye Limanı beton iskele. Bütün turlar buradan başlar.",
+      "Our departure point: the concrete pier at Fethiye Harbour. Every tour starts here.",
+      "Точка отправления: бетонный причал порта Фетхие. Все туры начинаются здесь.",
+    ),
+    distanceFromHarbor: l("Kalkış noktası", "Departure point", "Точка отправления"),
     stayDuration: "—", // TODO: buluşma / kalkış saati düzeni
-    tours: "Tüm turlar",
-    highlight: "Buradan çıkıyoruz",
+    tours: l("Tüm turlar", "All tours", "Все туры"),
+    highlight: l("Buradan çıkıyoruz", "We leave from here", "Отсюда отправляемся"),
     image: "/koylar/fethiye-limani.webp",
     imageThumb: "/koylar/fethiye-limani-thumb.webp",
   },
   {
     slug: "kizilada",
-    name: "Kızılada",
-    blurb: "Limandan çıkınca ilk durak; günübirlik rotanın yüzme molası.",
-    distanceFromHarbor: "~20 dk", // TODO: teyit (kaptanla)
+    name: l("Kızılada", "Kızılada", "Кызылада"),
+    blurb: l(
+      "Limandan çıkınca ilk durak; günübirlik rotanın yüzme molası.",
+      "The first stop after leaving the harbour; the swimming break on the day-charter route.",
+      "Первая остановка после выхода из порта; место для купания на дневном маршруте.",
+    ),
+    distanceFromHarbor: l("~20 dk", "~20 min", "~20 мин"), // TODO: teyit (kaptanla)
     stayDuration: "—", // TODO: koyda kalış
-    tours: "Günübirlik özel kiralama", // products[].route → 11:00 Kızılada
-    highlight: "Yüzme molası", // products[].route notu
+    tours: DAY_CHARTER, // products[].route → 11:00 Kızılada
+    highlight: l("Yüzme molası", "Swimming stop", "Остановка для купания"), // products[].route notu
     image: null, // TODO: Kızılada fotoğrafı gelince /koylar/kizilada.webp
     imageThumb: null,
   },
   {
     slug: "akvaryum-koyu",
-    name: "Akvaryum Koyu",
-    blurb: "Adını berrak suyundan alan koy; günübirlik rotada öğle molası.",
-    distanceFromHarbor: "~35 dk", // TODO: teyit (kaptanla)
+    name: l("Akvaryum Koyu", "Aquarium Bay", "Бухта Аквариум"),
+    blurb: l(
+      "Adını berrak suyundan alan koy; günübirlik rotada öğle molası.",
+      "A bay named after its crystal-clear water; the lunch stop on the day-charter route.",
+      "Бухта, названная за прозрачную воду; обеденная остановка на дневном маршруте.",
+    ),
+    distanceFromHarbor: l("~35 dk", "~35 min", "~35 мин"), // TODO: teyit (kaptanla)
     stayDuration: "—", // TODO: koyda kalış
-    tours: "Günübirlik özel kiralama", // products[].route → 13:00 Akvaryum Koyu
-    highlight: "Öğle yemeği durağı", // products[].route notu: Öğle molası
+    tours: DAY_CHARTER, // products[].route → 13:00 Akvaryum Koyu
+    highlight: l("Öğle yemeği durağı", "Lunch stop", "Обеденная остановка"), // products[].route notu: Öğle molası
     image: "/koylar/akvaryum-koyu.webp",
     imageThumb: "/koylar/akvaryum-koyu-thumb.webp",
   },
   {
     slug: "samanlik-koyu",
-    name: "Samanlık Koyu",
-    blurb: "Korunaklı ve sığ koy; günübirlik rotada şnorkel durağı.",
-    distanceFromHarbor: "~40 dk", // TODO: teyit (kaptanla)
+    name: l("Samanlık Koyu", "Samanlık Bay", "Бухта Саманлык"),
+    blurb: l(
+      "Korunaklı ve sığ koy; günübirlik rotada şnorkel durağı.",
+      "A sheltered, shallow bay; the snorkelling stop on the day-charter route.",
+      "Защищённая мелкая бухта; остановка для снорклинга на дневном маршруте.",
+    ),
+    distanceFromHarbor: l("~40 dk", "~40 min", "~40 мин"), // TODO: teyit (kaptanla)
     stayDuration: "—", // TODO: koyda kalış
-    tours: "Günübirlik özel kiralama", // products[].route → 15:00 Samanlık Koyu
-    highlight: "Şnorkel", // products[].route notu
+    tours: DAY_CHARTER, // products[].route → 15:00 Samanlık Koyu
+    highlight: l("Şnorkel", "Snorkelling", "Снорклинг"), // products[].route notu
     image: null, // TODO: Samanlık Koyu fotoğrafı gelince /koylar/samanlik-koyu.webp
     imageThumb: null,
   },
   {
     slug: "oludeniz",
-    name: "Ölüdeniz",
-    blurb: "Fethiye'nin en bilinen koyu; lagün ve uzun plaj.",
-    distanceFromHarbor: "~75 dk", // TODO: teyit (kaptanla)
+    name: l("Ölüdeniz", "Ölüdeniz", "Олюдениз"),
+    blurb: l(
+      "Fethiye'nin en bilinen koyu; lagün ve uzun plaj.",
+      "Fethiye's best-known bay; the lagoon and the long beach.",
+      "Самая известная бухта Фетхие; лагуна и длинный пляж.",
+    ),
+    distanceFromHarbor: l("~75 dk", "~75 min", "~75 мин"), // TODO: teyit (kaptanla)
     stayDuration: "—", // TODO: koyda kalış
     tours: "—", // TODO: hangi turların rotasında
     highlight: "—", // TODO: öne çıkan özellik
@@ -391,9 +597,13 @@ export const bays: Bay[] = [
   },
   {
     slug: "gemiler-adasi",
-    name: "Gemiler Adası",
-    blurb: "Bizans dönemi kalıntılarının bulunduğu ada ve korunaklı demir yeri.",
-    distanceFromHarbor: "~60 dk", // TODO: teyit (kaptanla)
+    name: l("Gemiler Adası", "Gemiler Island", "Остров Гемилер"),
+    blurb: l(
+      "Bizans dönemi kalıntılarının bulunduğu ada ve korunaklı demir yeri.",
+      "An island with Byzantine-era ruins and a sheltered anchorage.",
+      "Остров с руинами византийской эпохи и защищённой якорной стоянкой.",
+    ),
+    distanceFromHarbor: l("~60 dk", "~60 min", "~60 мин"), // TODO: teyit (kaptanla)
     stayDuration: "—", // TODO: koyda kalış
     tours: "—", // TODO: hangi turların rotasında
     highlight: "—", // TODO: öne çıkan özellik
@@ -402,9 +612,13 @@ export const bays: Bay[] = [
   },
   {
     slug: "kelebekler-vadisi",
-    name: "Kelebekler Vadisi",
-    blurb: "Dik kayalıklar arasında plaj; karadan ulaşımı zor, tekneyle kolay.",
-    distanceFromHarbor: "~90 dk", // TODO: teyit (kaptanla)
+    name: l("Kelebekler Vadisi", "Butterfly Valley", "Долина бабочек"),
+    blurb: l(
+      "Dik kayalıklar arasında plaj; karadan ulaşımı zor, tekneyle kolay.",
+      "A beach between steep cliffs; hard to reach by land, easy by boat.",
+      "Пляж между отвесными скалами; по суше добраться трудно, на яхте легко.",
+    ),
+    distanceFromHarbor: l("~90 dk", "~90 min", "~90 мин"), // TODO: teyit (kaptanla)
     stayDuration: "—", // TODO: koyda kalış
     tours: "—", // TODO: hangi turların rotasında
     highlight: "—", // TODO: öne çıkan özellik
@@ -419,29 +633,29 @@ export const bays: Bay[] = [
  * (components/ui/fethiye-coast.ts). Konumlar OSM'den; "TODO: yaklaşık"
  * notlular elle konuldu. Tahmini süreler `bays[].distanceFromHarbor`dan okunur.
  */
-export const mapPoints: MapPoint[] = [
-  { slug: "fethiye-limani", name: "Fethiye Limanı", kind: "harbor", x: 547.6, y: 258.7, labelDx: 8, labelDy: -14, labelAnchor: "start" }, // pin: siteInfo.departure (TODO gerçek iskele)
-  { slug: "fethiye", name: "Fethiye", kind: "town", x: 551.4, y: 262.6, labelDx: 10, labelDy: 14, labelAnchor: "start" },
-  { slug: "karagozler", name: "Karagözler", kind: "town", x: 531.6, y: 262.8, priority: 2, labelDx: -6, labelDy: 12, labelAnchor: "end" },
-  { slug: "calis", name: "Çalış", kind: "town", x: 543.5, y: 176.5, labelDx: 10, labelDy: 4, labelAnchor: "start" },
-  { slug: "oludeniz", name: "Ölüdeniz", kind: "bay", x: 566.3, y: 397.6, icon: "sunset", labelDx: 0, labelDy: 26, labelAnchor: "middle" },
-  { slug: "kayakoy", name: "Kayaköy", kind: "town", x: 509.4, y: 345.2, priority: 2, labelDx: 0, labelDy: -8, labelAnchor: "middle" },
-  { slug: "hisaronu", name: "Hisarönü", kind: "town", x: 580.7, y: 356.9, priority: 2, labelDx: 8, labelDy: 4, labelAnchor: "start" },
-  { slug: "gocek", name: "Göcek", kind: "town", x: 290.3, y: 15.6, labelDx: 10, labelDy: 4, labelAnchor: "start" },
-  { slug: "faralya", name: "Faralya", kind: "town", x: 590.0, y: 500.0, priority: 2, labelDx: 8, labelDy: 4, labelAnchor: "start" }, // TODO: yaklaşık konum
-  { slug: "kelebekler-vadisi", name: "Kelebekler Vadisi", kind: "bay", x: 566.0, y: 488.0, icon: "photo", labelDx: -16, labelDy: 4, labelAnchor: "end" }, // TODO: yaklaşık konum (alt kenardan içeri alındı)
-  { slug: "sovalye", name: "Şövalye Adası", kind: "island", x: 531.9, y: 210.8, priority: 2, labelDx: 8, labelDy: -8, labelAnchor: "start" },
-  { slug: "kizilada", name: "Kızılada", kind: "island", x: 449.1, y: 194.3, icon: "snorkel", labelDx: 0, labelDy: -16, labelAnchor: "middle" },
-  { slug: "yassica", name: "Yassıca Adaları", kind: "island", x: 277.4, y: 107.8, icon: "food", labelDx: -16, labelDy: -2, labelAnchor: "end" },
-  { slug: "tersane", name: "Tersane Adası", kind: "island", x: 263.2, y: 175.7, priority: 2, labelDx: 8, labelDy: 4, labelAnchor: "start" },
-  { slug: "domuz", name: "Domuz Adası", kind: "island", x: 223.1, y: 189.6, icon: "swim", labelDx: -16, labelDy: 4, labelAnchor: "end" },
-  { slug: "zeytin", name: "Zeytin Adası", kind: "island", x: 266.9, y: 122.8, priority: 2, labelDx: -8, labelDy: 12, labelAnchor: "end" },
-  { slug: "delikli", name: "Delikli Ada", kind: "island", x: 230.9, y: 157.7, priority: 2, labelDx: -8, labelDy: -6, labelAnchor: "end" }, // TODO: yaklaşık konum (OSM'de bulunamadı)
-  { slug: "katranci", name: "Katrancı Adası", kind: "island", x: 390.5, y: 125.0, priority: 2, labelDx: 8, labelDy: -6, labelAnchor: "start" },
-  { slug: "gocek-adasi", name: "Göcek Adası", kind: "island", x: 289.8, y: 65.3, priority: 2, labelDx: 10, labelDy: 4, labelAnchor: "start" },
-  { slug: "akvaryum-koyu", name: "Akvaryum Koyu", kind: "bay", x: 458.0, y: 413.0, icon: "snorkel", labelDx: 0, labelDy: 28, labelAnchor: "middle" },
-  { slug: "samanlik-koyu", name: "Samanlık Koyu", kind: "bay", x: 508.2, y: 223.4, priority: 2, labelDx: -10, labelDy: 4, labelAnchor: "end" },
-  { slug: "gemiler-adasi", name: "Gemiler Adası", kind: "island", x: 482.9, y: 391.8, priority: 2, labelDx: 8, labelDy: -6, labelAnchor: "start" },
+export const mapPoints: Seed<MapPoint>[] = [
+  { slug: "fethiye-limani", name: l("Fethiye Limanı", "Fethiye Harbour", "Порт Фетхие"), kind: "harbor", x: 547.6, y: 258.7, labelDx: 8, labelDy: -14, labelAnchor: "start" }, // pin: siteInfo.departure (TODO gerçek iskele)
+  { slug: "fethiye", name: l("Fethiye", "Fethiye", "Фетхие"), kind: "town", x: 551.4, y: 262.6, labelDx: 10, labelDy: 14, labelAnchor: "start" },
+  { slug: "karagozler", name: l("Karagözler", "Karagözler", "Карагёзлер"), kind: "town", x: 531.6, y: 262.8, priority: 2, labelDx: -6, labelDy: 12, labelAnchor: "end" },
+  { slug: "calis", name: l("Çalış", "Çalış", "Чалыш"), kind: "town", x: 543.5, y: 176.5, labelDx: 10, labelDy: 4, labelAnchor: "start" },
+  { slug: "oludeniz", name: l("Ölüdeniz", "Ölüdeniz", "Олюдениз"), kind: "bay", x: 566.3, y: 397.6, icon: "sunset", labelDx: 0, labelDy: 26, labelAnchor: "middle" },
+  { slug: "kayakoy", name: l("Kayaköy", "Kayaköy", "Каякёй"), kind: "town", x: 509.4, y: 345.2, priority: 2, labelDx: 0, labelDy: -8, labelAnchor: "middle" },
+  { slug: "hisaronu", name: l("Hisarönü", "Hisarönü", "Хисарёню"), kind: "town", x: 580.7, y: 356.9, priority: 2, labelDx: 8, labelDy: 4, labelAnchor: "start" },
+  { slug: "gocek", name: l("Göcek", "Göcek", "Гёчек"), kind: "town", x: 290.3, y: 15.6, labelDx: 10, labelDy: 4, labelAnchor: "start" },
+  { slug: "faralya", name: l("Faralya", "Faralya", "Фаралья"), kind: "town", x: 590.0, y: 500.0, priority: 2, labelDx: 8, labelDy: 4, labelAnchor: "start" }, // TODO: yaklaşık konum
+  { slug: "kelebekler-vadisi", name: l("Kelebekler Vadisi", "Butterfly Valley", "Долина бабочек"), kind: "bay", x: 566.0, y: 488.0, icon: "photo", labelDx: -16, labelDy: 4, labelAnchor: "end" }, // TODO: yaklaşık konum (alt kenardan içeri alındı)
+  { slug: "sovalye", name: l("Şövalye Adası", "Şövalye Island", "Остров Шёвалье"), kind: "island", x: 531.9, y: 210.8, priority: 2, labelDx: 8, labelDy: -8, labelAnchor: "start" },
+  { slug: "kizilada", name: l("Kızılada", "Kızılada", "Кызылада"), kind: "island", x: 449.1, y: 194.3, icon: "snorkel", labelDx: 0, labelDy: -16, labelAnchor: "middle" },
+  { slug: "yassica", name: l("Yassıca Adaları", "Yassıca Islands", "Острова Яссыджа"), kind: "island", x: 277.4, y: 107.8, icon: "food", labelDx: -16, labelDy: -2, labelAnchor: "end" },
+  { slug: "tersane", name: l("Tersane Adası", "Tersane Island", "Остров Терсане"), kind: "island", x: 263.2, y: 175.7, priority: 2, labelDx: 8, labelDy: 4, labelAnchor: "start" },
+  { slug: "domuz", name: l("Domuz Adası", "Domuz Island", "Остров Домуз"), kind: "island", x: 223.1, y: 189.6, icon: "swim", labelDx: -16, labelDy: 4, labelAnchor: "end" },
+  { slug: "zeytin", name: l("Zeytin Adası", "Zeytin Island", "Остров Зейтин"), kind: "island", x: 266.9, y: 122.8, priority: 2, labelDx: -8, labelDy: 12, labelAnchor: "end" },
+  { slug: "delikli", name: l("Delikli Ada", "Delikli Island", "Остров Деликли"), kind: "island", x: 230.9, y: 157.7, priority: 2, labelDx: -8, labelDy: -6, labelAnchor: "end" }, // TODO: yaklaşık konum (OSM'de bulunamadı)
+  { slug: "katranci", name: l("Katrancı Adası", "Katrancı Island", "Остров Катранджи"), kind: "island", x: 390.5, y: 125.0, priority: 2, labelDx: 8, labelDy: -6, labelAnchor: "start" },
+  { slug: "gocek-adasi", name: l("Göcek Adası", "Göcek Island", "Остров Гёчек"), kind: "island", x: 289.8, y: 65.3, priority: 2, labelDx: 10, labelDy: 4, labelAnchor: "start" },
+  { slug: "akvaryum-koyu", name: l("Akvaryum Koyu", "Aquarium Bay", "Бухта Аквариум"), kind: "bay", x: 458.0, y: 413.0, icon: "snorkel", labelDx: 0, labelDy: 28, labelAnchor: "middle" },
+  { slug: "samanlik-koyu", name: l("Samanlık Koyu", "Samanlık Bay", "Бухта Саманлык"), kind: "bay", x: 508.2, y: 223.4, priority: 2, labelDx: -10, labelDy: 4, labelAnchor: "end" },
+  { slug: "gemiler-adasi", name: l("Gemiler Adası", "Gemiler Island", "Остров Гемилер"), kind: "island", x: 482.9, y: 391.8, priority: 2, labelDx: 8, labelDy: -6, labelAnchor: "start" },
 ];
 
 /**
@@ -450,22 +664,22 @@ export const mapPoints: MapPoint[] = [
  * koy listesinden türetildi). Rota çizgileri suda kalacak şekilde
  * illustrated-map.tsx içindeki ara noktalarla çizilir.
  */
-export const routes: TourRoute[] = [
+export const routes: Seed<TourRoute>[] = [
   {
     slug: "gunubirlik",
-    name: "Günübirlik",
+    name: l("Günübirlik", "Day charter", "На день"),
     productSlug: "gunubirlik-ozel-kiralama",
     stops: ["fethiye-limani", "kizilada", "akvaryum-koyu", "yassica", "fethiye-limani"], // TODO: teyit
   },
   {
     slug: "gun-batimi",
-    name: "Gün batımı",
+    name: l("Gün batımı", "Sunset", "Закат"),
     productSlug: "gun-batimi-turu",
     stops: ["fethiye-limani", "sovalye", "kizilada", "fethiye-limani"], // TODO: teyit
   },
   {
     slug: "mavi-tur",
-    name: "Mavi tur",
+    name: l("Mavi tur", "Blue cruise", "Голубой круиз"),
     productSlug: "mavi-tur",
     stops: ["fethiye-limani", "yassica", "oludeniz", "kelebekler-vadisi"], // TODO: teyit (Göcek yönü 12 Adalar → Ölüdeniz → Kelebekler)
   },

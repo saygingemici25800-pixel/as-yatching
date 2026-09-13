@@ -1,4 +1,5 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import AvailabilityCalendar from "@/components/AvailabilityCalendar";
 import BayCoverflow from "@/components/ui/bay-coverflow";
 import DemoNotice from "@/components/DemoNotice";
@@ -9,6 +10,7 @@ import ProductCard from "@/components/ProductCard";
 import VideoHero from "@/components/VideoHero";
 import { ParallaxScrolling } from "@/components/ui/parallax-scrolling";
 import { ArrowIcon, WhatsappIcon } from "@/components/icons";
+import { Link } from "@/i18n/navigation";
 import { whatsappUrl } from "@/lib/links";
 import {
   getAvailabilityBlocks,
@@ -22,9 +24,21 @@ import {
   getRoutes,
   getSiteInfo,
 } from "@/lib/repository";
+import { localizedAlternates } from "@/lib/seo";
+import type { Locale } from "@/lib/types";
 
-export default async function HomePage() {
-  const [info, featured, products, boats, faqs, reviews, bays, mapPoints, routes] =
+type PageProps = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale } = await params;
+  return { alternates: localizedAlternates("/", locale as Locale) };
+}
+
+export default async function HomePage({ params }: PageProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const [info, featured, products, boats, faqs, reviews, bays, mapPoints, routes, t, th, tw] =
     await Promise.all([
       getSiteInfo(),
       getFeaturedProducts(),
@@ -35,6 +49,9 @@ export default async function HomePage() {
       getBays(),
       getMapPoints(),
       getRoutes(),
+      getTranslations("home"),
+      getTranslations("hero"),
+      getTranslations("whatsapp"),
     ]);
 
   const boat = boats[0];
@@ -46,17 +63,14 @@ export default async function HomePage() {
 
       {/* ---------- Hero (video) ---------- */}
       <VideoHero>
-        <p className="eyebrow">Fethiye Limanı · Günübirlik ve konaklamalı</p>
+        <p className="eyebrow">{th("eyebrow")}</p>
         <h1 className="mt-4 max-w-3xl text-[2.375rem] leading-[1.05] sm:text-5xl lg:text-[4rem]">
-          <span className="block">Fethiye&apos;de tekne kiralama</span>
-          <span className="mt-2 block text-surface/85">
-            Tarihi seçin, fiyatı ve müsaitliği görün
-          </span>
+          <span className="block">{th("title1")}</span>
+          <span className="mt-2 block text-surface/85">{th("title2")}</span>
         </h1>
 
         <p className="mt-5 max-w-lg text-base leading-relaxed text-ink-soft">
-          Günübirlik özel kiralama, gün batımı turu, sabah kahvaltı turu ve
-          konaklamalı mavi tur. Fiyatlar sitede, tarihler takvimde.
+          {th("text")}
         </p>
 
         <div className="mt-7 flex flex-col gap-3 sm:flex-row">
@@ -64,20 +78,17 @@ export default async function HomePage() {
             href="/turlar"
             className="inline-flex items-center justify-center gap-2 rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-deep transition-opacity hover:opacity-90"
           >
-            Turları ve fiyatları gör
+            {th("ctaTours")}
             <ArrowIcon className="size-4" />
           </Link>
           <a
-            href={whatsappUrl(
-              info.whatsapp,
-              "Merhaba, tekne kiralama hakkında bilgi almak istiyorum.",
-            )}
+            href={whatsappUrl(info.whatsapp, tw("generalInquiry"))}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden items-center justify-center gap-2 rounded-sm bg-wa px-6 py-3.5 text-sm font-medium text-white transition-colors hover:bg-wa-deep md:inline-flex"
           >
             <WhatsappIcon className="size-4" />
-            WhatsApp&apos;tan yazın
+            {th("ctaWhatsapp")}
           </a>
         </div>
       </VideoHero>
@@ -89,9 +100,9 @@ export default async function HomePage() {
         className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24"
       >
         <div className="text-center">
-          <p className="eyebrow">Rota</p>
+          <p className="eyebrow">{t("rotaEyebrow")}</p>
           <h2 id="koylar-baslik" className="mt-2 text-3xl sm:text-4xl">
-            Nereye gidiyoruz?
+            {t("rotaTitle")}
           </h2>
         </div>
         <div className="mt-8 sm:mt-10">
@@ -101,23 +112,23 @@ export default async function HomePage() {
 
       {/* ---------- Fethiye körfezi (parallax) ---------- */}
       <ParallaxScrolling
-        eyebrow="Fethiye körfezi"
-        title="Sabah çıkıyoruz, akşam dönüyoruz"
-        caption="Kızılada, Akvaryum Koyu, Samanlık Koyu. Rotayı grubun temposuna göre birlikte belirliyoruz."
+        eyebrow={t("parallaxEyebrow")}
+        title={t("parallaxTitle")}
+        caption={t("parallaxCaption")}
       />
 
       {/* ---------- Öne çıkan turlar ---------- */}
       <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <p className="eyebrow">Turlar</p>
-            <h2 className="mt-2 text-3xl sm:text-4xl">Öne çıkanlar</h2>
+            <p className="eyebrow">{t("toursEyebrow")}</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl">{t("toursTitle")}</h2>
           </div>
           <Link
             href="/turlar"
             className="inline-flex items-center gap-2 text-sm text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
           >
-            {products.length} turun tamamı
+            {t("allTours", { count: products.length })}
             <ArrowIcon className="size-4" />
           </Link>
         </div>
@@ -133,20 +144,16 @@ export default async function HomePage() {
       <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24">
         <div className="grid gap-8 lg:grid-cols-[1fr_minmax(0,26rem)] lg:items-center lg:gap-14">
           <div>
-            <p className="eyebrow">Müsaitlik</p>
-            <h2 className="mt-2 text-3xl sm:text-4xl">
-              Hangi gün boş, takvimde belli
-            </h2>
+            <p className="eyebrow">{t("availabilityEyebrow")}</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl">{t("availabilityTitle")}</h2>
             <p className="mt-4 max-w-lg text-base leading-relaxed text-ink-soft">
-              Takvimi tek yerden yönetiyoruz. Üstü çizili günler dolu ya da
-              bakımda; geri kalan bütün günler müsait. Tarih seçip talep
-              göndermek için tur sayfasına geçin.
+              {t("availabilityText")}
             </p>
             <Link
               href="/turlar"
               className="mt-6 inline-flex items-center gap-2 rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-deep transition-opacity hover:opacity-90"
             >
-              Tarih seçip talep gönder
+              {t("availabilityCta")}
               <ArrowIcon className="size-4" />
             </Link>
           </div>
@@ -177,8 +184,8 @@ export default async function HomePage() {
 
       {/* ---------- Sık sorulanlar ---------- */}
       <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-24">
-        <p className="eyebrow">Sık sorulanlar</p>
-        <h2 className="mt-2 text-3xl sm:text-4xl">Merak edilenler</h2>
+        <p className="eyebrow">{t("faqEyebrow")}</p>
+        <h2 className="mt-2 text-3xl sm:text-4xl">{t("faqTitle")}</h2>
 
         <div className="mt-7 max-w-3xl divide-y divide-line overflow-hidden rounded-sm border border-line bg-surface">
           {faqs.map((faq) => (
@@ -214,12 +221,9 @@ export default async function HomePage() {
         <div className="rounded-sm border border-line bg-surface p-6 sm:p-10">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div>
-              <h2 className="text-2xl sm:text-3xl">
-                Aklınızdaki tarih müsait mi?
-              </h2>
+              <h2 className="text-2xl sm:text-3xl">{t("ctaTitle")}</h2>
               <p className="mt-3 max-w-md text-sm leading-relaxed text-ink-soft">
-                Takvimden tarihi seçin, kişi sayısını girin; fiyatı görüp talebi
-                WhatsApp&apos;tan gönderin. {info.workingHours} ulaşabilirsiniz.
+                {t("ctaText", { hours: info.workingHours })}
               </p>
             </div>
             <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
@@ -227,20 +231,17 @@ export default async function HomePage() {
                 href="/turlar"
                 className="inline-flex items-center justify-center gap-2 rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-deep transition-opacity hover:opacity-90"
               >
-                Turlara git
+                {t("ctaToursLabel")}
                 <ArrowIcon className="size-4" />
               </Link>
               <a
-                href={whatsappUrl(
-                  info.whatsapp,
-                  "Merhaba, müsaitlik sormak istiyorum.",
-                )}
+                href={whatsappUrl(info.whatsapp, tw("availability"))}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-sm bg-wa px-6 py-3.5 text-sm font-medium text-white transition-colors hover:bg-wa-deep"
               >
                 <WhatsappIcon className="size-4" />
-                Müsaitlik sor
+                {t("ctaAsk")}
               </a>
             </div>
           </div>

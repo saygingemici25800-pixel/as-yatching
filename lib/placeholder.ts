@@ -15,8 +15,7 @@ export function isMissing(value: string | number | null | undefined): boolean {
   return value.trim() === "" || value.trim().startsWith("TODO");
 }
 
-/** Bilinmeyen alanlar için tek tip etiket */
-export const MISSING_LABEL = "Bilgi bekleniyor";
+/* Bilinmeyen alanların etiketi messages/*.json → common.missing ("Bilgi bekleniyor") */
 
 export interface Spec {
   label: string;

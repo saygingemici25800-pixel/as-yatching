@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
+import { useTranslations } from "next-intl";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { COAST_PATHS, MAP_VIEW } from "@/components/ui/fethiye-coast";
 import type { Bay, MapIcon, MapPoint, TourRoute } from "@/lib/types";
@@ -96,12 +97,13 @@ const ICON_PATHS: Record<MapIcon, string> = {
   sunset: "M4 18h16M6 15a6 6 0 0 1 12 0M12 4v3M5 8l2 2M19 8l-2 2",
   photo: "M4 8h3l2-2h6l2 2h3v11H4zM12 17a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z",
 };
-const ICON_MEANING: Record<MapIcon, string> = {
-  food: "Yemek molası",
-  snorkel: "Şnorkel / maske",
-  swim: "Yüzme molası",
-  sunset: "Gün batımı",
-  photo: "Fotoğraf durağı",
+/** Rozet anlamı → messages/*.json `map` anahtarı */
+const ICON_KEY: Record<MapIcon, string> = {
+  food: "iconFood",
+  snorkel: "iconSnorkel",
+  swim: "iconSwim",
+  sunset: "iconSunset",
+  photo: "iconPhoto",
 };
 const ICON_ORDER: MapIcon[] = ["food", "snorkel", "swim", "sunset", "photo"];
 
@@ -145,6 +147,8 @@ export default function IllustratedMap({
   harborLabel: string;
   className?: string;
 }) {
+  const t = useTranslations("map");
+  const meaning = (icon: MapIcon) => t(ICON_KEY[icon]);
   const rootRef = useRef<HTMLDivElement>(null);
   const boatRef = useRef<SVGGElement>(null);
   const gliderRef = useRef<SVGGElement>(null);
@@ -168,7 +172,7 @@ export default function IllustratedMap({
     }
     return m;
   }, [bays]);
-  const minutesLabel = (slug: string) => (minutes.has(slug) && slug !== HARBOR ? `~${minutes.get(slug)} dk` : "—");
+  const minutesLabel = (slug: string) => (minutes.has(slug) && slug !== HARBOR ? t("minutes", { n: minutes.get(slug)! }) : "—");
   const toursOf = (slug: string) => routes.filter((r) => r.stops.includes(slug)).map((r) => r.name);
 
   // --- Rota geometrisi: durak → durak, sudaki ara noktalarla ---
@@ -339,7 +343,7 @@ export default function IllustratedMap({
   return (
     <div className={`relative ${className}`}>
       {/* Tur seçici */}
-      <div role="tablist" aria-label="Tur rotası" className="mb-3 inline-flex rounded-sm border border-line bg-surface p-1">
+      <div role="tablist" aria-label={t("tabsLabel")} className="mb-3 inline-flex rounded-sm border border-line bg-surface p-1">
         {routes.map((r) => (
           <button
             key={r.slug}
@@ -363,7 +367,7 @@ export default function IllustratedMap({
           preserveAspectRatio="xMidYMid slice"
           className="absolute inset-0 h-full w-full select-none"
           role="img"
-          aria-label="Fethiye Körfezi illüstratif haritası: liman, 12 Adalar, tur rotaları ve duraklar"
+          aria-label={t("ariaLabel")}
           style={{ fontFamily: "var(--font-body)" }}
         >
           <defs>
@@ -503,7 +507,7 @@ export default function IllustratedMap({
                 <g key={i} data-priority="2">
                   <rect x={leg.mid[0] - 17} y={leg.mid[1] - 7} width="34" height="12" rx="6" fill="var(--color-surface)" stroke="var(--color-deep)" strokeWidth="0.5" opacity="0.95" />
                   <text x={leg.mid[0]} y={leg.mid[1] + 2.5} textAnchor="middle" fontSize="8" fontWeight={600} fill="var(--color-deep)">
-                    ~{leg.minutes} dk
+                    {t("minutes", { n: leg.minutes })}
                   </text>
                 </g>
               ) : null,
@@ -552,7 +556,7 @@ export default function IllustratedMap({
                 data-priority={p.priority ?? 1}
                 role="button"
                 tabIndex={0}
-                aria-label={`${p.name} — ${ICON_MEANING[p.icon!]}, limandan ${minutesLabel(p.slug)}. Ayrıntı kartı.`}
+                aria-label={t("pointAria", { name: p.name, meaning: meaning(p.icon!), minutes: minutesLabel(p.slug) })}
                 className="cursor-pointer outline-none"
                 onMouseEnter={() => setCard(p.slug)}
                 onMouseLeave={() => setCard((c) => (c === p.slug ? null : c))}
@@ -604,11 +608,11 @@ export default function IllustratedMap({
             <path d="M0 -12 L4 2 L0 0 L-4 2 Z" />
             <path d="M0 12 L4 -2 L0 0 L-4 -2 Z" opacity="0.3" />
             <text x="0" y="-13" fontSize="8" fontWeight={700} textAnchor="middle">
-              K
+              {t("compassNorth")}
             </text>
           </g>
           <text x="12" y={MAP_VIEW.height - 12} fontSize={compact ? 9 : 10} fill="var(--color-deep)" opacity="0.8" paintOrder="stroke" stroke="var(--color-sea)" strokeWidth="3">
-            Tahmini süreler · kıyı çizgisi © OpenStreetMap
+            {t("credit")}
           </text>
         </svg>
 
@@ -669,7 +673,7 @@ export default function IllustratedMap({
               aria-expanded={legendOpen}
               className="rounded-sm border border-line bg-surface px-2.5 py-1 text-[0.6875rem] font-medium text-deep"
             >
-              {legendOpen ? "Lejantı kapat" : "Lejant"}
+              {legendOpen ? t("legendClose") : t("legend")}
             </button>
           )}
           {(!compact || legendOpen) && (
@@ -679,7 +683,7 @@ export default function IllustratedMap({
                   <svg viewBox="0 0 16 16" className="size-3.5 shrink-0" aria-hidden>
                     <IconPath icon={icon} x={8} y={8} size={14} />
                   </svg>
-                  {ICON_MEANING[icon]}
+                  {meaning(icon)}
                 </li>
               ))}
             </ul>
@@ -706,14 +710,14 @@ export default function IllustratedMap({
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold">{cardPoint.name}</p>
                 <p className="text-xs opacity-80">
-                  {cardPoint.icon ? ICON_MEANING[cardPoint.icon] : ""} · limandan {minutesLabel(cardPoint.slug)}
+                  {cardPoint.icon ? meaning(cardPoint.icon) : ""} · {t("fromHarbour", { value: minutesLabel(cardPoint.slug) })}
                 </p>
-                {toursOf(cardPoint.slug).length > 0 && <p className="mt-0.5 text-xs opacity-80">Bu turda: {toursOf(cardPoint.slug).join(" · ")}</p>}
+                {toursOf(cardPoint.slug).length > 0 && <p className="mt-0.5 text-xs opacity-80">{t("inThisTour", { tours: toursOf(cardPoint.slug).join(" · ") })}</p>}
               </div>
             </div>
             {cardBay && (
               <button type="button" onClick={() => goToBay(cardPoint.slug)} className="mt-2 w-full rounded-sm bg-navy px-2 py-1.5 text-xs font-medium text-cream hover:opacity-90">
-                Rota bölümünde göster →
+                {t("showInRoute")}
               </button>
             )}
           </div>

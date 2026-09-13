@@ -1,25 +1,20 @@
+import type { Locale } from "./types";
+
 /**
  * Tarih yardımcıları — saf fonksiyonlar, veri erişimi yok.
  * Hepsi YEREL saat diliminde çalışır. `toISODate` UTC'ye çevirmez;
  * `toISOString()` kullanılırsa Türkiye saatinde tarih bir gün kayar.
+ * Ay ve gün adları `Intl` ile aktif dilde üretilir.
  */
 
-export const WEEKDAY_LABELS = ["Pt", "Sa", "Ça", "Pe", "Cu", "Ct", "Pz"];
-
-const MONTH_NAMES = [
-  "Ocak",
-  "Şubat",
-  "Mart",
-  "Nisan",
-  "Mayıs",
-  "Haziran",
-  "Temmuz",
-  "Ağustos",
-  "Eylül",
-  "Ekim",
-  "Kasım",
-  "Aralık",
-];
+/** Pazartesi başlangıçlı kısa gün adları ("Pzt", "Mon", "пн") */
+export function weekdayLabels(locale: Locale): string[] {
+  const fmt = new Intl.DateTimeFormat(locale, { weekday: "short" });
+  // 2024-01-01 Pazartesi
+  return Array.from({ length: 7 }, (_, i) =>
+    fmt.format(new Date(2024, 0, 1 + i)).replace(/\.$/, ""),
+  );
+}
 
 /** Date -> "2026-08-22" (yerel) */
 export function toISODate(date: Date): string {
@@ -35,13 +30,18 @@ export function fromISODate(iso: string): Date {
   return new Date(y, m - 1, d);
 }
 
-export function monthLabel(year: number, month: number): string {
-  return `${MONTH_NAMES[month]} ${year}`;
+/** "Ağustos 2026" / "August 2026" / "август 2026" */
+export function monthLabel(year: number, month: number, locale: Locale): string {
+  const name = new Intl.DateTimeFormat(locale, { month: "long" }).format(
+    new Date(year, month, 1),
+  );
+  const capitalized = name.charAt(0).toLocaleUpperCase(locale) + name.slice(1);
+  return `${capitalized} ${year}`;
 }
 
 /** "22 Ağustos 2026, Cumartesi" */
-export function formatLongDate(iso: string): string {
-  return fromISODate(iso).toLocaleDateString("tr-TR", {
+export function formatLongDate(iso: string, locale: Locale): string {
+  return fromISODate(iso).toLocaleDateString(locale, {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -92,8 +92,9 @@ export function buildMonthGrid(
   return cells;
 }
 
-export const BLOCK_REASON_LABEL: Record<string, string> = {
-  booked: "Dolu",
-  maintenance: "Bakım",
-  off_season: "Sezon dışı",
+/** Blok gerekçesi → messages/*.json `calendar` anahtarı */
+export const BLOCK_REASON_KEY: Record<string, string> = {
+  booked: "booked",
+  maintenance: "maintenance",
+  off_season: "offSeason",
 };

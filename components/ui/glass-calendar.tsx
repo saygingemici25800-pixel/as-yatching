@@ -2,15 +2,16 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import {
-  BLOCK_REASON_LABEL,
-  WEEKDAY_LABELS,
+  BLOCK_REASON_KEY,
   monthLabel,
   startOfToday,
   toISODate,
+  weekdayLabels,
 } from "@/lib/dates";
-import type { AvailabilityBlock } from "@/lib/types";
+import type { AvailabilityBlock, Locale } from "@/lib/types";
 
 /**
  * Cam görünümlü müsaitlik takvimi (21st.dev GlassCalendar'dan uyarlandı).
@@ -62,6 +63,11 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
     { className, blocks, selected = null, onSelect, monthsAhead = 11, ...props },
     ref,
   ) => {
+    const t = useTranslations("calendar");
+    const locale = useLocale() as Locale;
+    const weekdays = React.useMemo(() => weekdayLabels(locale), [locale]);
+    const reasonLabel = (reason: AvailabilityBlock["reason"] | undefined) =>
+      reason ? t(BLOCK_REASON_KEY[reason]) : t("notAvailable");
     const today = React.useMemo(() => startOfToday(), []);
     const [offset, setOffset] = React.useState(0);
     const stripRef = React.useRef<HTMLDivElement>(null);
@@ -82,8 +88,8 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
       const list: { date: Date; iso: string; day: number; weekday: string; isPast: boolean; isToday: boolean }[] = [];
       for (let i = 1; i <= daysInMonth; i++) {
         const date = new Date(viewDate.getFullYear(), viewDate.getMonth(), i);
-        // getDay(): 0 = Pazar; WEEKDAY_LABELS Pazartesi'den başlar
-        const weekday = WEEKDAY_LABELS[(date.getDay() + 6) % 7];
+        // getDay(): 0 = Pazar; weekdays Pazartesi'den başlar
+        const weekday = weekdays[(date.getDay() + 6) % 7];
         list.push({
           date,
           iso: toISODate(date),
@@ -95,7 +101,7 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
       }
       return list;
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [daysInMonth, viewDate.getFullYear(), viewDate.getMonth(), today]);
+    }, [daysInMonth, viewDate.getFullYear(), viewDate.getMonth(), today, weekdays]);
 
     // Ay değişince şerit başa, bu ayda ise bugüne/seçili güne kaydır
     React.useEffect(() => {
@@ -133,14 +139,14 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
             aria-live="polite"
             className="font-display text-3xl tracking-tight sm:text-4xl"
           >
-            {monthLabel(viewDate.getFullYear(), viewDate.getMonth())}
+            {monthLabel(viewDate.getFullYear(), viewDate.getMonth(), locale)}
           </motion.p>
           <div className="flex items-center gap-1">
             <button
               type="button"
               onClick={() => setOffset((o) => Math.max(0, o - 1))}
               disabled={offset === 0}
-              aria-label="Önceki ay"
+              aria-label={t("prevMonth")}
               className="flex size-9 items-center justify-center rounded-full text-cream/70 transition-colors hover:bg-white/10 hover:text-cream disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent"
             >
               <Chevron dir="left" />
@@ -149,7 +155,7 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
               type="button"
               onClick={() => setOffset((o) => Math.min(monthsAhead, o + 1))}
               disabled={offset >= monthsAhead}
-              aria-label="Sonraki ay"
+              aria-label={t("nextMonth")}
               className="flex size-9 items-center justify-center rounded-full text-cream/70 transition-colors hover:bg-white/10 hover:text-cream disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent"
             >
               <Chevron dir="right" />
@@ -167,10 +173,10 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
               const disabled = d.isPast || isBlocked || !interactive;
 
               const label = isBlocked
-                ? `${d.day} — ${BLOCK_REASON_LABEL[reason!] ?? "müsait değil"}`
+                ? t("dayBlocked", { day: d.day, reason: reasonLabel(reason) })
                 : d.isPast
-                  ? `${d.day} — geçmiş tarih`
-                  : `${d.day} — müsait`;
+                  ? t("dayPast", { day: d.day })
+                  : t("dayAvailable", { day: d.day });
 
               return (
                 <div key={d.iso} className="flex shrink-0 flex-col items-center gap-2">
@@ -184,7 +190,7 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
                     disabled={disabled}
                     aria-pressed={interactive ? isSelected : undefined}
                     aria-label={label}
-                    title={isBlocked ? BLOCK_REASON_LABEL[reason!] : undefined}
+                    title={isBlocked ? reasonLabel(reason) : undefined}
                     onClick={interactive && !disabled ? () => onSelect!(d.iso) : undefined}
                     className={cn(
                       "relative flex size-9 items-center justify-center rounded-full text-sm font-medium transition-all duration-200",
@@ -216,16 +222,16 @@ export const GlassCalendar = React.forwardRef<HTMLDivElement, GlassCalendarProps
         <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs text-cream/70">
           <li className="flex items-center gap-2">
             <span className="size-3 rounded-full border border-white/40" aria-hidden />
-            Müsait
+            {t("legendAvailable")}
           </li>
           <li className="flex items-center gap-2">
             <span className="size-3 rounded-full bg-white/20" aria-hidden />
-            Dolu / bakım
+            {t("legendBlocked")}
           </li>
           {interactive && (
             <li className="flex items-center gap-2">
               <span className="size-3 rounded-full bg-cream ring-2 ring-accent" aria-hidden />
-              Seçtiğiniz tarih
+              {t("legendSelected")}
             </li>
           )}
         </ul>

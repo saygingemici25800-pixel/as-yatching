@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { usePathname } from "@/i18n/navigation";
 
 /**
- * Footer'ın en altındaki ipucu — yalnızca ana sayfada.
+ * Footer'ın en altındaki ipucu — yalnızca ana sayfada (her dilde).
  * Hareket azaltma tercihinde ScrollLoop kapalı; yerine "Başa dön" bağlantısı.
  */
 export default function ScrollLoopHint() {
   const pathname = usePathname();
+  const t = useTranslations("footer");
   const [reduced, setReduced] = useState(false);
   useEffect(() => {
     setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -18,11 +20,11 @@ export default function ScrollLoopHint() {
 
   return reduced ? (
     <a href="#" className="text-xs text-ink-soft hover:text-accent">
-      ↑ Başa dön
+      {t("backToTop")}
     </a>
   ) : (
     <p className="text-xs text-ink-soft" aria-hidden>
-      ↓ kaydırmaya devam et — başa dön
+      {t("scrollHint")}
     </p>
   );
 }

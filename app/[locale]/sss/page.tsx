@@ -1,20 +1,36 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import DemoNotice from "@/components/DemoNotice";
 import { ArrowIcon, WhatsappIcon } from "@/components/icons";
+import { Link } from "@/i18n/navigation";
 import { whatsappUrl } from "@/lib/links";
 import { getFaqs, getSiteInfo } from "@/lib/repository";
-import { faqSchema, jsonLdScript } from "@/lib/seo";
+import { faqSchema, jsonLdScript, localizedAlternates } from "@/lib/seo";
+import type { Locale } from "@/lib/types";
 
-export const metadata: Metadata = {
-  title: "Sık Sorulan Sorular | Fethiye Tekne Kiralama",
-  description:
-    "Fiyata neler dahil, hava kötü olursa ne oluyor, çocuklarla gelinebilir mi? Tekne kiralama hakkında en çok sorulan soruların cevapları.",
-  alternates: { canonical: "/sss" },
-};
+type PageProps = { params: Promise<{ locale: string }> };
 
-export default async function FaqPage() {
-  const [faqs, info] = await Promise.all([getFaqs(), getSiteInfo()]);
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "faq" });
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+    alternates: localizedAlternates("/sss", locale as Locale),
+  };
+}
+
+export default async function FaqPage({ params }: PageProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const [faqs, info, t, tc, tw] = await Promise.all([
+    getFaqs(),
+    getSiteInfo(),
+    getTranslations("faq"),
+    getTranslations("common"),
+    getTranslations("whatsapp"),
+  ]);
 
   return (
     <>
@@ -27,23 +43,23 @@ export default async function FaqPage() {
       <DemoNotice />
 
       <div className="mx-auto max-w-6xl px-4 pt-6 sm:px-6 sm:pt-8">
-        <nav aria-label="Sayfa yolu" className="text-xs text-ink-soft">
+        <nav aria-label={tc("breadcrumb")} className="text-xs text-ink-soft">
           <ol className="flex flex-wrap items-center gap-1.5">
             <li>
-              <Link href="/" className="hover:text-accent">Ana sayfa</Link>
+              <Link href="/" className="hover:text-accent">{tc("home")}</Link>
             </li>
             <li aria-hidden>/</li>
-            <li aria-current="page" className="text-ink">Sık sorulan sorular</li>
+            <li aria-current="page" className="text-ink">{t("breadcrumb")}</li>
           </ol>
         </nav>
 
         <header className="mt-6">
-          <p className="eyebrow">Sık sorulanlar</p>
+          <p className="eyebrow">{t("eyebrow")}</p>
           <h1 className="mt-4 max-w-2xl text-[2.125rem] leading-[1.15] sm:text-5xl">
-            Merak edilenler
+            {t("title")}
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-soft">
-            Aradığınızı bulamazsanız yazın; cevabını buraya da ekleyelim.
+            {t("intro")}
           </p>
         </header>
 
@@ -76,30 +92,26 @@ export default async function FaqPage() {
           <div className="rounded-sm border border-line bg-surface p-6 sm:p-10">
             <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div>
-                <h2 className="text-2xl sm:text-3xl">Sorunuz burada yok mu?</h2>
+                <h2 className="text-2xl sm:text-3xl">{t("ctaTitle")}</h2>
                 <p className="mt-3 max-w-md text-sm leading-relaxed text-ink-soft">
-                  {info.workingHours} yazabilirsiniz. Genelde birkaç dakika
-                  içinde dönüş yapıyoruz.
+                  {t("ctaText", { hours: info.workingHours })}
                 </p>
               </div>
               <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
                 <a
-                  href={whatsappUrl(
-                    info.whatsapp,
-                    "Merhaba, bir sorum var.",
-                  )}
+                  href={whatsappUrl(info.whatsapp, tw("question"))}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 rounded-sm bg-wa px-6 py-3.5 text-sm font-medium text-white transition-colors hover:bg-wa-deep"
                 >
                   <WhatsappIcon className="size-4" />
-                  WhatsApp&apos;tan sorun
+                  {tc("whatsappAsk")}
                 </a>
                 <Link
                   href="/turlar"
                   className="inline-flex items-center justify-center gap-2 rounded-sm border border-line px-6 py-3.5 text-sm font-medium text-ink transition-colors hover:border-accent"
                 >
-                  Turlara bakın
+                  {tc("browseTours")}
                   <ArrowIcon className="size-4" />
                 </Link>
               </div>

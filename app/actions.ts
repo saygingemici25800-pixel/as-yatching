@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import {
   createBookingRequest,
   getProduct,
@@ -23,26 +24,25 @@ export type BookingActionResult =
  * başladığında bu dosya değişmeyecek.
  *
  * Tarayıcıdaki kontrollere güvenilmez; müsaitlik ve kişi sayısı burada
- * yeniden doğrulanıyor.
+ * yeniden doğrulanıyor. Hata metinleri misafirin dilinde (messages/*.json).
  */
 export async function requestBooking(
   input: BookingActionInput,
 ): Promise<BookingActionResult> {
+  const t = await getTranslations("booking");
+
   const product = await getProduct(input.productSlug);
   if (!product) {
-    return { ok: false, error: "Tur bulunamadı." };
+    return { ok: false, error: t("errorNotFound") };
   }
 
   if (!/^\d{4}-\d{2}-\d{2}$/.test(input.date)) {
-    return { ok: false, error: "Lütfen takvimden bir tarih seçin." };
+    return { ok: false, error: t("errorBadDate") };
   }
 
   const available = await isDateAvailable(product.boatSlug, input.date);
   if (!available) {
-    return {
-      ok: false,
-      error: "Seçtiğiniz tarih dolu görünüyor. Başka bir tarih seçin.",
-    };
+    return { ok: false, error: t("errorUnavailable") };
   }
 
   const guests = Math.round(input.guests);
@@ -53,7 +53,7 @@ export async function requestBooking(
   ) {
     return {
       ok: false,
-      error: `Kişi sayısı ${product.minGuests} ile ${product.maxGuests} arasında olmalı.`,
+      error: t("errorGuests", { min: product.minGuests, max: product.maxGuests }),
     };
   }
 

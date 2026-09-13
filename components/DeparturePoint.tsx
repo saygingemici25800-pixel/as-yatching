@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import IllustratedMap from "@/components/ui/illustrated-map";
 import { ArrowIcon, PinIcon, WhatsappIcon } from "@/components/icons";
 import { directionsUrl, whatsappUrl } from "@/lib/links";
@@ -11,12 +12,6 @@ import type { Bay, MapPoint, SiteInfo, TourRoute } from "@/lib/types";
  *
  * TODO (işletmeyle teyit): buluşma saati, otopark, ulaşım satırları.
  */
-const DETAILS: { label: string; value: string }[] = [
-  { label: "Buluşma", value: "Kalkıştan 15 dk önce" }, // TODO: teyit
-  { label: "Otopark", value: "—" }, // TODO: otopark bilgisi
-  { label: "Ulaşım", value: "Fethiye merkezden yürüyerek" }, // TODO: teyit
-];
-
 export default function DeparturePoint({
   info,
   points,
@@ -28,7 +23,16 @@ export default function DeparturePoint({
   bays: Bay[];
   routes: TourRoute[];
 }) {
+  const t = useTranslations("departure");
+  const tc = useTranslations("common");
+  const tw = useTranslations("whatsapp");
   const { departure } = info;
+
+  const details: { label: string; value: string }[] = [
+    { label: t("meeting"), value: t("meetingValue") }, // TODO: teyit
+    { label: t("parking"), value: "—" }, // TODO: otopark bilgisi
+    { label: t("transport"), value: t("transportValue") }, // TODO: teyit
+  ];
 
   return (
     <section
@@ -39,9 +43,9 @@ export default function DeparturePoint({
       <div className="grid gap-6 lg:grid-cols-[minmax(0,26rem)_1fr] lg:gap-8">
         {/* Sol: krem kutu */}
         <div className="min-w-0 rounded-sm border border-line bg-surface p-6 sm:p-8">
-          <p className="eyebrow">Kalkış noktası</p>
+          <p className="eyebrow">{t("eyebrow")}</p>
           <h2 id="kalkis-baslik" className="mt-2 text-3xl sm:text-4xl">
-            Fethiye Limanı, beton iskele
+            {t("title")}
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-ink-soft">
             {info.address}
@@ -53,7 +57,7 @@ export default function DeparturePoint({
           )}
 
           <dl className="mt-6 border-t border-line text-sm">
-            {DETAILS.map((row) => (
+            {details.map((row) => (
               <div
                 key={row.label}
                 className="flex items-baseline justify-between gap-4 border-b border-line py-2.5"
@@ -73,19 +77,16 @@ export default function DeparturePoint({
               className="inline-flex items-center justify-center gap-2 rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-deep transition-opacity hover:opacity-90"
             >
               <PinIcon className="size-4" />
-              Yol tarifi al
+              {t("directions")}
             </a>
             <a
-              href={whatsappUrl(
-                info.whatsapp,
-                "Merhaba, kalkış noktasını sormak istiyorum.",
-              )}
+              href={whatsappUrl(info.whatsapp, tw("departure"))}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-sm bg-wa px-6 py-3.5 text-sm font-medium text-white transition-colors hover:bg-wa-deep"
             >
               <WhatsappIcon className="size-4" />
-              WhatsApp&apos;tan sor
+              {tc("whatsappAsk")}
               <ArrowIcon className="size-4" />
             </a>
           </div>

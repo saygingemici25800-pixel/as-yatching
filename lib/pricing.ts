@@ -1,10 +1,20 @@
-import type { Product } from "./types";
+import type { Locale, Product } from "./types";
 
 const HIGH_SEASON_MONTHS = [6, 7, 8, 9];
 
 export function isHighSeason(date: Date): boolean {
   return HIGH_SEASON_MONTHS.includes(date.getMonth() + 1);
 }
+
+/**
+ * Çeviri fonksiyonu — next-intl'in `useTranslations("pricing")` /
+ * `getTranslations("pricing")` çıktısıyla uyumlu. Fiyat yardımcıları metin
+ * üretmez; etiketleri bu fonksiyondan alır (metinler messages/*.json'da).
+ */
+export type Translate = (
+  key: string,
+  values?: Record<string, string | number>,
+) => string;
 
 export interface PriceResult {
   total: number;
@@ -21,6 +31,8 @@ export function calculatePrice(
   product: Product,
   guests: number,
   date: Date | null,
+  t: Translate,
+  locale: Locale,
 ): PriceResult {
   const seasonMultiplier =
     date && isHighSeason(date) ? product.highSeasonMultiplier : 1;
@@ -28,30 +40,35 @@ export function calculatePrice(
   let base: number;
   let unitLabel: string;
   let breakdown: string;
+  const price = formatTRY(product.basePrice, locale);
 
   switch (product.pricingType) {
     case "per_day": {
       const days = product.durationDays ?? 1;
       base = product.basePrice * days;
-      unitLabel = days > 1 ? `${days} gün` : "tekne / gün";
+      unitLabel = days > 1 ? t("unitDays", { days }) : t("unitDayOne");
       breakdown =
         days > 1
-          ? `${formatTRY(product.basePrice)} × ${days} gün`
-          : `Tekne günlük fiyatı — ${product.maxGuests} kişiye kadar`;
+          ? t("breakdownDays", { price, days })
+          : t("breakdownDayOne", { max: product.maxGuests });
       break;
     }
     case "per_person": {
       const effectiveGuests = Math.max(guests, product.minGuests);
       base = product.basePrice * effectiveGuests;
-      unitLabel = "kişi başı";
-      breakdown = `${formatTRY(product.basePrice)} × ${effectiveGuests} kişi (en az ${product.minGuests} kişi)`;
+      unitLabel = t("unitPerson");
+      breakdown = t("breakdownPerson", {
+        price,
+        guests: effectiveGuests,
+        min: product.minGuests,
+      });
       break;
     }
     case "per_hour": {
       const hours = product.durationHours ?? 1;
       base = product.basePrice * hours;
-      unitLabel = `${hours} saat`;
-      breakdown = `${formatTRY(product.basePrice)} × ${hours} saat`;
+      unitLabel = t("unitHours", { hours });
+      breakdown = t("breakdownHours", { price, hours });
       break;
     }
   }
@@ -63,28 +80,52 @@ export function calculatePrice(
     unitLabel,
     breakdown:
       seasonMultiplier > 1
-        ? `${breakdown} · yüksek sezon`
+        ? `${breakdown} · ${t("highSeason")}`
         : breakdown,
     isSample: product.isSamplePrice,
   };
 }
 
-export function formatTRY(amount: number): string {
-  return new Intl.NumberFormat("tr-TR", {
+/** ₺ simgesiyle, dilin sayı biçiminde (tr: ₺18.000 · en: ₺18,000 · ru: 18 000 ₺) */
+export function formatTRY(amount: number, locale: Locale = "tr"): string {
+  return new Intl.NumberFormat(locale, {
     style: "currency",
     currency: "TRY",
+    currencyDisplay: "narrowSymbol",
     maximumFractionDigits: 0,
   }).format(amount);
 }
 
 /** Kart üzerinde gösterilecek "şu fiyattan başlıyor" ifadesi */
-export function startingFromLabel(product: Product): string {
+export function startingFromLabel(
+  product: Product,
+  t: Translate,
+  locale: Locale,
+): string {
+  const price = formatTRY(product.basePrice, locale);
   switch (product.pricingType) {
     case "per_day":
-      return `${formatTRY(product.basePrice)} / gün`;
+      return t("perDay", { price });
     case "per_person":
-      return `${formatTRY(product.basePrice)} / kişi`;
+      return t("perPerson", { price });
     case "per_hour":
-      return `${formatTRY(product.basePrice)} / saat`;
+      return t("perHour", { price });
   }
+}
+
+/** Süre etiketi: saatlik, günlük ve konaklamalı ürünlerin hepsini karşılar */
+export function durationLabel(product: Product, t: Translate): string | null {
+  if (product.durationDays && product.durationDays > 1) {
+    return t("durationDays", { days: product.durationDays });
+  }
+  if (product.durationHours) {
+    return t("durationHours", { hours: product.durationHours });
+  }
+  return null;
+}
+
+export function guestsLabel(product: Product, t: Translate): string {
+  return product.minGuests > 1
+    ? t("guestsRange", { min: product.minGuests, max: product.maxGuests })
+    : t("guestsUpTo", { max: product.maxGuests });
 }

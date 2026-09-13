@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import ScrollLoopHint from "@/components/ScrollLoopHint";
 import Wordmark from "@/components/Wordmark";
 import {
@@ -8,11 +8,27 @@ import {
   PinIcon,
   WhatsappIcon,
 } from "@/components/icons";
+import { Link } from "@/i18n/navigation";
+import type { StaticPathname } from "@/i18n/routing";
 import { telUrl, whatsappUrl } from "@/lib/links";
 import { getSiteInfo } from "@/lib/repository";
 
+const LINKS: { href: StaticPathname; key: string; ns: "nav" | "common" | "footer" }[] = [
+  { href: "/turlar", key: "toursAndPrices", ns: "common" },
+  { href: "/tekne", key: "boat", ns: "nav" },
+  { href: "/sss", key: "faqLong", ns: "footer" },
+  { href: "/iletisim", key: "contact", ns: "nav" },
+];
+
 export default async function SiteFooter() {
-  const info = await getSiteInfo();
+  const [info, t, tn, tc] = await Promise.all([
+    getSiteInfo(),
+    getTranslations("footer"),
+    getTranslations("nav"),
+    getTranslations("common"),
+  ]);
+  const label = (item: (typeof LINKS)[number]) =>
+    item.ns === "nav" ? tn(item.key) : item.ns === "common" ? tc(item.key) : t(item.key);
 
   return (
     <footer className="mt-20 border-t border-line/60 bg-canvas/40">
@@ -20,13 +36,12 @@ export default async function SiteFooter() {
         <div>
           <Wordmark className="text-2xl" />
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-ink-soft">
-            Fethiye Limanı&apos;ndan kalkan günübirlik ve konaklamalı tekne
-            turları. Fiyatlar sitede yazılı, tarihler takvimde açık.
+            {t("text")}
           </p>
         </div>
 
         <div>
-          <p className="eyebrow">İletişim</p>
+          <p className="eyebrow">{t("contactEyebrow")}</p>
           <ul className="mt-3 space-y-2.5 text-sm">
             <li>
               <a
@@ -45,7 +60,7 @@ export default async function SiteFooter() {
                 className="inline-flex items-center gap-2 rounded-sm bg-wa px-3 py-1.5 text-white transition-colors hover:bg-wa-deep"
               >
                 <WhatsappIcon className="size-4" />
-                WhatsApp&apos;tan yazın
+                {tc("whatsappWrite")}
               </a>
             </li>
             {info.instagram && (
@@ -57,7 +72,7 @@ export default async function SiteFooter() {
                   className="inline-flex items-center gap-2 hover:text-accent"
                 >
                   <InstagramIcon className="size-4 text-accent" />
-                  Instagram: @as_yachting
+                  {t("instagram")}
                 </a>
               </li>
             )}
@@ -69,7 +84,7 @@ export default async function SiteFooter() {
         </div>
 
         <div>
-          <p className="eyebrow">Adres</p>
+          <p className="eyebrow">{t("addressEyebrow")}</p>
           <a
             href={info.mapUrl}
             target="_blank"
@@ -80,26 +95,13 @@ export default async function SiteFooter() {
             {info.address}
           </a>
           <ul className="mt-5 space-y-2 text-sm">
-            <li>
-              <Link href="/turlar" className="text-ink-soft hover:text-accent">
-                Turlar ve fiyatlar
-              </Link>
-            </li>
-            <li>
-              <Link href="/tekne" className="text-ink-soft hover:text-accent">
-                Tekne
-              </Link>
-            </li>
-            <li>
-              <Link href="/sss" className="text-ink-soft hover:text-accent">
-                Sık sorulan sorular
-              </Link>
-            </li>
-            <li>
-              <Link href="/iletisim" className="text-ink-soft hover:text-accent">
-                İletişim
-              </Link>
-            </li>
+            {LINKS.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} className="text-ink-soft hover:text-accent">
+                  {label(item)}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -107,9 +109,7 @@ export default async function SiteFooter() {
       <div className="hairline">
         <div className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-5 text-xs text-ink-soft sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <p>© {new Date().getFullYear()} {info.brandName}</p>
-          <p>
-            Demo sürüm — fiyatlar ve tekne bilgileri örnektir.
-          </p>
+          <p>{t("demo")}</p>
         </div>
         <div className="mx-auto max-w-6xl px-4 pb-4 text-center sm:px-6">
           <ScrollLoopHint />

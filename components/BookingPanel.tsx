@@ -1,13 +1,14 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { requestBooking } from "@/app/actions";
 import AvailabilityCalendar from "@/components/AvailabilityCalendar";
 import SampleBadge from "@/components/SampleBadge";
 import { WhatsappIcon } from "@/components/icons";
 import { formatLongDate, fromISODate } from "@/lib/dates";
 import { calculatePrice, formatTRY } from "@/lib/pricing";
-import type { AvailabilityBlock, Product } from "@/lib/types";
+import type { AvailabilityBlock, Locale, Product } from "@/lib/types";
 
 /**
  * Talep formu: tarih + kişi sayısı + ürün → WhatsApp mesajı (Faz 2 DoD).
@@ -23,14 +24,18 @@ export default function BookingPanel({
   product: Product;
   blocks: AvailabilityBlock[];
 }) {
+  const t = useTranslations("booking");
+  const tp = useTranslations("pricing");
+  const locale = useLocale() as Locale;
   const [date, setDate] = useState<string | null>(null);
   const [guests, setGuests] = useState(Math.max(2, product.minGuests));
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
   const price = useMemo(
-    () => calculatePrice(product, guests, date ? fromISODate(date) : null),
-    [product, guests, date],
+    () =>
+      calculatePrice(product, guests, date ? fromISODate(date) : null, tp, locale),
+    [product, guests, date, tp, locale],
   );
 
   function clampGuests(next: number) {
@@ -39,7 +44,7 @@ export default function BookingPanel({
 
   function handleSubmit() {
     if (!date) {
-      setError("Önce takvimden bir tarih seçin.");
+      setError(t("errorNoDate"));
       return;
     }
     setError(null);
@@ -61,46 +66,43 @@ export default function BookingPanel({
 
   return (
     <div className="rounded-sm border border-line bg-surface p-5 sm:p-6">
-      <p className="eyebrow">Tarih seçin, fiyatı görün</p>
+      <p className="eyebrow">{t("eyebrow")}</p>
 
       {/* ---- Fiyat ---- */}
       <div className="mt-4 border-b border-line pb-5">
         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
           <span className="text-3xl font-semibold tracking-tight">
-            {formatTRY(price.total)}
+            {formatTRY(price.total, locale)}
           </span>
-          <span className="text-sm text-ink-soft">/ {price.unitLabel}</span>
+          <span className="text-sm text-ink-soft">
+            {t("perUnit", { unit: price.unitLabel })}
+          </span>
           {price.isSample && <SampleBadge className="ml-auto" />}
         </div>
         <p className="mt-2 text-xs leading-relaxed text-ink-soft">
           {price.breakdown}
         </p>
         {!date && (
-          <p className="mt-2 text-xs text-ink-soft">
-            Yüksek sezon farkı tarih seçilince hesaba katılır.
-          </p>
+          <p className="mt-2 text-xs text-ink-soft">{t("highSeasonNote")}</p>
         )}
       </div>
 
       {/* ---- Kişi sayısı ---- */}
       <div className="mt-5">
-        <label
-          htmlFor="guests"
-          className="block text-sm font-medium"
-        >
-          Kişi sayısı
+        <label htmlFor="guests" className="block text-sm font-medium">
+          {t("guests")}
         </label>
         <p className="mt-1 text-xs text-ink-soft">
           {product.minGuests > 1
-            ? `En az ${product.minGuests}, en fazla ${product.maxGuests} kişi`
-            : `En fazla ${product.maxGuests} kişi`}
+            ? t("guestsRange", { min: product.minGuests, max: product.maxGuests })
+            : t("guestsMax", { max: product.maxGuests })}
         </p>
         <div className="mt-2 flex items-center gap-2">
           <button
             type="button"
             onClick={() => clampGuests(guests - 1)}
             disabled={guests <= product.minGuests}
-            aria-label="Kişi sayısını azalt"
+            aria-label={t("decrease")}
             className="flex size-11 shrink-0 items-center justify-center rounded-sm border border-line text-lg transition-colors hover:border-accent disabled:opacity-35 disabled:hover:border-line"
           >
             −
@@ -120,7 +122,7 @@ export default function BookingPanel({
             type="button"
             onClick={() => clampGuests(guests + 1)}
             disabled={guests >= product.maxGuests}
-            aria-label="Kişi sayısını artır"
+            aria-label={t("increase")}
             className="flex size-11 shrink-0 items-center justify-center rounded-sm border border-line text-lg transition-colors hover:border-accent disabled:opacity-35 disabled:hover:border-line"
           >
             +
@@ -130,7 +132,7 @@ export default function BookingPanel({
 
       {/* ---- Takvim ---- */}
       <div className="mt-6">
-        <p className="text-sm font-medium">Tarih</p>
+        <p className="text-sm font-medium">{t("date")}</p>
         <div className="mt-2">
           <AvailabilityCalendar
             blocks={blocks}
@@ -144,10 +146,11 @@ export default function BookingPanel({
         <p aria-live="polite" className="mt-3 text-sm">
           {date ? (
             <span className="text-ink">
-              Seçilen tarih: <strong className="font-medium">{formatLongDate(date)}</strong>
+              {t("selectedDate")}{" "}
+              <strong className="font-medium">{formatLongDate(date, locale)}</strong>
             </span>
           ) : (
-            <span className="text-ink-soft">Henüz tarih seçilmedi.</span>
+            <span className="text-ink-soft">{t("noDate")}</span>
           )}
         </p>
       </div>
@@ -161,7 +164,7 @@ export default function BookingPanel({
           className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-wa px-6 py-4 text-sm font-medium text-white transition-colors hover:bg-wa-deep disabled:opacity-60"
         >
           <WhatsappIcon className="size-4" />
-          {pending ? "Hazırlanıyor…" : "WhatsApp'tan talep gönder"}
+          {pending ? t("preparing") : t("submit")}
         </button>
 
         {error && (
@@ -170,11 +173,7 @@ export default function BookingPanel({
           </p>
         )}
 
-        <p className="mt-3 text-xs leading-relaxed text-ink-soft">
-          Buton, seçtiğiniz tarih ve kişi sayısıyla hazır bir WhatsApp mesajı
-          açar. Mesajı göndermeden önce görebilirsiniz — otomatik rezervasyon
-          yapılmaz.
-        </p>
+        <p className="mt-3 text-xs leading-relaxed text-ink-soft">{t("note")}</p>
       </div>
     </div>
   );

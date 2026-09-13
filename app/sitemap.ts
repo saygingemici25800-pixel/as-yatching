@@ -1,29 +1,66 @@
 import type { MetadataRoute } from "next";
-import { getProducts } from "@/lib/repository";
+import { getPathname } from "@/i18n/navigation";
+import { routing, type StaticPathname } from "@/i18n/routing";
+import { getProductSlugs } from "@/lib/repository";
 import { SITE_URL } from "@/lib/seo";
 
+type Href = Parameters<typeof getPathname>[0]["href"];
+
 /**
+ * Site haritası üç dili de içerir: her adres dil başına bir kayıt, kaydın
+ * `alternates.languages` alanında diğer dillerdeki karşılıkları.
  * Tur sayfaları veriden üretiliyor — seed'e doğrudan dokunulmuyor (Kural 4).
  * Yeni bir ürün eklendiğinde site haritası kendiliğinden büyür.
  */
+const STATIC: {
+  href: StaticPathname;
+  changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"];
+  priority: number;
+}[] = [
+  { href: "/", changeFrequency: "weekly", priority: 1 },
+  { href: "/turlar", changeFrequency: "weekly", priority: 0.9 },
+  { href: "/tekne", changeFrequency: "monthly", priority: 0.7 },
+  { href: "/iletisim", changeFrequency: "yearly", priority: 0.6 },
+  { href: "/sss", changeFrequency: "monthly", priority: 0.6 },
+];
+
+function entries(
+  href: Href,
+  lastModified: Date,
+  changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"],
+  priority: number,
+): MetadataRoute.Sitemap {
+  const languages = Object.fromEntries(
+    routing.locales.map((locale) => [
+      locale,
+      `${SITE_URL}${getPathname({ href, locale })}`,
+    ]),
+  );
+  return routing.locales.map((locale) => ({
+    url: languages[locale],
+    lastModified,
+    changeFrequency,
+    priority,
+    alternates: { languages },
+  }));
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
 
-  const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${SITE_URL}/`, lastModified, changeFrequency: "weekly", priority: 1 },
-    { url: `${SITE_URL}/turlar`, lastModified, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${SITE_URL}/tekne`, lastModified, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${SITE_URL}/iletisim`, lastModified, changeFrequency: "yearly", priority: 0.6 },
-    { url: `${SITE_URL}/sss`, lastModified, changeFrequency: "monthly", priority: 0.6 },
-  ];
+  const staticRoutes = STATIC.flatMap((item) =>
+    entries(item.href, lastModified, item.changeFrequency, item.priority),
+  );
 
-  const products = await getProducts();
-  const productRoutes: MetadataRoute.Sitemap = products.map((product) => ({
-    url: `${SITE_URL}/turlar/${product.slug}`,
-    lastModified,
-    changeFrequency: "weekly",
-    priority: 0.8,
-  }));
+  const slugs = await getProductSlugs();
+  const productRoutes = slugs.flatMap((urun) =>
+    entries(
+      { pathname: "/turlar/[urun]", params: { urun } },
+      lastModified,
+      "weekly",
+      0.8,
+    ),
+  );
 
   return [...staticRoutes, ...productRoutes];
 }

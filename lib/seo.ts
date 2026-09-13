@@ -1,4 +1,6 @@
-import type { Faq, Product, SiteInfo } from "./types";
+import { getPathname } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
+import type { Faq, Locale, Product, SiteInfo } from "./types";
 
 /**
  * YAPISAL VERİ (JSON-LD) ÜRETİCİLERİ
@@ -61,6 +63,35 @@ export const ALLOW_INDEXING =
 
 /** Paylaşım görseli — 1200x630 */
 export const OG_IMAGE_PATH = "/og-image.jpg";
+
+/** Open Graph `locale` değeri */
+export const OG_LOCALE: Record<Locale, string> = {
+  tr: "tr_TR",
+  en: "en_US",
+  ru: "ru_RU",
+};
+
+type LocalizedHref = Parameters<typeof getPathname>[0]["href"];
+
+/**
+ * Canonical + hreflang (Metadata.alternates).
+ * Türkçe öneksiz (/turlar), diğerleri önekli (/en/tours, /ru/tury);
+ * x-default Türkçe sürüme işaret eder. `metadataBase` göreli yolları
+ * mutlak adrese çevirir.
+ */
+export function localizedAlternates(href: LocalizedHref, locale: Locale) {
+  const languages: Record<string, string> = {};
+  for (const l of routing.locales) {
+    languages[l] = getPathname({ href, locale: l });
+  }
+  languages["x-default"] = getPathname({ href, locale: routing.defaultLocale });
+  return { canonical: getPathname({ href, locale }), languages };
+}
+
+/** Sayfanın aktif dildeki mutlak adresi (OG url, JSON-LD) */
+export function localizedUrl(href: LocalizedHref, locale: Locale): string {
+  return `${SITE_URL}${getPathname({ href, locale })}`;
+}
 
 /*
  * İşletmenin konumu `siteInfo.departure` alanında (data/seed.ts, repository
@@ -145,8 +176,7 @@ export function localBusinessSchema(info: SiteInfo) {
  * yayımlanır — bu geçerli bir Product'tır, sadece zengin sonuçta fiyat
  * göstermez. Gerekçesi dosya başındaki KRİTİK KURAL 2'de yazılı.
  */
-export function productSchema(product: Product) {
-  const url = `${SITE_URL}/turlar/${product.slug}`;
+export function productSchema(product: Product, url: string) {
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",

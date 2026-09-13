@@ -18,6 +18,7 @@ import {
   type MotionValue,
   type PanInfo,
 } from "framer-motion";
+import { useTranslations } from "next-intl";
 import type { Bay } from "@/lib/types";
 
 /**
@@ -97,6 +98,8 @@ interface BayCardProps {
   flat: boolean;
   active: boolean;
   onSelect: (index: number) => void;
+  /** Pasif kartın erişilebilir adı ("… kartına geç") */
+  goLabel: string;
 }
 
 function BayCard({
@@ -110,6 +113,7 @@ function BayCard({
   flat,
   active,
   onSelect,
+  goLabel,
 }: BayCardProps) {
   const step = 360 / total;
 
@@ -176,7 +180,7 @@ function BayCard({
         type="button"
         tabIndex={-1}
         onClick={() => onSelect(index)}
-        aria-label={active ? bay.name : `${bay.name} kartına geç`}
+        aria-label={active ? bay.name : goLabel}
         className="group block h-full w-full cursor-pointer rounded-2xl text-left"
       >
         <div className="relative h-full w-full overflow-hidden rounded-2xl border border-line bg-deep/30 shadow-[0_18px_40px_-18px_color-mix(in_srgb,var(--color-deep)_45%,transparent)] transition-shadow duration-300 group-hover:shadow-[0_22px_48px_-18px_color-mix(in_srgb,var(--color-deep)_55%,transparent)]">
@@ -207,6 +211,7 @@ function BayCard({
 // BayCoverflow
 // ---------------------------------------------------------------------------
 export default function BayCoverflow({ bays }: { bays: Bay[] }) {
+  const t = useTranslations("coverflow");
   const items = bays.filter((b): b is BayWithImage => b.image !== null);
   const flat = usePrefersReducedMotion();
   const stageRef = useRef<HTMLDivElement>(null);
@@ -338,8 +343,8 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
       <motion.div
         ref={stageRef}
         role="group"
-        aria-roledescription="kaydırmalı galeri"
-        aria-label="Koylar"
+        aria-roledescription={t("roleDescription")}
+        aria-label={t("ariaGallery")}
         tabIndex={0}
         onKeyDown={onKeyDown}
         drag="x"
@@ -373,6 +378,7 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
                 position={position}
                 flat={flat}
                 active={i === active}
+                goLabel={t("goToCard", { name: bay.name })}
                 onSelect={handleSelect}
               />
             ))}
@@ -389,7 +395,7 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
         <button
           type="button"
           onClick={() => stepBy(-1)}
-          aria-label="Önceki koy"
+          aria-label={t("prev")}
           className={ARROW_CLASS + " left-2 sm:left-3"}
         >
           <ChevronIcon className="size-4 rotate-180" />
@@ -397,7 +403,7 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
         <button
           type="button"
           onClick={() => stepBy(1)}
-          aria-label="Sonraki koy"
+          aria-label={t("next")}
           className={ARROW_CLASS + " right-2 sm:right-3"}
         >
           <ChevronIcon className="size-4" />
@@ -408,7 +414,7 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
       <div
         className="mt-4 flex justify-center gap-2"
         role="tablist"
-        aria-label="Koy seç"
+        aria-label={t("pick")}
       >
         {items.map((bay, i) => (
           <button
@@ -455,9 +461,9 @@ export default function BayCoverflow({ bays }: { bays: Bay[] }) {
                 {current.blurb}
               </p>
               <dl className="mt-5 border-t border-line text-sm">
-                <InfoRow label="Limandan (tahmini)" value={current.distanceFromHarbor} />
-                <InfoRow label="Kalış süresi" value={current.stayDuration} />
-                <InfoRow label="Hangi tur" value={current.tours} />
+                <InfoRow label={t("fromHarbour")} value={current.distanceFromHarbor} />
+                <InfoRow label={t("stay")} value={current.stayDuration} />
+                <InfoRow label={t("tours")} value={current.tours} />
               </dl>
             </motion.div>
           </AnimatePresence>

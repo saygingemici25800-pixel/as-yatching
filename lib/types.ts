@@ -160,3 +160,32 @@ export interface TourRoute {
   productSlug: string | null;
   stops: string[];
 }
+
+/* ------------------------------------------------------------------
+ * ÇOKLU DİL — seed biçimi
+ * ------------------------------------------------------------------
+ * Seed'de metin alanları `{ tr, en, ru }` olarak yazılır; repository
+ * aktif dile göre düz string'e çevirir. Sayfalar yalnızca yukarıdaki düz
+ * tipleri görür (Product, Bay, Faq…), dilden habersizdir.
+ */
+export type Locale = "tr" | "en" | "ru";
+
+export interface Localized {
+  tr: string;
+  en: string;
+  ru: string;
+}
+
+/**
+ * Düz string alanlar `string | Localized` olabilir; literal birlikler
+ * (pricingType, currency, kind…) olduğu gibi korunur.
+ */
+export type Seed<T> = T extends string
+  ? string extends T
+    ? string | Localized
+    : T
+  : T extends (infer U)[]
+    ? Seed<U>[]
+    : T extends object
+      ? { [K in keyof T]: Seed<T[K]> }
+      : T;

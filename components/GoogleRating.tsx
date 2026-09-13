@@ -1,8 +1,9 @@
+import { useLocale, useTranslations } from "next-intl";
 import { StarIcon } from "@/components/icons";
 
 /**
- * Sitedeki TEK gerçek sosyal kanıt: Google 5.0 / 34 yorum.
- * Yorum metinleri elimizde olmadığı için alıntı gösterilmez — uydurulmaz.
+ * Sitedeki TEK gerçek sosyal kanıt: Google 5.0 / 33 yorum.
+ * Puan ve yorum sayısı seed'den gelir (`siteInfo`), uydurulmaz.
  */
 export default function GoogleRating({
   rating,
@@ -15,7 +16,10 @@ export default function GoogleRating({
   profileUrl: string | null;
   size?: "sm" | "md";
 }) {
+  const t = useTranslations("reviews");
+  const locale = useLocale();
   const starSize = size === "sm" ? "size-3.5" : "size-4";
+  const ratingText = rating.toLocaleString(locale, { minimumFractionDigits: 1 });
 
   const inner = (
     <>
@@ -25,10 +29,8 @@ export default function GoogleRating({
         ))}
       </span>
       <span className={size === "sm" ? "text-sm" : "text-base"}>
-        <strong className="font-semibold">
-          {rating.toLocaleString("tr-TR", { minimumFractionDigits: 1 })}
-        </strong>
-        <span className="text-ink-soft"> · {reviewCount} Google yorumu</span>
+        <strong className="font-semibold">{ratingText}</strong>
+        <span className="text-ink-soft"> · {t("badge", { count: reviewCount })}</span>
       </span>
     </>
   );
@@ -52,7 +54,7 @@ export default function GoogleRating({
         <div className={classes}>{inner}</div>
       )}
       <span className="sr-only">
-        Google üzerinde {reviewCount} değerlendirmede {rating} üzerinden 5 puan.
+        {t("srText", { count: reviewCount, rating: ratingText })}
       </span>
     </div>
   );

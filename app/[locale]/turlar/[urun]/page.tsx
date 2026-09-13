@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import BookingPanel from "@/components/BookingPanel";
 import DemoNotice from "@/components/DemoNotice";
 import GoogleRating from "@/components/GoogleRating";
-import ProductCard, {
-  durationLabel,
-  guestsLabel,
-} from "@/components/ProductCard";
+import ProductCard from "@/components/ProductCard";
 import SampleBadge from "@/components/SampleBadge";
 import {
   CheckIcon,
@@ -16,81 +13,107 @@ import {
   CrossIcon,
   UsersIcon,
 } from "@/components/icons";
-import { startingFromLabel } from "@/lib/pricing";
+import { Link } from "@/i18n/navigation";
+import { durationLabel, guestsLabel, startingFromLabel } from "@/lib/pricing";
 import {
   getAvailabilityBlocks,
   getBoat,
   getProduct,
+  getProductSlugs,
   getProducts,
   getSiteInfo,
 } from "@/lib/repository";
-import { SITE_URL, jsonLdScript, productSchema } from "@/lib/seo";
+import {
+  OG_LOCALE,
+  jsonLdScript,
+  localizedAlternates,
+  localizedUrl,
+  productSchema,
+} from "@/lib/seo";
+import type { Locale } from "@/lib/types";
 
-type PageProps = { params: Promise<{ urun: string }> };
+type PageProps = { params: Promise<{ locale: string; urun: string }> };
 
 export async function generateStaticParams() {
-  const products = await getProducts();
-  return products.map((product) => ({ urun: product.slug }));
+  const slugs = await getProductSlugs();
+  return slugs.map((urun) => ({ urun }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { urun } = await params;
-  const product = await getProduct(urun);
-  if (!product) return { title: "Tur bulunamadı" };
+  const { locale, urun } = await params;
+  setRequestLocale(locale);
+  const [product, t, tp] = await Promise.all([
+    getProduct(urun),
+    getTranslations({ locale, namespace: "product" }),
+    getTranslations({ locale, namespace: "pricing" }),
+  ]);
+  if (!product) return { title: t("notFound") };
 
-  const description = `${product.shortDescription} ${startingFromLabel(product)} — fiyata dahil olanlar sayfada yazılı.`;
+  const href = { pathname: "/turlar/[urun]", params: { urun: product.slug } } as const;
+  const description = t("metaDescription", {
+    short: product.shortDescription,
+    price: startingFromLabel(product, tp, locale as Locale),
+  });
 
   return {
-    title: `${product.name} | Fethiye Tekne Kiralama`,
+    title: t("metaTitle", { name: product.name }),
     description,
-    alternates: { canonical: `/turlar/${product.slug}` },
+    alternates: localizedAlternates(href, locale as Locale),
     openGraph: {
-      title: `${product.name} | Fethiye Tekne Kiralama | As Yachting`,
+      title: `${t("metaTitle", { name: product.name })} | As Yachting`,
       description,
       type: "website",
-      locale: "tr_TR",
-      url: `${SITE_URL}/turlar/${product.slug}`,
+      locale: OG_LOCALE[locale as Locale],
+      url: localizedUrl(href, locale as Locale),
     },
   };
 }
 
 export default async function ProductPage({ params }: PageProps) {
-  const { urun } = await params;
+  const { locale, urun } = await params;
+  setRequestLocale(locale);
+
   const product = await getProduct(urun);
   if (!product) notFound();
 
-  const [info, boat, allProducts] = await Promise.all([
+  const [info, boat, allProducts, t, tp, tc] = await Promise.all([
     getSiteInfo(),
     getBoat(product.boatSlug),
     getProducts(),
+    getTranslations("product"),
+    getTranslations("pricing"),
+    getTranslations("common"),
   ]);
 
   const blocks = await getAvailabilityBlocks(product.boatSlug);
   const others = allProducts.filter((p) => p.slug !== product.slug).slice(0, 3);
-  const duration = durationLabel(product);
+  const duration = durationLabel(product, tp);
+  const href = { pathname: "/turlar/[urun]", params: { urun: product.slug } } as const;
 
   return (
     <>
       {/* Product + Offer yapısal verisi — aggregateRating içermez (bkz. lib/seo.ts) */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={jsonLdScript(productSchema(product))}
+        dangerouslySetInnerHTML={jsonLdScript(
+          productSchema(product, localizedUrl(href, locale as Locale)),
+        )}
       />
 
       <DemoNotice />
 
       <div className="mx-auto max-w-6xl px-4 pt-6 sm:px-6 sm:pt-8">
         {/* ---------- Kırıntı yolu ---------- */}
-        <nav aria-label="Sayfa yolu" className="text-xs text-ink-soft">
+        <nav aria-label={tc("breadcrumb")} className="text-xs text-ink-soft">
           <ol className="flex flex-wrap items-center gap-1.5">
             <li>
-              <Link href="/" className="hover:text-accent">Ana sayfa</Link>
+              <Link href="/" className="hover:text-accent">{tc("home")}</Link>
             </li>
             <li aria-hidden>/</li>
             <li>
-              <Link href="/turlar" className="hover:text-accent">Turlar</Link>
+              <Link href="/turlar" className="hover:text-accent">{tc("toursAndPrices")}</Link>
             </li>
             <li aria-hidden>/</li>
             <li aria-current="page" className="text-ink">{product.name}</li>
@@ -115,11 +138,11 @@ export default async function ProductPage({ params }: PageProps) {
             )}
             <li className="flex items-center gap-2">
               <UsersIcon className="size-4 text-accent" />
-              {guestsLabel(product)}
+              {guestsLabel(product, tp)}
             </li>
             <li className="flex items-center gap-2">
               <span className="font-semibold tracking-tight text-ink">
-                {startingFromLabel(product)}
+                {startingFromLabel(product, tp, locale as Locale)}
               </span>
               {product.isSamplePrice && <SampleBadge />}
             </li>
@@ -130,7 +153,7 @@ export default async function ProductPage({ params }: PageProps) {
         <div className="relative mt-8 aspect-[16/10] overflow-hidden rounded-sm border border-line sm:aspect-[2/1]">
           <Image
             src={product.images[0]}
-            alt={`${product.name} — tekne görseli`}
+            alt={t("imageAlt", { name: product.name })}
             fill
             sizes="(min-width: 1280px) 1152px, 100vw"
             priority
@@ -143,7 +166,7 @@ export default async function ProductPage({ params }: PageProps) {
           <div className="min-w-0">
             {/* Açıklama */}
             <section>
-              <h2 className="text-2xl sm:text-3xl">Bu turda ne oluyor?</h2>
+              <h2 className="text-2xl sm:text-3xl">{t("whatHappens")}</h2>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-soft">
                 {product.description}
               </p>
@@ -154,8 +177,8 @@ export default async function ProductPage({ params }: PageProps) {
               <section className="mt-12">
                 <h2 className="text-2xl sm:text-3xl">
                   {product.durationDays && product.durationDays > 1
-                    ? "Gün planı"
-                    : "Saat planı"}
+                    ? t("dayPlan")
+                    : t("hourPlan")}
                 </h2>
                 <ol className="mt-5 space-y-0">
                   {product.route.map((stop, index) => (
@@ -186,22 +209,20 @@ export default async function ProductPage({ params }: PageProps) {
                     </li>
                   ))}
                 </ol>
-                <p className="mt-2 text-xs text-ink-soft">
-                  Saatler ve rota hava koşullarına göre değişebilir.
-                </p>
+                <p className="mt-2 text-xs text-ink-soft">{t("scheduleNote")}</p>
               </section>
             )}
 
             {/* Fiyata dahil / dahil değil */}
             <section className="mt-12">
-              <h2 className="text-2xl sm:text-3xl">Fiyata dahil olanlar</h2>
+              <h2 className="text-2xl sm:text-3xl">{t("includedTitle")}</h2>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-soft">
-                Sürpriz ücret çıkmasın diye ikisini de yazıyoruz.
+                {t("includedText")}
               </p>
 
               <div className="mt-5 grid gap-5 sm:grid-cols-2">
                 <div className="rounded-sm border border-line bg-surface p-5">
-                  <h3 className="text-base font-medium">Dahil</h3>
+                  <h3 className="text-base font-medium">{t("included")}</h3>
                   <ul className="mt-3 space-y-2.5 text-sm">
                     {product.priceIncludes.included.map((item) => (
                       <li key={item} className="flex gap-2.5">
@@ -213,7 +234,7 @@ export default async function ProductPage({ params }: PageProps) {
                 </div>
 
                 <div className="rounded-sm border border-line bg-surface p-5">
-                  <h3 className="text-base font-medium">Dahil değil</h3>
+                  <h3 className="text-base font-medium">{t("excluded")}</h3>
                   <ul className="mt-3 space-y-2.5 text-sm text-ink-soft">
                     {product.priceIncludes.excluded.map((item) => (
                       <li key={item} className="flex gap-2.5">
@@ -229,7 +250,7 @@ export default async function ProductPage({ params }: PageProps) {
             {/* Tekne özeti */}
             {boat && (
               <section className="mt-12">
-                <h2 className="text-2xl sm:text-3xl">Tekne</h2>
+                <h2 className="text-2xl sm:text-3xl">{t("boatTitle")}</h2>
                 <div className="mt-5 flex flex-col gap-5 rounded-sm border border-line bg-surface p-5 sm:flex-row sm:items-center">
                   <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-sm sm:size-32 sm:aspect-auto">
                     <Image
@@ -242,15 +263,13 @@ export default async function ProductPage({ params }: PageProps) {
                   </div>
                   <div>
                     <p className="text-sm leading-relaxed text-ink-soft">
-                      Tur, {boat.maxGuests} kişiye kadar kapasiteli teknemizle{" "}
-                      {boat.homePort}&apos;ndan yapılıyor. Donanım ve güvenlik
-                      ekipmanlarının tamamı tekne sayfasında listeli.
+                      {t("boatText", { max: boat.maxGuests, port: boat.homePort })}
                     </p>
                     <Link
                       href="/tekne"
                       className="mt-3 inline-block text-sm text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
                     >
-                      Tekneyi inceleyin
+                      {t("boatLink")}
                     </Link>
                   </div>
                 </div>
@@ -275,7 +294,7 @@ export default async function ProductPage({ params }: PageProps) {
         {/* ---------- Diğer turlar ---------- */}
         {others.length > 0 && (
           <section className="mt-20">
-            <h2 className="text-2xl sm:text-3xl">Diğer turlar</h2>
+            <h2 className="text-2xl sm:text-3xl">{t("otherTours")}</h2>
             <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {others.map((item) => (
                 <ProductCard key={item.slug} product={item} />

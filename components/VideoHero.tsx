@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useSiteAudio } from "@/components/SiteAudioProvider";
@@ -28,6 +29,7 @@ const POSTER_SRC = "/hero/hero-poster.jpg";
 
 export default function VideoHero({ children }: { children: ReactNode }) {
   const rootRef = useRef<HTMLElement>(null);
+  const t = useTranslations("hero");
 
   const [motionOk, setMotionOk] = useState(false);
   const { on: soundOn, toggle: toggleSound, setHeroVisible } = useSiteAudio();
@@ -103,7 +105,7 @@ export default function VideoHero({ children }: { children: ReactNode }) {
   }, [setHeroVisible]);
 
   return (
-    <section ref={rootRef} className="vhero" aria-label="Tanıtım">
+    <section ref={rootRef} className="vhero" aria-label={t("ariaLabel")}>
       <div className="vhero__stage">
         <div className="vhero__frame">
           {motionOk ? (
@@ -138,7 +140,7 @@ export default function VideoHero({ children }: { children: ReactNode }) {
             className="vhero__sound"
           >
             <span className="vhero__sound-dot" aria-hidden />
-            {soundOn ? "Ses açık" : "Sesi aç"}
+            {soundOn ? t("soundOn") : t("soundOff")}
           </button>
         </div>
 
