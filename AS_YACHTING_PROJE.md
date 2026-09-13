@@ -6,9 +6,9 @@
 | Alan | Değer |
 |---|---|
 | Proje adı | AS Yachting — Marka & Web Platformu |
-| Versiyon | v0.7 (İndeksleme kilidi + Vercel hazır) |
-| Son güncelleme | 2026-08-18 |
-| Güncelleyen | Claude Code (Faz 2B uygulaması) |
+| Versiyon | v0.8 (Çoklu dil tr/en/ru + 4 yeni sayfa) |
+| Son güncelleme | 2026-09-13 |
+| Güncelleyen | Claude Code (Faz 3B uygulaması) |
 | Aktif faz | **Faz 3 — Müşteri Sunumu** |
 | Durum | ✅ Deploy edilebilir · 🔒 **Arama motorlarına KAPALI** — kilit Faz 7 yayın listesi bitince açılır |
 
@@ -226,9 +226,10 @@ Ziyaretçinin **tarihi ve fiyatı kendi başına görüp talebi başlatması**. 
 | **2** | **Demo İnşası** | Çalışan demo: ana sayfa, ürünler, takvim, talep formu, ~~admin taslağı~~ | ✅ Tamamlandı (admin paneli hariç — DoD'da yoktu, Faz 6'ya alındı) |
 | **2B** | **Site Tamamlama & Teknik SEO** | Eksik sayfalar (`/iletisim`, `/sss`, 404), JSON-LD, sitemap, robots, OG görseli | ✅ Tamamlandı |
 | **3** | Müşteri Sunumu | Demo gösterimi, gerçek veri toplama, onay | ⏳ Devam ediyor — **sunum yapılmadı** |
+| **3B** | **Çoklu Dil & Yeni Sayfalar** | next-intl (tr/en/ru), Hakkımızda, Rotalar, Hediye çeki, Misafir bilgisi, yorum kartı | ✅ Tamamlandı (2026-09-13) — EN/RU makine çevirisi, kontrol bekliyor |
 | **4** | Marka Kimliği | Logo vektörleştirme, palet, tipografi, ton rehberi | ⬜ |
 | **5** | İçerik & Çekim | Profesyonel çekim, metinler (TR/EN), SSS | ⬜ |
-| **6** | Gerçek Veri & Supabase | Seed → veritabanı geçişi, admin paneli, çoklu dil | ⬜ |
+| **6** | Gerçek Veri & Supabase | Seed → veritabanı geçişi, admin paneli, ~~çoklu dil~~ (Faz 3B'de öne çekildi) | ⬜ |
 | **7** | SEO & Yayın | ~~Schema, sitemap~~ (Faz 2B'de öne çekildi), GBP optimizasyonu, GA4, domain, SSL | 🟡 Kısmen |
 | **8** | Büyüme | İçerik takvimi, yorum toplama, reklam, raporlama | ⬜ |
 
@@ -290,6 +291,22 @@ dosyasının başında yazılı — sonradan eklenmesin.
 - [ ] Google Business Profile kısa linki alındı (`googleProfileUrl`)
 - [ ] Profesyonel çekim için karar ve bütçe alındı (Faz 5 kritik yolu)
 - [ ] Domain adı seçildi
+
+### Faz Tanımı — Faz 3B — Çoklu Dil & Yeni Sayfalar (tamamlandı, 2026-09-13)
+**Hedef:** Siteyi üç dile açmak ve sunumda eksik görünecek sayfaları (kaptan, rotalar, hediye çeki, misafir bilgisi) uydurma içerik olmadan eklemek.
+**Bitti sayılma kriteri (DoD):**
+- [x] next-intl kuruldu; `app/[locale]/` yapısı; tr öneksiz (`/turlar`), en/ru önekli (`/en/tours`, `/ru/tury`)
+- [x] Arayüz metinleri `messages/tr|en|ru.json`; seed metinleri `{ tr, en, ru }`; repository aktif dile göre çözüyor, sayfalar dili bilmiyor
+- [x] "Taslak çeviri / Draft translation" şeridi yalnızca `NEXT_PUBLIC_ALLOW_INDEXING=false` iken ve TR dışı dillerde
+- [x] Header'da TR / EN / RU seçici (mobilde menü satırında); hreflang + locale bazlı canonical; sitemap 3 dil × 21 adres = 63 kayıt
+- [x] `/hakkimizda` — kaptan/ekip alanları TODO → "Bilgi bekleniyor"; `/public/placeholder/kaptan.jpg`
+- [x] `/rotalar` ve `/rotalar/[koy]` — 5 koy; süreler "yaklaşık" + TODO; her koy ilgili turlara bağlı
+- [x] `/hediye-ceki` — 3 tutar + serbest tutar (ÖRNEK), satın alma yok, WhatsApp talebi
+- [x] `/misafir-bilgisi` — adres gerçek; tarif/park/iptal TODO; yalnızca SSS'deki hava kuralı
+- [x] Yorumlar bölümü: 5.0/33 rozeti + Google profil kartı; dizi boşken de çalışıyor
+- [x] Menü 6 öğe (Turlar, Rotalar, Tekne, Hakkımızda, SSS, İletişim); hediye çeki ve misafir bilgisi footer'da
+- [x] Her yeni sayfa 375px'te taşmasız (3 dilde ölçüldü); `npm run build` hatasız (63 statik sayfa); `@/data/seed` importu yalnız `lib/repository.ts`'te
+- [x] Ana sayfa LCP ölçüldü (aşağıda) — kısıtsız 0,1–0,25 s; yavaş 4G + CPU×4 kısıtıyla 2,5–2,6 s (sınırda)
 
 ### Faz Tanımı — Faz 7 — SEO & Yayın · **YAYIN KONTROL LİSTESİ**
 
@@ -356,6 +373,8 @@ Aşağıdaki maddelerin **hepsi** işaretlenmeden bayrak açılmaz:
 | **Yanlış domainle yayına çıkma** (Faz 2B'de eklendi) | Orta *(indeksleme kilidiyle düştü)* | Canonical, sitemap ve JSON-LD adresleri `SITE_URL`'den üretiliyor; varsayılan bir tahmin. Site aramaya kapalı olduğu için yanlış adres indekslenmiyor; yine de domain kesinleşince `NEXT_PUBLIC_SITE_URL` ayarlanmalı (soru C11) |
 | **Demo içeriğin indekslenmesi** (Faz 2B'de eklendi) | ~~Yüksek~~ → Düşük | ✅ **Kilit kuruldu.** Varsayılan `Disallow: /` + her sayfada `noindex, nofollow`. Kalan risk yalnızca `NEXT_PUBLIC_ALLOW_INDEXING`'in erken açılması; bu yüzden bayrak Faz 7 yayın listesinin **en son maddesi** olarak konumlandırıldı |
 | ~~Örnek fiyatların yapısal veriyle yayımlanması~~ | ~~Yüksek~~ | ✅ **Kapandı — koda gömüldü.** `productSchema` örnek fiyatlı üründe `offers` üretmiyor. Riskin "yayından önce hatırlarız"a bırakılmaması için koruma kod seviyesinde; gerekçesi `lib/seo.ts` başında KRİTİK KURAL 2 olarak yazılı |
+| **EN/RU içerik makine çevirisi** (Faz 3B'de eklendi) | Orta | Şerit (`DraftTranslationNotice`) indeksleme kilidi açılınca kendiliğinden kaybolur; kilit açılmadan önce ana dili konuşan biri `messages/en.json`, `messages/ru.json` ve seed'deki `l()` alanlarını kontrol etmeli (soru D4). Yayın listesine madde olarak eklendi |
+| **Mobilde menü satırı 6 öğeyle 375px'e sığmıyor** (Faz 3B'de eklendi) | Düşük | Satır yatay kaydırılabilir (`scrollbar-hide`), dil seçici sağda sabit; son iki öğe (SSS, İletişim) ilk bakışta kısmen görünür. Hamburger menüye geçilmesi düşünülebilir |
 | **Yer tutucu görseller sunumda "eksik iş" izlenimi verebilir** (Faz 2'de eklendi) | Orta | Görseller marka paletinde ve "YER TUTUCU" damgalı üretildi; sunumda bunun geçici olduğu sözlü olarak da söylenmeli. Kalıcı çözüm Faz 5 çekimi |
 
 ---
@@ -419,6 +438,23 @@ Aşağıdaki maddelerin **hepsi** işaretlenmeden bayrak açılmaz:
 | 2026-08-17 | `lib/repository.ts` içindeki tarih biçimlendirmesi yerel `Date` ile kuruluyor | `new Date("2026-08-30")` UTC gece yarısı sayıldığı için bazı saat dilimlerinde günü bir geri kaydırırdı |
 | 2026-08-17 | Menüye `SSS` ve `İletişim` eklendi, telefon numarası `lg` altında gizlendi | Dört menü öğesi + numara `md` genişliğinde başlığı taşırıyordu. 375px'te menü satırı rahat sığıyor |
 
+| 2026-09-13 | **Faz 3B kararları aşağıda** ⬇️ | — |
+| 2026-09-13 | Çoklu dil için `next-intl` (v4) seçildi; `localePrefix: "as-needed"` — tr öneksiz, en/ru önekli; yerelleştirilmiş yollar (`/en/tours`, `/ru/tury`) | Mevcut Türkçe adresler değişmedi (kırık bağlantı yok); klasör yapısı Türkçe kaldı, çeviri middleware'de |
+| 2026-09-13 | Tarayıcı diline göre otomatik yönlendirme KAPALI (`localeDetection: false`); dil yalnızca seçiciden değişir, seçim çerezde | Yabancı tarayıcıyla `/` açan Türk kullanıcının EN'e atılması ve Googlebot'un tutarsız sürüm görmesi istenmedi |
+| 2026-09-13 | Seed metinleri `{ tr, en, ru }` (`l()` yardımcısı, `Seed<T>` tipi); repository `getLocale()` ile çözüyor | Kural 4 korunuyor: sayfalar düz tipleri alıyor, dili bilmiyor. Supabase geçişinde yalnızca repository değişecek |
+| 2026-09-13 | Google yorum metinleri ÇEVRİLMİYOR; her dilde orijinal Türkçe, "orijinal dilde" notuyla | Kural 2: yorum düzenlenmez. Yalnızca "3 ay önce" etiketi çevrildi |
+| 2026-09-13 | WhatsApp hazır mesajları misafirin dilinde | Misafir gönderdiği mesajı okuyabilmeli; işletme çeviri yapabilir. Tercih değişirse `messages/*.json → whatsapp` |
+| 2026-09-13 | EN/RU makine çevirisi; "Taslak çeviri" şeridi yalnızca indeksleme kilitliyken | Şerit yayınla birlikte kendiliğinden kalkıyor; çeviri kontrolü yayın listesine bağlandı |
+| 2026-09-13 | Koy rehberleri seed'de `routeGuides` adıyla (istenen `routes` adı haritadaki tur çizgileri için zaten kullanılıyordu) | İki farklı kavram aynı adı paylaşmasın |
+| 2026-09-13 | Menü 6 öğe: Turlar, Rotalar, Tekne, Hakkımızda, SSS, İletişim; Hediye çeki ve Misafir bilgisi footer'da | 6 öğe sınırı; dönüşüme en yakın sayfalar menüde |
+| 2026-09-13 | Mobil menü satırı yatay kaydırmalı, hamburger yok | Mevcut "hamburger yok" kararı korundu; 6 öğe + dil seçici 375px'e sığmıyor |
+| 2026-09-13 | Hakkımızda: kaptan adı, deneyim, belgeler, hikâye TODO; Google yorumlarında geçen isimler sayfaya taşınmadı | Kural 1. Yorumdaki isim teyit edilmiş bilgi değil |
+| 2026-09-13 | Hediye çeki: satın alma/ödeme yok, talep WhatsApp'a; tutarlar ÖRNEK; geçerlilik/teslim TODO | Faz 2 talep mantığıyla aynı; ödeme altyapısı Faz 6+ |
+| 2026-09-13 | Misafir bilgisi: yalnızca seed'de bilinen gerçekler + genel öneriler; iptal/iade, otopark, yaşlı misafir, alkol politikası TODO | SSS'deki hava kuralı dışında politika uydurulmadı |
+| 2026-09-13 | `googleReviews` dizisi boşaltılmadı (gerçek, birebir yorumlar); bölüm boş dizide de çalışacak şekilde yazıldı | İstenen "boş dizi" gerçek sosyal kanıtı silerdi; tip zaten vardı |
+| 2026-09-13 | Yorum sayısı 33 olarak kaldı (profil, 2026-09-12); 34 yazılmadı | Doğrulanmamış sayı basılmaz; profilde 34 görülürse seed'de tek satır değişir |
+| 2026-09-13 | Fiyat biçimi dile göre `Intl` (`₺18.000` / `₺18,000` / `18 000 ₺`), para birimi TL kaldı | Fiyat rakamı yerelde okunmalı; kur çevirisi yapılmadı |
+
 ---
 
 ## 10. Açık Sorular
@@ -453,6 +489,16 @@ Aşağıdaki maddelerin **hepsi** işaretlenmeden bayrak açılmaz:
 - ~~**C12.** Product şemasındaki fiyatlar hâlâ ÖRNEK verisi.~~ → **Çözüldü (kod seviyesinde).** `productSchema`, ürünün `isSamplePrice` alanı `true` olduğu sürece `offers` alanını hiç üretmiyor. Fiyat yalnızca gerçek olduğunda (`isSamplePrice: false`) yapısal veriye giriyor. Fiyatları açmanın tek yolu `data/seed.ts`'e gerçek fiyatı girip bayrağı `false` yapmak — `lib/seo.ts`'e dokunmak değil.
 - **C13.** OG görseli şimdilik tipografik (marka renkleri + wordmark). Profesyonel çekim gelince tekne fotoğraflı bir sürümle değiştirilmeli — sosyal paylaşımda en çok tıklanan öge bu.
 - **C14.** Analitik (GA4) ve Search Console henüz kurulmadı; domain sonrası Faz 7 işi.
+
+### 🔴 Faz 3B'de ortaya çıkanlar (2026-09-13)
+- **D1. Kaptan bilgisi** — ad, kaç yıldır kaptanlık, ehliyet/belgeler, konuşulan diller, mürettebat, birkaç paragraf hikâye, bir fotoğraf. `/hakkimizda` şu an bu alanları "Bilgi bekleniyor" gösteriyor (`data/seed.ts → about`).
+- **D2. İptal ve iade politikası** — `/misafir-bilgisi` ve SSS'de yalnızca "hava kötüyse ücretsiz tarih değişikliği" var. Kapora, iptal süresi, iade oranı? (C4 ile aynı; artık iki sayfada boş.)
+- **D3. Rota süreleri** — limandan Kızılada ~20 dk, Akvaryum ~35, Samanlık ~40, Gemiler ~60, Ölüdeniz ~75, Kelebekler ~90 dk **tahmin**; Göcek 12 Adalar süresi yok. Koylarda kalış süreleri ve hangi koyun hangi turda olduğu (`routeGuides[].tourSlugs`) teyit edilmeli.
+- **D4. RU (ve EN) çeviri kontrolü** — `messages/ru.json`, `messages/en.json` ve seed'deki `l()` alanları makine çevirisi. Yayından önce ana dili konuşan biri okumalı; özellikle tur adları ve WhatsApp mesajları.
+- **D5. Hediye çeki** — gerçek tutarlar (şu an 5.000 / 10.000 / 20.000 ÖRNEK), geçerlilik süresi, teslim biçimi (PDF / WhatsApp / basılı), kişiye özel yazı olacak mı?
+- **D6. Misafir bilgisi** — buluşma düzeni (kaç dk önce, kiminle), otopark, ulaşım; havlu sağlanıyor mu; dışarıdan yiyecek-içecek ve alkol; yaşlı/hareket kısıtlı misafir için biniş koşulları.
+- **D7. Google yorum sayısı** — seed 33 (profil, 2026-09-12); brief 34 diyor. Profilde teyit edilip `googleReviewCount` güncellenecek.
+- **D8. Dil tercihi** — tarayıcı diline göre otomatik yönlendirme kapalı. İstenirse `i18n/routing.ts → localeDetection: true`.
 
 ### Kalan sorular (Faz 2–3'te lazım olacak)
 
@@ -643,3 +689,51 @@ Başka ayar gerekmiyor; Next.js 15 Vercel'de hazır çalışır.
 | **İndeksleme kilidi — bayrak KAPALI** | ✅ `robots.txt` = `Disallow: /`, sitemap satırı yok; altı sayfanın hepsinde `noindex, nofollow` |
 | **İndeksleme kilidi — bayrak `true`** | ✅ `Allow: /` + sitemap bildirimi geri geliyor; `robots` meta etiketi hiç üretilmiyor |
 | Her iki bayrak durumunda build | ✅ Çıkış kodu 0 |
+
+### Faz 3B — Çoklu Dil & Yeni Sayfalar (2026-09-13)
+
+**Çoklu dil altyapısı**
+- `i18n/routing.ts` — diller, varsayılan, yerelleştirilmiş yollar (`/turlar → /en/tours, /ru/tury` …)
+- `i18n/navigation.ts` — `Link`, `usePathname`, `getPathname` (dil bilen gezinme)
+- `i18n/request.ts`, `middleware.ts`, `next.config.ts` (`createNextIntlPlugin`)
+- `messages/tr.json`, `messages/en.json`, `messages/ru.json` — tüm arayüz metinleri (EN/RU makine çevirisi)
+- `lib/localize.ts` — `l()`, `localize()`; `lib/types.ts` — `Locale`, `Localized`, `Seed<T>`
+- `app/[locale]/layout.tsx` — `NextIntlClientProvider`, `<html lang>`, OG locale, taslak çeviri şeridi
+- `app/[locale]/[...rest]/page.tsx` + `app/[locale]/not-found.tsx` — dil bazlı 404
+- `components/LocaleSwitcher.tsx`, `components/DraftTranslationNotice.tsx`
+- `lib/seo.ts` — `localizedAlternates` (canonical + hreflang + x-default), `localizedUrl`, `OG_LOCALE`
+- `app/sitemap.ts` — 3 dil × 21 adres, `alternates.languages`
+- `lib/pricing.ts`, `lib/dates.ts` — çeviri fonksiyonu ve locale parametresi; `Intl` biçimleri
+
+**Yeni sayfalar**
+- `app/[locale]/hakkimizda/page.tsx` — kaptan/ekip (TODO alanlar), gerçek yorum alıntıları; `public/placeholder/kaptan.jpg`
+- `app/[locale]/rotalar/page.tsx`, `app/[locale]/rotalar/[koy]/page.tsx` — 5 koy rehberi
+- `app/[locale]/hediye-ceki/page.tsx` + `components/GiftVoucherPanel.tsx`
+- `app/[locale]/misafir-bilgisi/page.tsx`
+- `components/GoogleProfileCard.tsx`; `components/GoogleReviews.tsx` boş dizi durumu
+
+**Seed / tipler**
+- `data/seed.ts` — metinler `l(tr, en, ru)`; yeni: `about`, `routeGuides`, `giftVoucher`, `guestInfo`
+- `lib/repository.ts` — `getAbout`, `getRouteGuides/getRouteGuide/getRouteGuideSlugs`, `getGiftVoucher`, `getGuestInfo`, `getProductSlugs`
+
+**Değiştirilenler**
+- `app/*` sayfaları `app/[locale]/` altına taşındı; tüm bileşenler `useTranslations`/`getTranslations`
+- `components/SiteHeader.tsx` — 6 öğeli menü, dil seçici, mobilde kaydırmalı satır; `SiteFooter.tsx` — 7 bağlantı
+- `components/icons.tsx` — `CalendarIcon`, `TagIcon`, `GiftIcon`, `InfoIcon`
+- `app/globals.css` — `@utility scrollbar-hide`
+
+### Faz 3B doğrulama sonuçları
+
+| Ölçüt | Sonuç |
+|---|---|
+| `next build` | ✅ Hatasız — 63 statik sayfa (21 adres × 3 dil) + middleware |
+| `npx tsc --noEmit`, `npm run lint` | ✅ Temiz (3 önceden var olan `<img>` uyarısı) |
+| Kural 4 | ✅ `@/data/seed` importu yalnızca `lib/repository.ts`'te |
+| Dil yönlendirmesi | ✅ `/` tr, `/tr/turlar → /turlar` (307), `/en/turlar → /en/tours` (307), `/en/tours` 200, `/ru/tury/gun-batimi-turu` 200, bilinmeyen adres her dilde 404 |
+| hreflang / canonical | ✅ Her sayfada tr, en, ru, x-default (tr); canonical aktif dilin adresi |
+| Dil seçici | ✅ Tur sayfasında EN → `/en/tours/gun-batimi-turu`, RU → `/ru/tury/…`, TR → `/turlar/…` |
+| Taslak çeviri şeridi | ✅ Yalnızca en/ru'da görünüyor (bayrak `false`); tr'de yok |
+| 375px kırılma | ✅ 11 sayfa × 3 dil: `scrollWidth = 375` |
+| Yorumlar bölümü | ✅ Dolu dizide 9 kart + profil kartı; dizi boşaltıldığında rozet + profil kartı, taşma yok |
+| Hediye çeki | ✅ Hazır tutar, serbest tutar, sınır dışı hata, WhatsApp'a `₺7.500` mesajı |
+| **Ana sayfa LCP (prod build, Chromium)** | Kısıtsız: 375px **0,08–0,25 s**, 1280px **0,08–0,12 s**. Yavaş 4G (1,6 Mb/s, 150 ms) + CPU×4: 375px **2,50–2,59 s**, 1280px **2,55–2,62 s**. LCP ögesi `hero-poster.jpg` (72 KB, 3 ölçüm). Kısıtlı senaryoda hedefin (2,5 s) tam sınırında; ana sayfa First Load JS 258 kB (coverflow, harita, galeri istemci bileşenleri) — posterden çok script yükü belirleyici. Düşürme çalışması Faz 3B kapsamı dışı bırakıldı, Faz 7 yayın listesinde ele alınmalı |

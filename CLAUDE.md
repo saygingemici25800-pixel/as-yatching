@@ -12,7 +12,7 @@ Fethiye'de tek tekneli bir tekne kiralama işletmesi için, **şeffaf fiyatlı**
 3. **Fiyatlar demo verisidir.** Arayüzde `ÖRNEK` rozetiyle gösterilir.
 4. **Veri erişimi sadece `lib/repository.ts` üzerinden.** Hiçbir sayfa `data/seed.ts`'i doğrudan import etmez. Bu kural Supabase geçişi içindir, esnetilmez.
 5. **Mobil önce.** 375px'te kırılma olmayacak. Trafiğin çoğu mobil olacak.
-6. **Türkçe birincil dil.** İngilizce v2.
+6. **Türkçe birincil dil.** EN ve RU var (next-intl, `app/[locale]/`), ikisi de **makine çevirisi** — yayından önce kontrol. Arayüz metni `messages/*.json`; seed metni `l(tr, en, ru)`; sayfalar dili bilmez, repository çözer.
 
 ## Marka dili
 
@@ -49,7 +49,9 @@ Palet yalnızca bu beş renk ve şeffaf türevleridir; kodda hex yazılmaz, `@th
 ## Klasör yapısı
 
 ```
-app/                 Next.js App Router sayfaları
+app/[locale]/        Next.js App Router sayfaları (tr öneksiz, en/ru önekli)
+i18n/                next-intl yönlendirme (yollar burada yerelleştirilir)
+messages/            tr.json, en.json, ru.json — arayüz metinleri
 components/          Yeniden kullanılabilir bileşenler
 data/seed.ts         TÜM demo verisi burada
 lib/types.ts         Tip tanımları
